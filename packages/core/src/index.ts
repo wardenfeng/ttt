@@ -106,8 +106,7 @@ export { path } from './utils/Path';
 export { Pool } from './utils/Pool';
 export { RegExps } from './utils/RegExps';
 export { Stats } from './utils/Stats';
-export { Ticker } from './utils/Ticker';
+export { Ticker, ticker } from './utils/Ticker';
 export { Uuid } from './utils/Uuid';
 export { Water } from './water/Water';
 export { WaterUniforms } from './water/WaterMaterial';
-
