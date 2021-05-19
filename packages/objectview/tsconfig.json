@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "declarationMap": true,
+        "declaration": true,
+        "composite": true,
+        "experimentalDecorators": true,
+        "lib": [
+            "ES2017",
+            "DOM"
+        ],
+        "types": [
+            "@feng3d/polyfill"
+        ],
+        "outFile": "./dist/index.js",
+    },
+    "files": [
+        "src/ObjectView.ts"
+    ]
+}

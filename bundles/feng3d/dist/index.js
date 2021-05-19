@@ -539,6 +539,13 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
+     * 全局事件
+     */
+    feng3d.globalEmitter = new feng3d.EventEmitter();
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
      * 任务
      *
      * 处理 异步任务(函数)串联并联执行功能
@@ -22316,13 +22323,6 @@ var feng3d;
      * 菜单配置
      */
     feng3d.menuConfig = new MenuConfig();
-})(feng3d || (feng3d = {}));
-var feng3d;
-(function (feng3d) {
-    /**
-     * 全局事件
-     */
-    feng3d.globalEmitter = new feng3d.EventEmitter();
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
