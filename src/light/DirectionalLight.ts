@@ -10,11 +10,11 @@ namespace feng3d
     @RegisterComponent()
     export class DirectionalLight extends Light
     {
-        static create(name = "DirectionalLight")
+        @AddEntityMenu("Light/Directional Light")
+        static create(name = "Directional Light")
         {
-            var entity = new Entity();
-            entity.name = name;
-            var directionalLight = entity.addComponent(DirectionalLight);
+            var directionalLight = new Entity().addComponent(DirectionalLight);
+            directionalLight.name = name;
             return directionalLight;
         }
         __class__: "feng3d.DirectionalLight";
@@ -55,7 +55,7 @@ namespace feng3d
             }, null) || new Box3(new Vector3(), new Vector3(1, 1, 1));
 
             // 
-            var center = worldBounds.getCenter();
+            var center = worldBounds.getCenter() || new Vector3();
             var radius = worldBounds.getSize().length / 2;
             // 
             const position = center.addTo(this.direction.scaleNumberTo(radius + this.shadowCameraNear).negate());

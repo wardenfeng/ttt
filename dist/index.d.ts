@@ -3775,7 +3775,7 @@ declare namespace feng3d {
          * @param x 该对象的x属性值
          * @param y 该对象的y属性值
          */
-        set(x: number, y: number): Vector2;
+        set(x?: number, y?: number): Vector2;
         /**
          * 克隆点对象
          */
@@ -7788,6 +7788,296 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
     /**
+     * The PixiJS Matrix as a class makes it a lot faster.
+     *
+     * Here is a representation of it:
+     * ```js
+     * | a | c | tx|
+     * | b | d | ty|
+     * | 0 | 0 | 1 |
+     * ```
+     */
+    class Matrix {
+        a: number;
+        b: number;
+        c: number;
+        d: number;
+        tx: number;
+        ty: number;
+        array: Float32Array | null;
+        /**
+         * @param {number} [a=1] - x scale
+         * @param {number} [b=0] - y skew
+         * @param {number} [c=0] - x skew
+         * @param {number} [d=1] - y scale
+         * @param {number} [tx=0] - x translation
+         * @param {number} [ty=0] - y translation
+         */
+        constructor(a?: number, b?: number, c?: number, d?: number, tx?: number, ty?: number);
+        /**
+         * Creates a Matrix object based on the given array. The Element to Matrix mapping order is as follows:
+         *
+         * a = array[0]
+         * b = array[1]
+         * c = array[3]
+         * d = array[4]
+         * tx = array[2]
+         * ty = array[5]
+         *
+         * @param {number[]} array - The array that the matrix will be populated from.
+         */
+        fromArray(array: number[]): void;
+        /**
+         * sets the matrix properties
+         *
+         * @param {number} a - Matrix component
+         * @param {number} b - Matrix component
+         * @param {number} c - Matrix component
+         * @param {number} d - Matrix component
+         * @param {number} tx - Matrix component
+         * @param {number} ty - Matrix component
+         *
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        set(a: number, b: number, c: number, d: number, tx: number, ty: number): this;
+        /**
+         * Creates an array from the current Matrix object.
+         *
+         * @param {boolean} transpose - Whether we need to transpose the matrix or not
+         * @param {Float32Array} [out=new Float32Array(9)] - If provided the array will be assigned to out
+         * @return {number[]} the newly created array which contains the matrix
+         */
+        toArray(transpose: boolean, out?: Float32Array): Float32Array;
+        /**
+         * Get a new position with the current transformation applied.
+         * Can be used to go from a child's coordinate space to the world coordinate space. (e.g. rendering)
+         *
+         * @param {PIXI.IPointData} pos - The origin
+         * @param {PIXI.Point} [newPos] - The point that the new position is assigned to (allowed to be same as input)
+         * @return {PIXI.Point} The new point, transformed through this matrix
+         */
+        apply(pos: Vector2, newPos?: Vector2): Vector2;
+        /**
+         * Get a new position with the inverse of the current transformation applied.
+         * Can be used to go from the world coordinate space to a child's coordinate space. (e.g. input)
+         *
+         * @param {PIXI.IPointData} pos - The origin
+         * @param {PIXI.Point} [newPos] - The point that the new position is assigned to (allowed to be same as input)
+         * @return {PIXI.Point} The new point, inverse-transformed through this matrix
+         */
+        applyInverse(pos: Vector2, newPos?: Vector2): Vector2;
+        /**
+         * Translates the matrix on the x and y.
+         *
+         * @param {number} x - How much to translate x by
+         * @param {number} y - How much to translate y by
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        translate(x: number, y: number): this;
+        /**
+         * Applies a scale transformation to the matrix.
+         *
+         * @param {number} x - The amount to scale horizontally
+         * @param {number} y - The amount to scale vertically
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        scale(x: number, y: number): this;
+        /**
+         * Applies a rotation transformation to the matrix.
+         *
+         * @param {number} angle - The angle in radians.
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        rotate(angle: number): this;
+        /**
+         * Appends the given Matrix to this Matrix.
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to append.
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        append(matrix: Matrix): this;
+        /**
+         * Sets the matrix based on all the available properties
+         *
+         * @param {number} x - Position on the x axis
+         * @param {number} y - Position on the y axis
+         * @param {number} pivotX - Pivot on the x axis
+         * @param {number} pivotY - Pivot on the y axis
+         * @param {number} scaleX - Scale on the x axis
+         * @param {number} scaleY - Scale on the y axis
+         * @param {number} rotation - Rotation in radians
+         * @param {number} skewX - Skew on the x axis
+         * @param {number} skewY - Skew on the y axis
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        setTransform(x: number, y: number, pivotX: number, pivotY: number, scaleX: number, scaleY: number, rotation: number, skewX: number, skewY: number): this;
+        /**
+         * Prepends the given Matrix to this Matrix.
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to prepend
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        prepend(matrix: Matrix): this;
+        /**
+         * Decomposes the matrix (x, y, scaleX, scaleY, and rotation) and sets the properties on to a transform.
+         *
+         * @param {PIXI.Transform} transform - The transform to apply the properties to.
+         * @return {PIXI.Transform} The transform with the newly applied properties
+         */
+        decompose(transform: Transform): Transform;
+        /**
+         * Inverts this matrix
+         *
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        invert(): this;
+        /**
+         * Resets this Matrix to an identity (default) matrix.
+         *
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        identity(): this;
+        /**
+         * Creates a new Matrix object with the same values as this one.
+         *
+         * @return {PIXI.Matrix} A copy of this matrix. Good for chaining method calls.
+         */
+        clone(): Matrix;
+        /**
+         * Changes the values of the given matrix to be the same as the ones in this matrix
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to copy to.
+         * @return {PIXI.Matrix} The matrix given in parameter with its values updated.
+         */
+        copyTo(matrix: Matrix): Matrix;
+        /**
+         * Changes the values of the matrix to be the same as the ones in given matrix
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to copy from.
+         * @return {PIXI.Matrix} this
+         */
+        copyFrom(matrix: Matrix): this;
+        toString(): string;
+        /**
+         * A default (identity) matrix
+         *
+         * @static
+         * @const
+         * @member {PIXI.Matrix}
+         */
+        static get IDENTITY(): Matrix;
+        /**
+         * A temp matrix
+         *
+         * @static
+         * @const
+         * @member {PIXI.Matrix}
+         */
+        static get TEMP_MATRIX(): Matrix;
+    }
+}
+declare namespace feng3d {
+    /**
+     * Transform that takes care about its versions
+     *
+     */
+    class Transform {
+        /**
+         * A default (identity) transform
+         *
+         * @static
+         * @constant
+         * @member {PIXI.Transform}
+         */
+        static readonly IDENTITY: Transform;
+        worldTransform: Matrix;
+        localTransform: Matrix;
+        /**
+         * The coordinate of the object relative to the local coordinates of the parent.
+         */
+        get x(): number;
+        set x(v: number);
+        private _x;
+        get y(): number;
+        set y(v: number);
+        private _y;
+        /**
+         * The scale factor of the object.
+         */
+        get scaleX(): number;
+        set scaleX(v: number);
+        private _scaleX;
+        get scaleY(): number;
+        set scaleY(v: number);
+        private _scaleY;
+        /**
+         * The pivot point of the displayObject that it rotates around.
+         */
+        get pivotX(): number;
+        set pivotX(v: number);
+        private _pivotX;
+        get pivotY(): number;
+        set pivotY(v: number);
+        private _pivotY;
+        /**
+         * The skew amount, on the x and y axis.
+         */
+        get skewX(): number;
+        set skewX(v: number);
+        private _skewX;
+        get skewY(): number;
+        set skewY(v: number);
+        private _skewY;
+        _parentID: number;
+        _worldID: number;
+        protected _rotation: number;
+        protected _cx: number;
+        protected _sx: number;
+        protected _cy: number;
+        protected _sy: number;
+        protected _localID: number;
+        protected _currentLocalID: number;
+        constructor();
+        /**
+         * Called when a value changes.
+         *
+         * @protected
+         */
+        protected onChange(): void;
+        /**
+         * Called when the skew or the rotation changes.
+         *
+         * @protected
+         */
+        protected updateSkew(): void;
+        toString(): string;
+        /**
+         * Updates the local transformation matrix.
+         */
+        updateLocalTransform(): void;
+        /**
+         * Updates the local and the world transformation matrices.
+         *
+         * @param {PIXI.Transform} parentTransform - The parent transform
+         */
+        updateTransform(parentTransform: Transform): void;
+        /**
+         * Decomposes a matrix and sets the transforms properties based on it.
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to decompose
+         */
+        setFromMatrix(matrix: Matrix): void;
+        /**
+         * The rotation of the object in radians.
+         *
+         * @member {number}
+         */
+        get rotation(): number;
+        set rotation(value: number);
+    }
+}
+declare namespace feng3d {
+    /**
      * 路径工具
      */
     var pathUtils: PathUtils;
@@ -10392,18 +10682,42 @@ declare namespace feng3d {
      */
     function AddComponentMenu(path: string, componentOrder?: number): (target: Constructor<Components>) => void;
     /**
-     * 菜单配置
+     * 添加实体菜单
+     *
+     * 在创建实体函数上新增 @AddEntityMenu("3D对象/平面") 可以添加到实体菜单上。
+     *
+     * @param path 菜单中路径
+     * @param componentOrder 菜单中顺序(从低到高)。
      */
-    const menuConfig: MenuConfig;
-    /**
-     * 菜单配置
-     */
-    interface MenuConfig {
+    function AddEntityMenu(path: string, componentOrder?: number): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void;
+    class MenuConfig {
+        private _componentOrderInvalid;
         /**
          * 组件菜单
          */
-        component?: ComponentMenu[];
+        get component(): ComponentMenu[];
+        private _component;
+        /**
+         * 新增组件菜单
+         * @param componentMenu
+         */
+        addComponent(componentMenu: ComponentMenu): void;
+        /**
+         * 实体菜单
+         */
+        get entity(): EntityMenu[];
+        /**
+         * 新增实体菜单
+         * @param componentMenu
+         */
+        addEntity(item: EntityMenu): void;
+        private _entity;
+        private _entityOrderInvalid;
     }
+    /**
+     * 菜单配置
+     */
+    const menuConfig: MenuConfig;
     /**
      * 组件菜单
      */
@@ -10420,6 +10734,11 @@ declare namespace feng3d {
          * 组件类定义
          */
         type: ComponentNames;
+    }
+    interface EntityMenu {
+        path: string;
+        order: number;
+        func: () => Component;
     }
 }
 declare namespace feng3d {
@@ -12437,6 +12756,10 @@ declare namespace feng3d {
          */
         get entity(): Entity<EntityEventMap>;
         set entity(v: Entity<EntityEventMap>);
+        private _entity;
+        get node(): Node<ComponentEventMap>;
+        set node(v: Node<ComponentEventMap>);
+        private _node;
         /**
          * 名称。
          *
@@ -12543,85 +12866,142 @@ declare namespace feng3d {
         dispose(): void;
         beforeRender(renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
         /**
+         * Returns all components of Type type in the Entity.
+         *
+         * 返回 Entity 或其任何子项中类型为 type 的所有组件。
+         *
+         * @param type		类定义
+         * @return			返回与给出类定义一致的组件
+         */
+        getComponentsInChildren<T extends Components>(type?: Constructor<T>, filter?: (compnent: T) => {
+            findchildren: boolean;
+            value: boolean;
+        }, result?: T[]): T[];
+        /**
+         * 从父类中获取组件
+         * @param type		类定义
+         * @return			返回与给出类定义一致的组件
+         */
+        getComponentsInParents<T extends Components>(type?: Constructor<T>, result?: T[]): T[];
+        /**
          * 监听对象的所有事件并且传播到所有组件中
          */
         private _onAnyListener;
-        /**
-         * 该方法仅在Entity中使用
-         * @private
-         *
-         * @param entity 实体
-         */
-        _setEntity(entity: Entity): void;
-        protected _entity: Entity;
     }
 }
 declare namespace feng3d {
-    interface ContainerEventMap {
+    interface ComponentEventMap extends NodeEventMap {
+    }
+    interface NodeEventMap {
         /**
          * 添加了子对象，当child被添加到parent中时派发冒泡事件
          */
-        addChild: {
-            parent: Container;
-            child: Container;
+        childAdded: {
+            parent: Node;
+            child: Node;
+            index: number;
         };
         /**
          * 删除了子对象，当child被parent移除时派发冒泡事件
          */
-        removeChild: {
-            parent: Container;
-            child: Container;
+        childRemoved: {
+            parent: Node;
+            child: Node;
+            index: number;
         };
         /**
          * 自身被添加到父对象中事件
          */
         added: {
-            parent: Container;
+            parent: Node;
         };
         /**
          * 自身从父对象中移除事件
          */
         removed: {
-            parent: Container;
+            parent: Node;
         };
-    }
-    /**
-     *
-     */
-    class Container<T extends ContainerEventMap = ContainerEventMap> extends EventEmitter<T> {
         /**
-         * 名称
+         * 当GameObject的scene属性被设置是由Scene派发
          */
-        name: string;
-        protected _parent: Container;
-        protected _children: Container[];
-        get parent(): Container<ContainerEventMap>;
-        private _setParent;
+        addedToScene: Node;
+        /**
+         * 当GameObject的scene属性被清空时由Scene派发
+         */
+        removedFromScene: Node;
+    }
+    class Node<T extends ComponentEventMap = ComponentEventMap> extends Component<T> {
+        protected _children: Node[];
+        get parent(): Node<ComponentEventMap>;
+        protected _parent: Node;
+        /**
+         * 子对象
+         */
+        get children(): Node<ComponentEventMap>[];
+        set children(value: Node<ComponentEventMap>[]);
         get numChildren(): number;
+        /**
+         * 是否显示
+         */
+        get visible(): boolean;
+        set visible(v: boolean);
+        private _visible;
+        /**
+         * 全局是否可见
+         */
+        get globalVisible(): boolean;
+        protected _globalVisible: boolean;
+        protected _globalVisibleInvalid: boolean;
+        /**
+         * 自身以及子对象是否支持鼠标拾取
+         */
+        mouseEnabled: boolean;
         /**
          * 根据名称查找对象
          *
          * @param name 对象名称
          */
-        find(name: string): Container;
+        find(name: string): Node;
         /**
          * 是否包含指定对象
          *
          * @param child 可能的子孙对象
          */
-        contains(child: Container): boolean;
+        contains(child: Node): boolean;
         /**
          * 添加子对象
          *
          * @param child 子对象
          */
-        addChild(child: Container): Container<ContainerEventMap>;
+        addChild<T extends Node[]>(...children: T): T[0];
+        addChildAt<T extends Node>(child: T, index: number): T;
+        /**
+         *
+         * @param child
+         * @param child2
+         */
+        swapChildren(child: Node, child2: Node): this;
+        /***
+         *
+         */
+        protected onChildrenChange(index?: number): void;
+        /**
+         *
+         * @param child
+         */
+        getChildIndex(child: Node): number;
+        /**
+         *
+         * @param child
+         * @param index
+         */
+        setChildIndex(child: Node, index: number): void;
         /**
          * 添加子对象
          *
          * @param children 子对象
          */
-        addChildren(...children: Container[]): void;
+        addChildren(...children: Node[]): void;
         /**
          * 移除自身
          */
@@ -12629,30 +13009,57 @@ declare namespace feng3d {
         /**
          * 移除所有子对象
          */
-        removeChildren(): void;
+        removeChildren(beginIndex?: number, endIndex?: number): Node[];
         /**
          * 移除子对象
          *
          * @param child 子对象
          */
-        removeChild(child: Container): void;
+        removeChild<T extends Node[]>(...children: T): T[0];
         /**
          * 删除指定位置的子对象
          *
          * @param index 需要删除子对象的所有
          */
-        removeChildAt(index: number): void;
+        removeChildAt(index: number): Node<ComponentEventMap>;
         /**
          * 获取指定位置的子对象
          *
          * @param index
          */
-        getChildAt(index: number): Container<ContainerEventMap>;
+        getChildAt(index: number): Node<ComponentEventMap>;
         /**
          * 获取子对象列表（备份）
          */
-        getChildren(): Container<ContainerEventMap>[];
-        private removeChildInternal;
+        getChildren(start?: number, end?: number): Node<ComponentEventMap>[];
+        /**
+         * 从自身与子代（孩子，孩子的孩子，...）Entity 中获取所有指定类型的组件
+         *
+         * @param type		要检索的组件的类型。
+         * @return			返回与给出类定义一致的组件
+         *
+         * @todo 与 Node3D.getComponentsInChildren 代码重复，有待优化
+         */
+        getComponentsInChildren<T extends Components>(type?: Constructor<T>, filter?: (compnent: T) => {
+            /**
+             * 是否继续查找子项
+             */
+            findchildren: boolean;
+            /**
+             * 是否为需要查找的组件
+             */
+            value: boolean;
+        }, result?: T[]): T[];
+        /**
+         * 从父代（父亲，父亲的父亲，...）中获取组件
+         *
+         * @param type		类定义
+         * @return			返回与给出类定义一致的组件
+         */
+        getComponentsInParents<T extends Components>(type?: Constructor<T>, result?: T[]): T[];
+        protected _setParent(value: Node): void;
+        protected _updateGlobalVisible(): void;
+        protected _invalidateGlobalVisible(): void;
     }
 }
 declare namespace feng3d {
@@ -12728,40 +13135,6 @@ declare namespace feng3d {
 declare namespace feng3d {
     interface Component3DEventMap {
         /**
-         * 添加了子对象，当child被添加到parent中时派发冒泡事件
-         */
-        addChild: {
-            parent: Node3D;
-            child: Node3D;
-        };
-        /**
-         * 删除了子对象，当child被parent移除时派发冒泡事件
-         */
-        removeChild: {
-            parent: Node3D;
-            child: Node3D;
-        };
-        /**
-         * 自身被添加到父对象中事件
-         */
-        added: {
-            parent: Node3D;
-        };
-        /**
-         * 自身从父对象中移除事件
-         */
-        removed: {
-            parent: Node3D;
-        };
-        /**
-         * 当GameObject的scene属性被设置是由Scene派发
-         */
-        addedToScene: Node3D;
-        /**
-         * 当GameObject的scene属性被清空时由Scene派发
-         */
-        removedFromScene: Node3D;
-        /**
          * 变换矩阵变化
          */
         transformChanged: Node3D;
@@ -12777,6 +13150,15 @@ declare namespace feng3d {
     interface ComponentMap {
         Node3D: Node3D;
     }
+    interface Node3D {
+        getChildren(start?: number, end?: number): Node3D[];
+        /**
+         * 根据名称查找对象
+         *
+         * @param name 对象名称
+         */
+        find(name: string): Node3D;
+    }
     /**
      * 变换
      *
@@ -12784,10 +13166,12 @@ declare namespace feng3d {
      *
      * 场景中的每个对象都有一个变换。它用于存储和操作对象的位置、旋转和缩放。每个转换都可以有一个父元素，它允许您分层应用位置、旋转和缩放
      */
-    class Node3D<T extends Component3DEventMap = Component3DEventMap> extends Component<T> {
+    class Node3D<T extends Component3DEventMap = Component3DEventMap> extends Node<T> {
         __class__: "feng3d.Node3D";
         assetType: AssetType;
-        create(): void;
+        static create(name?: string): Node3D<Component3DEventMap>;
+        parent: Node3D;
+        children: Node3D[];
         /**
          * 预设资源编号
          */
@@ -12796,10 +13180,6 @@ declare namespace feng3d {
          * 资源编号
          */
         assetId: string;
-        /**
-         * 自身以及子对象是否支持鼠标拾取
-         */
-        mouseEnabled: boolean;
         /**
          * 创建一个实体，该类为虚类
          */
@@ -12873,18 +13253,6 @@ declare namespace feng3d {
         get orientation(): Quaternion;
         set orientation(value: Quaternion);
         /**
-         * 是否显示
-         */
-        get visible(): boolean;
-        set visible(v: boolean);
-        private _visible;
-        /**
-         * 全局是否可见
-         */
-        get globalVisible(): boolean;
-        protected _globalVisible: boolean;
-        protected _globalVisibleInvalid: boolean;
-        /**
          * 本地变换矩阵
          */
         get matrix(): Matrix4x4;
@@ -12898,14 +13266,7 @@ declare namespace feng3d {
          */
         get boundingBox(): BoundingBox;
         private _boundingBox;
-        get parent(): Node3D<Component3DEventMap>;
         get scene(): Scene;
-        /**
-         * 子对象
-         */
-        get children(): Node3D<Component3DEventMap>[];
-        set children(value: Node3D<Component3DEventMap>[]);
-        get numChildren(): number;
         moveForward(distance: number): void;
         moveBackward(distance: number): void;
         moveLeft(distance: number): void;
@@ -12948,60 +13309,6 @@ declare namespace feng3d {
         get worldToLocalMatrix(): Matrix4x4;
         get localToWorldRotationMatrix(): Matrix4x4;
         get worldToLocalRotationMatrix(): Matrix4x4;
-        /**
-         * 根据名称查找对象
-         *
-         * @param name 对象名称
-         */
-        find(name: string): Node3D;
-        /**
-         * 是否包含指定对象
-         *
-         * @param child 可能的子孙对象
-         */
-        contains(child: Node3D): boolean;
-        /**
-         * 添加子对象
-         *
-         * @param child 子对象
-         */
-        addChild(child: Node3D): Node3D<Component3DEventMap>;
-        /**
-         * 添加子对象
-         *
-         * @param children 子对象
-         */
-        addChildren(...children: Node3D[]): void;
-        /**
-         * 移除自身
-         */
-        remove(): void;
-        /**
-         * 移除所有子对象
-         */
-        removeChildren(): void;
-        /**
-         * 移除子对象
-         *
-         * @param child 子对象
-         */
-        removeChild(child: Node3D): void;
-        /**
-         * 删除指定位置的子对象
-         *
-         * @param index 需要删除子对象的所有
-         */
-        removeChildAt(index: number): void;
-        /**
-         * 获取指定位置的子对象
-         *
-         * @param index
-         */
-        getChildAt(index: number): Node3D<Component3DEventMap>;
-        /**
-         * 获取子对象列表（备份）
-         */
-        getChildren(): Node3D<Component3DEventMap>[];
         /**
          * 将方向从局部空间转换到世界空间。
          *
@@ -13076,29 +13383,6 @@ declare namespace feng3d {
          * @param localRay 局部空间射线。
          */
         rayWorldToLocal(worldRay: Ray3, localRay?: Ray3): Ray3;
-        /**
-         * 从自身与子代（孩子，孩子的孩子，...）Entity 中获取所有指定类型的组件
-         *
-         * @param type		要检索的组件的类型。
-         * @return			返回与给出类定义一致的组件
-         */
-        getComponentsInChildren<T extends Components>(type?: Constructor<T>, filter?: (compnent: T) => {
-            /**
-             * 是否继续查找子项
-             */
-            findchildren: boolean;
-            /**
-             * 是否为需要查找的组件
-             */
-            value: boolean;
-        }, result?: T[]): T[];
-        /**
-         * 从父代（父亲，父亲的父亲，...）中获取组件
-         *
-         * @param type		类定义
-         * @return			返回与给出类定义一致的组件
-         */
-        getComponentsInParents<T extends Components>(type?: Constructor<T>, result?: T[]): T[];
         beforeRender(renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
         /**
          * 销毁
@@ -13118,20 +13402,17 @@ declare namespace feng3d {
         protected _worldToLocalMatrixInvalid: boolean;
         protected readonly _localToWorldRotationMatrix: Matrix4x4;
         protected _localToWorldRotationMatrixInvalid: boolean;
-        protected _parent: Node3D;
-        protected _children: Node3D[];
         protected _scene: Scene;
         private _renderAtomic;
         private _positionChanged;
         private _rotationChanged;
         private _scaleChanged;
-        private _setParent;
+        protected _setParent(value: Node3D): void;
         private updateScene;
         /**
          * @private
          */
         private _updateChildrenScene;
-        private removeChildInternal;
         private _invalidateTransform;
         private _invalidateSceneTransform;
         private _updateMatrix;
@@ -13154,8 +13435,6 @@ declare namespace feng3d {
          * @param callback 完成回调
          */
         onLoadCompleted(callback: () => void): void;
-        protected _updateGlobalVisible(): void;
-        protected _invalidateGlobalVisible(): void;
         /**
          * 申明冒泡函数
          * feng3d.__event_bubble_function__
@@ -13406,7 +13685,7 @@ declare namespace feng3d {
          * @param component		被添加的组件
          * @param index			插入的位置
          */
-        private addComponentAt;
+        addComponentAt(component: Components, index: number): void;
         /**
          * 为了兼容以往json序列化格式
          *
@@ -13554,24 +13833,6 @@ declare namespace feng3d {
          * 附加到此 Entity 的 Node3D。
          */
         get node3d(): Node3D<Component3DEventMap>;
-        /**
-         * Returns all components of Type type in the Entity.
-         *
-         * 返回 Entity 或其任何子项中类型为 type 的所有组件。
-         *
-         * @param type		类定义
-         * @return			返回与给出类定义一致的组件
-         */
-        getComponentsInChildren<T extends Components>(type?: Constructor<T>, filter?: (compnent: T) => {
-            findchildren: boolean;
-            value: boolean;
-        }, result?: T[]): T[];
-        /**
-         * 从父类中获取组件
-         * @param type		类定义
-         * @return			返回与给出类定义一致的组件
-         */
-        getComponentsInParents<T extends Components>(type?: Constructor<T>, result?: T[]): T[];
     }
 }
 declare namespace feng3d {
@@ -13693,6 +13954,262 @@ declare namespace feng3d {
         private _invalidateLayout;
         private _invalidateSize;
         private _invalidatePivot;
+    }
+}
+declare namespace feng3d {
+    interface IDestroyOptions {
+        children?: boolean;
+        texture?: boolean;
+        baseTexture?: boolean;
+    }
+    interface Node2D {
+        /**
+         * Adds a child to the container at a specified index. If the index is out of bounds an error will be thrown
+         *
+         * @param {feng3d.Node2D} child - The child to add
+         * @param {number} index - The index to place the child in
+         * @return {feng3d.Node2D} The child that was added.
+         */
+        addChildAt<T extends Node2D>(child: T, index: number): T;
+        /**
+         * Returns the child at the specified index
+         *
+         * @param {number} index - The index to get the child at
+         * @return {feng3d.Node2D} The child at the given index, if any.
+         */
+        getChildAt(index: number): Node2D;
+        /**
+         * Removes all children from this container that are within the begin and end indexes.
+         *
+         * @param {number} [beginIndex=0] - The beginning position.
+         * @param {number} [endIndex=this.children.length] - The ending position. Default value is size of the container.
+         * @returns {feng3d.Node2D[]} List of removed children
+         */
+        removeChildren(beginIndex?: number, endIndex?: number): Node2D[];
+        /**
+         * Removes a child from the specified index position.
+         *
+         * @param {number} index - The index to get the child from
+         * @return {feng3d.Node2D} The child that was removed.
+         */
+        removeChildAt(index: number): Node2D;
+        /**
+         * Adds a child to the container at a specified index. If the index is out of bounds an error will be thrown
+         *
+         * @param {feng3d.Node2D} child - The child to add
+         * @param {number} index - The index to place the child in
+         * @return {feng3d.Node2D} The child that was added.
+         */
+        addChildAt<T extends Node2D>(child: T, index: number): T;
+    }
+    /**
+     * Container is a general-purpose display object that holds children. It also adds built-in support for advanced
+     * rendering features like masking and filtering.
+     *
+     * It is the base class of all display objects that act as a container for other objects, including Graphics
+     * and Sprite.
+     *
+     * ```js
+     * import { BlurFilter } from '@pixi/filter-blur';
+     * import { Container } from '@pixi/display';
+     * import { Graphics } from '@pixi/graphics';
+     * import { Sprite } from '@pixi/sprite';
+     *
+     * let container = new Container();
+     * let sprite = Sprite.from("https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png");
+     *
+     * sprite.width = 512;
+     * sprite.height = 512;
+     *
+     * // Adds a sprite as a child to this container. As a result, the sprite will be rendered whenever the container
+     * // is rendered.
+     * container.addChild(sprite);
+     *
+     * // Blurs whatever is rendered by the container
+     * container.filters = [new BlurFilter()];
+     *
+     * // Only the contents within a circle at the center should be rendered onto the screen.
+     * container.mask = new Graphics()
+     *  .beginFill(0xffffff)
+     *  .drawCircle(sprite.width / 2, sprite.height / 2, Math.min(sprite.width, sprite.height) / 2)
+     *  .endFill();
+     * ```
+     *
+     */
+    class Node2D<T extends Component2DEventMap = Component2DEventMap> extends Node<T> {
+        worldAlpha: number;
+        transform: Transform;
+        alpha: number;
+        visible: boolean;
+        protected _destroyed: boolean;
+        protected tempDisplayObjectParent: Node2D;
+        displayObjectUpdateTransform: () => void;
+        constructor();
+        /**
+         * Recursively updates transform of all objects from the root to this one
+         * internal function for toLocal()
+         */
+        _recursivePostUpdateTransform(): void;
+        /**
+         * Calculates the global position of the display object.
+         *
+         * @param {PIXI.IPointData} position - The world origin to calculate from.
+         * @param {PIXI.Point} [point] - A Point object in which to store the value, optional
+         *  (otherwise will create a new Point).
+         * @param {boolean} [skipUpdate=false] - Should we skip the update transform.
+         * @return {PIXI.Point} A point object representing the position of this object.
+         */
+        toGlobal(position: Vector2, point?: Vector2, skipUpdate?: boolean): Vector2;
+        /**
+         * Calculates the local position of the display object relative to another point.
+         *
+         * @param {PIXI.IPointData} position - The world origin to calculate from.
+         * @param {feng3d.Node2D} [from] - The Node2D to calculate the global position from.
+         * @param {PIXI.Point} [point] - A Point object in which to store the value, optional
+         *  (otherwise will create a new Point).
+         * @param {boolean} [skipUpdate=false] - Should we skip the update transform
+         * @return {PIXI.Point} A point object representing the position of this object
+         */
+        toLocal(position: Vector2, from?: Node2D, point?: Vector2, skipUpdate?: boolean): Vector2;
+        protected _setParent(value: Node): void;
+        /**
+         * Convenience function to set the position, scale, skew and pivot at once.
+         *
+         * @param {number} [x=0] - The X position
+         * @param {number} [y=0] - The Y position
+         * @param {number} [scaleX=1] - The X scale value
+         * @param {number} [scaleY=1] - The Y scale value
+         * @param {number} [rotation=0] - The rotation
+         * @param {number} [skewX=0] - The X skew value
+         * @param {number} [skewY=0] - The Y skew value
+         * @param {number} [pivotX=0] - The X pivot value
+         * @param {number} [pivotY=0] - The Y pivot value
+         * @return {feng3d.Node2D} The Node2D instance
+         */
+        setTransform(x?: number, y?: number, scaleX?: number, scaleY?: number, rotation?: number, skewX?: number, skewY?: number, pivotX?: number, pivotY?: number): this;
+        /**
+         * @protected
+         * @member {PIXI.Container}
+         */
+        get _tempDisplayObjectParent(): Node2D;
+        /**
+         * The position of the displayObject on the x axis relative to the local coordinates of the parent.
+         * An alias to position.x
+         *
+         * @member {number}
+         */
+        get x(): number;
+        set x(value: number);
+        /**
+         * The position of the displayObject on the y axis relative to the local coordinates of the parent.
+         * An alias to position.y
+         *
+         * @member {number}
+         */
+        get y(): number;
+        set y(value: number);
+        /**
+         * Current transform of the object based on world (parent) factors.
+         *
+         * @member {PIXI.Matrix}
+         * @readonly
+         */
+        get worldTransform(): Matrix;
+        /**
+         * Current transform of the object based on local factors: position, scale, other stuff.
+         *
+         * @member {PIXI.Matrix}
+         * @readonly
+         */
+        get localTransform(): Matrix;
+        /**
+         * The scale factors of this object along the local coordinate axes.
+         *
+         * The default scale is (1, 1).
+         */
+        get scaleX(): number;
+        set scaleX(v: number);
+        get scaleY(): number;
+        set scaleY(v: number);
+        /**
+         * The center of rotation, scaling, and skewing for this display object in its local space. The `position`
+         * is the projection of `pivot` in the parent's local space.
+         *
+         * By default, the pivot is the origin (0, 0).
+         */
+        get pivotX(): number;
+        set pivotX(value: number);
+        get pivotY(): number;
+        set pivotY(value: number);
+        /**
+         * The skew factor for the object in radians.
+         */
+        get skewX(): number;
+        set skewX(value: number);
+        get skewY(): number;
+        set skewY(value: number);
+        /**
+         * The rotation of the object in radians.
+         * 'rotation' and 'angle' have the same effect on a display object; rotation is in radians, angle is in degrees.
+         */
+        get rotation(): number;
+        set rotation(value: number);
+        /**
+         * The angle of the object in degrees.
+         * 'rotation' and 'angle' have the same effect on a display object; rotation is in radians, angle is in degrees.
+         */
+        get angle(): number;
+        set angle(value: number);
+        /**
+         * Indicates if the object is globally visible.
+         */
+        get worldVisible(): boolean;
+        /**
+         * Updates the transform on all children of this container for rendering
+         */
+        updateTransform(): void;
+        /**
+         * Removes all internal references and listeners as well as removes children from the display list.
+         * Do not use a Container after calling `destroy`.
+         *
+         * @param {object|boolean} [options] - Options parameter. A boolean will act as if all options
+         *  have been set to that value
+         * @param {boolean} [options.children=false] - if set to true, all the children will have their destroy
+         *  method called as well. 'options' will be passed on to those calls.
+         * @param {boolean} [options.texture=false] - Only used for child Sprites if options.children is set to true
+         *  Should it destroy the texture of the child sprite
+         * @param {boolean} [options.baseTexture=false] - Only used for child Sprites if options.children is set to true
+         *  Should it destroy the base texture of the child sprite
+         */
+        destroy(options?: IDestroyOptions | boolean): void;
+    }
+}
+declare namespace feng3d {
+    interface Component2DEventMap extends ComponentEventMap {
+    }
+    /**
+     * 2D组件
+     *
+     * 所有基于3D空间的组件均可继承于该组件。
+     */
+    class Component2D<T extends Component2DEventMap = Component2DEventMap> extends Component<T> {
+        /**
+         * The Node2D attached to this Entity (null if there is none attached).
+         *
+         * 附加到此 Entity 的 Node2D。
+         */
+        get node2d(): Node2D<Component2DEventMap>;
+    }
+}
+declare namespace feng3d {
+    /**
+     * 2D场景
+     *
+     * Scene2D同时拥有Node2D与Node3D组件。
+     */
+    class Scene2D extends Component {
+        static create(name?: string): Scene2D;
+        __class__: "feng3d.Scene2D";
     }
 }
 declare namespace feng3d {
@@ -14050,6 +14567,7 @@ declare namespace feng3d {
      * 3D场景
      */
     class Scene extends Component3D {
+        static create(name?: string): Scene;
         __class__: "feng3d.Scene";
         /**
          * 背景颜色
@@ -14507,6 +15025,8 @@ declare namespace feng3d {
      */
     class PointGeometry extends Geometry {
         __class__: "feng3d.PointGeometry";
+        name: string;
+        static create(name?: string): MeshRenderer;
         /**
          * 点数据列表
          * 修改数组内数据时需要手动调用 invalidateGeometry();
@@ -14520,11 +15040,12 @@ declare namespace feng3d {
     /**
      * 点信息
      */
-    interface PointInfo {
-        position?: Vector3;
-        color?: Color4;
-        normal?: Vector3;
-        uv?: Vector2;
+    class PointInfo {
+        position: Vector3;
+        /**
+         * 起点颜色
+         */
+        color: Color4;
     }
 }
 declare namespace feng3d {
@@ -14537,6 +15058,7 @@ declare namespace feng3d {
     class SegmentGeometry extends Geometry {
         __class__: "feng3d.SegmentGeometry";
         name: string;
+        static create(name?: string): MeshRenderer;
         /**
          * 线段列表
          * 修改数组内数据时需要手动调用 invalidateGeometry();
@@ -14835,6 +15357,7 @@ declare namespace feng3d {
      */
     class QuadGeometry extends Geometry {
         __class__: "feng3d.QuadGeometry";
+        create(name?: string): MeshRenderer;
         constructor();
     }
     interface DefaultGeometry {
@@ -14853,6 +15376,7 @@ declare namespace feng3d {
      */
     class PlaneGeometry extends Geometry {
         __class__: "feng3d.PlaneGeometry";
+        create(name?: string): MeshRenderer;
         /**
          * 宽度
          */
@@ -14932,6 +15456,7 @@ declare namespace feng3d {
     class CubeGeometry extends Geometry {
         __class__: "feng3d.CubeGeometry";
         name: string;
+        create(name?: string): MeshRenderer;
         /**
          * 宽度
          */
@@ -15018,6 +15543,7 @@ declare namespace feng3d {
      */
     class SphereGeometry extends Geometry {
         __class__: "feng3d.SphereGeometry";
+        create(name?: string): MeshRenderer;
         /**
          * 球体半径
          */
@@ -15073,6 +15599,7 @@ declare namespace feng3d {
      */
     class CapsuleGeometry extends Geometry {
         __class__: "feng3d.CapsuleGeometry";
+        create(name?: string): MeshRenderer;
         /**
          * 胶囊体半径
          */
@@ -15134,6 +15661,7 @@ declare namespace feng3d {
      */
     class CylinderGeometry extends Geometry {
         __class__: "feng3d.CylinderGeometry" | "feng3d.ConeGeometry";
+        create(name?: string): MeshRenderer;
         /**
          * 顶部半径
          */
@@ -15204,6 +15732,7 @@ declare namespace feng3d {
     class ConeGeometry extends CylinderGeometry {
         __class__: "feng3d.ConeGeometry";
         name: string;
+        create(name?: string): MeshRenderer;
         /**
          * 底部半径 private
          */
@@ -15233,6 +15762,7 @@ declare namespace feng3d {
      */
     class TorusGeometry extends Geometry {
         __class__: "feng3d.TorusGeometry";
+        create(name?: string): MeshRenderer;
         /**
          * 半径
          */
@@ -15666,6 +16196,9 @@ declare namespace feng3d {
          */
         u_PointSize: number;
     }
+    interface DefaultMaterial {
+        "Point-Material": Material;
+    }
 }
 declare namespace feng3d {
     interface UniformsTypes {
@@ -15861,6 +16394,7 @@ declare namespace feng3d {
     class PointLight extends Light {
         __class__: "feng3d.PointLight";
         lightType: LightType;
+        static create(name?: string): PointLight;
         /**
          * 光照范围
          */
@@ -15887,6 +16421,7 @@ declare namespace feng3d {
      */
     class SpotLight extends Light {
         lightType: LightType;
+        static create(name?: string): SpotLight;
         /**
          * 光照范围
          */
@@ -16276,6 +16811,7 @@ declare namespace feng3d {
      */
     class Water extends Renderable {
         __class__: "feng3d.Water";
+        static create(name?: string): Water;
         geometry: PlaneGeometry;
         material: Material;
         /**

@@ -6527,6 +6527,8 @@ var feng3d;
          * @param y 该对象的y属性值
          */
         Vector2.prototype.set = function (x, y) {
+            if (x === void 0) { x = 0; }
+            if (y === void 0) { y = x; }
             this.x = x;
             this.y = y;
             return this;
@@ -11623,6 +11625,9 @@ var feng3d;
          */
         Box3.prototype.getCenter = function (vout) {
             if (vout === void 0) { vout = new feng3d.Vector3(); }
+            if (this.isEmpty) {
+                return null;
+            }
             return vout.copy(this.min).add(this.max).scaleNumber(0.5);
         };
         /**
@@ -17073,6 +17078,771 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
+     * The PixiJS Matrix as a class makes it a lot faster.
+     *
+     * Here is a representation of it:
+     * ```js
+     * | a | c | tx|
+     * | b | d | ty|
+     * | 0 | 0 | 1 |
+     * ```
+     */
+    var Matrix = /** @class */ (function () {
+        /**
+         * @param {number} [a=1] - x scale
+         * @param {number} [b=0] - y skew
+         * @param {number} [c=0] - x skew
+         * @param {number} [d=1] - y scale
+         * @param {number} [tx=0] - x translation
+         * @param {number} [ty=0] - y translation
+         */
+        function Matrix(a, b, c, d, tx, ty) {
+            if (a === void 0) { a = 1; }
+            if (b === void 0) { b = 0; }
+            if (c === void 0) { c = 0; }
+            if (d === void 0) { d = 1; }
+            if (tx === void 0) { tx = 0; }
+            if (ty === void 0) { ty = 0; }
+            this.array = null;
+            /**
+             * @member {number}
+             * @default 1
+             */
+            this.a = a;
+            /**
+             * @member {number}
+             * @default 0
+             */
+            this.b = b;
+            /**
+             * @member {number}
+             * @default 0
+             */
+            this.c = c;
+            /**
+             * @member {number}
+             * @default 1
+             */
+            this.d = d;
+            /**
+             * @member {number}
+             * @default 0
+             */
+            this.tx = tx;
+            /**
+             * @member {number}
+             * @default 0
+             */
+            this.ty = ty;
+        }
+        /**
+         * Creates a Matrix object based on the given array. The Element to Matrix mapping order is as follows:
+         *
+         * a = array[0]
+         * b = array[1]
+         * c = array[3]
+         * d = array[4]
+         * tx = array[2]
+         * ty = array[5]
+         *
+         * @param {number[]} array - The array that the matrix will be populated from.
+         */
+        Matrix.prototype.fromArray = function (array) {
+            this.a = array[0];
+            this.b = array[1];
+            this.c = array[3];
+            this.d = array[4];
+            this.tx = array[2];
+            this.ty = array[5];
+        };
+        /**
+         * sets the matrix properties
+         *
+         * @param {number} a - Matrix component
+         * @param {number} b - Matrix component
+         * @param {number} c - Matrix component
+         * @param {number} d - Matrix component
+         * @param {number} tx - Matrix component
+         * @param {number} ty - Matrix component
+         *
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.set = function (a, b, c, d, tx, ty) {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
+            this.tx = tx;
+            this.ty = ty;
+            return this;
+        };
+        /**
+         * Creates an array from the current Matrix object.
+         *
+         * @param {boolean} transpose - Whether we need to transpose the matrix or not
+         * @param {Float32Array} [out=new Float32Array(9)] - If provided the array will be assigned to out
+         * @return {number[]} the newly created array which contains the matrix
+         */
+        Matrix.prototype.toArray = function (transpose, out) {
+            if (!this.array) {
+                this.array = new Float32Array(9);
+            }
+            var array = out || this.array;
+            if (transpose) {
+                array[0] = this.a;
+                array[1] = this.b;
+                array[2] = 0;
+                array[3] = this.c;
+                array[4] = this.d;
+                array[5] = 0;
+                array[6] = this.tx;
+                array[7] = this.ty;
+                array[8] = 1;
+            }
+            else {
+                array[0] = this.a;
+                array[1] = this.c;
+                array[2] = this.tx;
+                array[3] = this.b;
+                array[4] = this.d;
+                array[5] = this.ty;
+                array[6] = 0;
+                array[7] = 0;
+                array[8] = 1;
+            }
+            return array;
+        };
+        /**
+         * Get a new position with the current transformation applied.
+         * Can be used to go from a child's coordinate space to the world coordinate space. (e.g. rendering)
+         *
+         * @param {PIXI.IPointData} pos - The origin
+         * @param {PIXI.Point} [newPos] - The point that the new position is assigned to (allowed to be same as input)
+         * @return {PIXI.Point} The new point, transformed through this matrix
+         */
+        Matrix.prototype.apply = function (pos, newPos) {
+            newPos = newPos || new feng3d.Vector2();
+            var x = pos.x;
+            var y = pos.y;
+            newPos.x = (this.a * x) + (this.c * y) + this.tx;
+            newPos.y = (this.b * x) + (this.d * y) + this.ty;
+            return newPos;
+        };
+        /**
+         * Get a new position with the inverse of the current transformation applied.
+         * Can be used to go from the world coordinate space to a child's coordinate space. (e.g. input)
+         *
+         * @param {PIXI.IPointData} pos - The origin
+         * @param {PIXI.Point} [newPos] - The point that the new position is assigned to (allowed to be same as input)
+         * @return {PIXI.Point} The new point, inverse-transformed through this matrix
+         */
+        Matrix.prototype.applyInverse = function (pos, newPos) {
+            newPos = newPos || new feng3d.Vector2();
+            var id = 1 / ((this.a * this.d) + (this.c * -this.b));
+            var x = pos.x;
+            var y = pos.y;
+            newPos.x = (this.d * id * x) + (-this.c * id * y) + (((this.ty * this.c) - (this.tx * this.d)) * id);
+            newPos.y = (this.a * id * y) + (-this.b * id * x) + (((-this.ty * this.a) + (this.tx * this.b)) * id);
+            return newPos;
+        };
+        /**
+         * Translates the matrix on the x and y.
+         *
+         * @param {number} x - How much to translate x by
+         * @param {number} y - How much to translate y by
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.translate = function (x, y) {
+            this.tx += x;
+            this.ty += y;
+            return this;
+        };
+        /**
+         * Applies a scale transformation to the matrix.
+         *
+         * @param {number} x - The amount to scale horizontally
+         * @param {number} y - The amount to scale vertically
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.scale = function (x, y) {
+            this.a *= x;
+            this.d *= y;
+            this.c *= x;
+            this.b *= y;
+            this.tx *= x;
+            this.ty *= y;
+            return this;
+        };
+        /**
+         * Applies a rotation transformation to the matrix.
+         *
+         * @param {number} angle - The angle in radians.
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.rotate = function (angle) {
+            var cos = Math.cos(angle);
+            var sin = Math.sin(angle);
+            var a1 = this.a;
+            var c1 = this.c;
+            var tx1 = this.tx;
+            this.a = (a1 * cos) - (this.b * sin);
+            this.b = (a1 * sin) + (this.b * cos);
+            this.c = (c1 * cos) - (this.d * sin);
+            this.d = (c1 * sin) + (this.d * cos);
+            this.tx = (tx1 * cos) - (this.ty * sin);
+            this.ty = (tx1 * sin) + (this.ty * cos);
+            return this;
+        };
+        /**
+         * Appends the given Matrix to this Matrix.
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to append.
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.append = function (matrix) {
+            var a1 = this.a;
+            var b1 = this.b;
+            var c1 = this.c;
+            var d1 = this.d;
+            this.a = (matrix.a * a1) + (matrix.b * c1);
+            this.b = (matrix.a * b1) + (matrix.b * d1);
+            this.c = (matrix.c * a1) + (matrix.d * c1);
+            this.d = (matrix.c * b1) + (matrix.d * d1);
+            this.tx = (matrix.tx * a1) + (matrix.ty * c1) + this.tx;
+            this.ty = (matrix.tx * b1) + (matrix.ty * d1) + this.ty;
+            return this;
+        };
+        /**
+         * Sets the matrix based on all the available properties
+         *
+         * @param {number} x - Position on the x axis
+         * @param {number} y - Position on the y axis
+         * @param {number} pivotX - Pivot on the x axis
+         * @param {number} pivotY - Pivot on the y axis
+         * @param {number} scaleX - Scale on the x axis
+         * @param {number} scaleY - Scale on the y axis
+         * @param {number} rotation - Rotation in radians
+         * @param {number} skewX - Skew on the x axis
+         * @param {number} skewY - Skew on the y axis
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.setTransform = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) {
+            this.a = Math.cos(rotation + skewY) * scaleX;
+            this.b = Math.sin(rotation + skewY) * scaleX;
+            this.c = -Math.sin(rotation - skewX) * scaleY;
+            this.d = Math.cos(rotation - skewX) * scaleY;
+            this.tx = x - ((pivotX * this.a) + (pivotY * this.c));
+            this.ty = y - ((pivotX * this.b) + (pivotY * this.d));
+            return this;
+        };
+        /**
+         * Prepends the given Matrix to this Matrix.
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to prepend
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.prepend = function (matrix) {
+            var tx1 = this.tx;
+            if (matrix.a !== 1 || matrix.b !== 0 || matrix.c !== 0 || matrix.d !== 1) {
+                var a1 = this.a;
+                var c1 = this.c;
+                this.a = (a1 * matrix.a) + (this.b * matrix.c);
+                this.b = (a1 * matrix.b) + (this.b * matrix.d);
+                this.c = (c1 * matrix.a) + (this.d * matrix.c);
+                this.d = (c1 * matrix.b) + (this.d * matrix.d);
+            }
+            this.tx = (tx1 * matrix.a) + (this.ty * matrix.c) + matrix.tx;
+            this.ty = (tx1 * matrix.b) + (this.ty * matrix.d) + matrix.ty;
+            return this;
+        };
+        /**
+         * Decomposes the matrix (x, y, scaleX, scaleY, and rotation) and sets the properties on to a transform.
+         *
+         * @param {PIXI.Transform} transform - The transform to apply the properties to.
+         * @return {PIXI.Transform} The transform with the newly applied properties
+         */
+        Matrix.prototype.decompose = function (transform) {
+            // sort out rotation / skew..
+            var a = this.a;
+            var b = this.b;
+            var c = this.c;
+            var d = this.d;
+            var pivotX = transform.pivotX;
+            var pivotY = transform.pivotY;
+            var skewX = -Math.atan2(-c, d);
+            var skewY = Math.atan2(b, a);
+            var delta = Math.abs(skewX + skewY);
+            if (delta < 0.00001 || Math.abs(Math.PI * 2 - delta) < 0.00001) {
+                transform.rotation = skewY;
+                transform.skewX = transform.skewY = 0;
+            }
+            else {
+                transform.rotation = 0;
+                transform.skewX = skewX;
+                transform.skewY = skewY;
+            }
+            // next set scale
+            transform.scaleX = Math.sqrt((a * a) + (b * b));
+            transform.scaleY = Math.sqrt((c * c) + (d * d));
+            // next set position
+            transform.x = this.tx + ((pivotX * a) + (pivotY * c));
+            transform.y = this.ty + ((pivotX * b) + (pivotY * d));
+            return transform;
+        };
+        /**
+         * Inverts this matrix
+         *
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.invert = function () {
+            var a1 = this.a;
+            var b1 = this.b;
+            var c1 = this.c;
+            var d1 = this.d;
+            var tx1 = this.tx;
+            var n = (a1 * d1) - (b1 * c1);
+            this.a = d1 / n;
+            this.b = -b1 / n;
+            this.c = -c1 / n;
+            this.d = a1 / n;
+            this.tx = ((c1 * this.ty) - (d1 * tx1)) / n;
+            this.ty = -((a1 * this.ty) - (b1 * tx1)) / n;
+            return this;
+        };
+        /**
+         * Resets this Matrix to an identity (default) matrix.
+         *
+         * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.identity = function () {
+            this.a = 1;
+            this.b = 0;
+            this.c = 0;
+            this.d = 1;
+            this.tx = 0;
+            this.ty = 0;
+            return this;
+        };
+        /**
+         * Creates a new Matrix object with the same values as this one.
+         *
+         * @return {PIXI.Matrix} A copy of this matrix. Good for chaining method calls.
+         */
+        Matrix.prototype.clone = function () {
+            var matrix = new Matrix();
+            matrix.a = this.a;
+            matrix.b = this.b;
+            matrix.c = this.c;
+            matrix.d = this.d;
+            matrix.tx = this.tx;
+            matrix.ty = this.ty;
+            return matrix;
+        };
+        /**
+         * Changes the values of the given matrix to be the same as the ones in this matrix
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to copy to.
+         * @return {PIXI.Matrix} The matrix given in parameter with its values updated.
+         */
+        Matrix.prototype.copyTo = function (matrix) {
+            matrix.a = this.a;
+            matrix.b = this.b;
+            matrix.c = this.c;
+            matrix.d = this.d;
+            matrix.tx = this.tx;
+            matrix.ty = this.ty;
+            return matrix;
+        };
+        /**
+         * Changes the values of the matrix to be the same as the ones in given matrix
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to copy from.
+         * @return {PIXI.Matrix} this
+         */
+        Matrix.prototype.copyFrom = function (matrix) {
+            this.a = matrix.a;
+            this.b = matrix.b;
+            this.c = matrix.c;
+            this.d = matrix.d;
+            this.tx = matrix.tx;
+            this.ty = matrix.ty;
+            return this;
+        };
+        // #if _DEBUG
+        Matrix.prototype.toString = function () {
+            return "[@pixi/math:Matrix a=" + this.a + " b=" + this.b + " c=" + this.c + " d=" + this.d + " tx=" + this.tx + " ty=" + this.ty + "]";
+        };
+        Object.defineProperty(Matrix, "IDENTITY", {
+            // #endif
+            /**
+             * A default (identity) matrix
+             *
+             * @static
+             * @const
+             * @member {PIXI.Matrix}
+             */
+            get: function () {
+                return new Matrix();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Matrix, "TEMP_MATRIX", {
+            /**
+             * A temp matrix
+             *
+             * @static
+             * @const
+             * @member {PIXI.Matrix}
+             */
+            get: function () {
+                return new Matrix();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return Matrix;
+    }());
+    feng3d.Matrix = Matrix;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
+     * Transform that takes care about its versions
+     *
+     */
+    var Transform = /** @class */ (function () {
+        function Transform() {
+            this._x = 0;
+            this._y = 0;
+            this._scaleX = 1;
+            this._scaleY = 1;
+            this._pivotX = 0;
+            this._pivotY = 0;
+            this._skewX = 0;
+            this._skewY = 0;
+            /**
+             * The world transformation matrix.
+             *
+             * @member {PIXI.Matrix}
+             */
+            this.worldTransform = new feng3d.Matrix();
+            /**
+             * The local transformation matrix.
+             *
+             * @member {PIXI.Matrix}
+             */
+            this.localTransform = new feng3d.Matrix();
+            /**
+             * The rotation amount.
+             *
+             * @protected
+             * @member {number}
+             */
+            this._rotation = 0;
+            /**
+             * The X-coordinate value of the normalized local X axis,
+             * the first column of the local transformation matrix without a scale.
+             *
+             * @protected
+             * @member {number}
+             */
+            this._cx = 1;
+            /**
+             * The Y-coordinate value of the normalized local X axis,
+             * the first column of the local transformation matrix without a scale.
+             *
+             * @protected
+             * @member {number}
+             */
+            this._sx = 0;
+            /**
+             * The X-coordinate value of the normalized local Y axis,
+             * the second column of the local transformation matrix without a scale.
+             *
+             * @protected
+             * @member {number}
+             */
+            this._cy = 0;
+            /**
+             * The Y-coordinate value of the normalized local Y axis,
+             * the second column of the local transformation matrix without a scale.
+             *
+             * @protected
+             * @member {number}
+             */
+            this._sy = 1;
+            /**
+             * The locally unique ID of the local transform.
+             *
+             * @protected
+             * @member {number}
+             */
+            this._localID = 0;
+            /**
+             * The locally unique ID of the local transform
+             * used to calculate the current local transformation matrix.
+             *
+             * @protected
+             * @member {number}
+             */
+            this._currentLocalID = 0;
+            /**
+             * The locally unique ID of the world transform.
+             *
+             * @protected
+             * @member {number}
+             */
+            this._worldID = 0;
+            /**
+             * The locally unique ID of the parent's world transform
+             * used to calculate the current world transformation matrix.
+             *
+             * @protected
+             * @member {number}
+             */
+            this._parentID = 0;
+        }
+        Object.defineProperty(Transform.prototype, "x", {
+            /**
+             * The coordinate of the object relative to the local coordinates of the parent.
+             */
+            get: function () {
+                return this._x;
+            },
+            set: function (v) {
+                if (this._x === v)
+                    return;
+                this._x = v;
+                this.onChange();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Transform.prototype, "y", {
+            get: function () {
+                return this._y;
+            },
+            set: function (v) {
+                if (this._y === v)
+                    return;
+                this._y = v;
+                this.onChange();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Transform.prototype, "scaleX", {
+            /**
+             * The scale factor of the object.
+             */
+            get: function () {
+                return this._scaleX;
+            },
+            set: function (v) {
+                if (this._scaleX === v)
+                    return;
+                this._scaleX = v;
+                this.onChange();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Transform.prototype, "scaleY", {
+            get: function () {
+                return this._scaleY;
+            },
+            set: function (v) {
+                if (this._scaleY === v)
+                    return;
+                this._scaleY = v;
+                this.onChange();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Transform.prototype, "pivotX", {
+            /**
+             * The pivot point of the displayObject that it rotates around.
+             */
+            get: function () {
+                return this._pivotX;
+            },
+            set: function (v) {
+                if (this._pivotX === v)
+                    return;
+                this._pivotX = v;
+                this.onChange();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Transform.prototype, "pivotY", {
+            get: function () {
+                return this._pivotY;
+            },
+            set: function (v) {
+                if (this._pivotY === v)
+                    return;
+                this._pivotY = v;
+                this.onChange();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Transform.prototype, "skewX", {
+            /**
+             * The skew amount, on the x and y axis.
+             */
+            get: function () {
+                return this._skewX;
+            },
+            set: function (v) {
+                if (this._skewX === v)
+                    return;
+                this._skewX = v;
+                this.updateSkew();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Transform.prototype, "skewY", {
+            get: function () {
+                return this._skewY;
+            },
+            set: function (v) {
+                if (this._skewY === v)
+                    return;
+                this._skewY = v;
+                this.updateSkew();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        /**
+         * Called when a value changes.
+         *
+         * @protected
+         */
+        Transform.prototype.onChange = function () {
+            this._localID++;
+        };
+        /**
+         * Called when the skew or the rotation changes.
+         *
+         * @protected
+         */
+        Transform.prototype.updateSkew = function () {
+            this._cx = Math.cos(this._rotation + this._skewY);
+            this._sx = Math.sin(this._rotation + this._skewY);
+            this._cy = -Math.sin(this._rotation - this._skewX); // cos, added PI/2
+            this._sy = Math.cos(this._rotation - this._skewX); // sin, added PI/2
+            this._localID++;
+        };
+        // #if _DEBUG
+        Transform.prototype.toString = function () {
+            return "[@pixi/math:Transform "
+                + ("position=(" + this.x + ", " + this.y + ") ")
+                + ("rotation=" + this.rotation + " ")
+                + ("scale=(" + this._scaleX + ", " + this._scaleY + ") ")
+                + ("skew=(" + this._skewX + ", " + this._skewY + ") ")
+                + "]";
+        };
+        // #endif
+        /**
+         * Updates the local transformation matrix.
+         */
+        Transform.prototype.updateLocalTransform = function () {
+            var lt = this.localTransform;
+            if (this._localID !== this._currentLocalID) {
+                // get the matrix values of the displayobject based on its transform properties..
+                lt.a = this._cx * this._scaleX;
+                lt.b = this._sx * this._scaleX;
+                lt.c = this._cy * this._scaleY;
+                lt.d = this._sy * this._scaleY;
+                lt.tx = this.x - ((this._pivotX * lt.a) + (this._pivotY * lt.c));
+                lt.ty = this.y - ((this._pivotX * lt.b) + (this._pivotY * lt.d));
+                this._currentLocalID = this._localID;
+                // force an update..
+                this._parentID = -1;
+            }
+        };
+        /**
+         * Updates the local and the world transformation matrices.
+         *
+         * @param {PIXI.Transform} parentTransform - The parent transform
+         */
+        Transform.prototype.updateTransform = function (parentTransform) {
+            var lt = this.localTransform;
+            if (this._localID !== this._currentLocalID) {
+                // get the matrix values of the displayobject based on its transform properties..
+                lt.a = this._cx * this._scaleX;
+                lt.b = this._sx * this._scaleX;
+                lt.c = this._cy * this._scaleY;
+                lt.d = this._sy * this._scaleY;
+                lt.tx = this.x - ((this._pivotX * lt.a) + (this._pivotY * lt.c));
+                lt.ty = this.y - ((this._pivotX * lt.b) + (this._pivotY * lt.d));
+                this._currentLocalID = this._localID;
+                // force an update..
+                this._parentID = -1;
+            }
+            if (this._parentID !== parentTransform._worldID) {
+                // concat the parent matrix with the objects transform.
+                var pt = parentTransform.worldTransform;
+                var wt = this.worldTransform;
+                wt.a = (lt.a * pt.a) + (lt.b * pt.c);
+                wt.b = (lt.a * pt.b) + (lt.b * pt.d);
+                wt.c = (lt.c * pt.a) + (lt.d * pt.c);
+                wt.d = (lt.c * pt.b) + (lt.d * pt.d);
+                wt.tx = (lt.tx * pt.a) + (lt.ty * pt.c) + pt.tx;
+                wt.ty = (lt.tx * pt.b) + (lt.ty * pt.d) + pt.ty;
+                this._parentID = parentTransform._worldID;
+                // update the id of the transform..
+                this._worldID++;
+            }
+        };
+        /**
+         * Decomposes a matrix and sets the transforms properties based on it.
+         *
+         * @param {PIXI.Matrix} matrix - The matrix to decompose
+         */
+        Transform.prototype.setFromMatrix = function (matrix) {
+            matrix.decompose(this);
+            this._localID++;
+        };
+        Object.defineProperty(Transform.prototype, "rotation", {
+            /**
+             * The rotation of the object in radians.
+             *
+             * @member {number}
+             */
+            get: function () {
+                return this._rotation;
+            },
+            set: function (value) {
+                if (this._rotation !== value) {
+                    this._rotation = value;
+                    this.updateSkew();
+                }
+            },
+            enumerable: false,
+            configurable: true
+        });
+        /**
+         * A default (identity) transform
+         *
+         * @static
+         * @constant
+         * @member {PIXI.Transform}
+         */
+        Transform.IDENTITY = new Transform();
+        return Transform;
+    }());
+    feng3d.Transform = Transform;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
      * 路径工具
      */
     var PathUtils = /** @class */ (function () {
@@ -21466,19 +22236,86 @@ var feng3d;
     function AddComponentMenu(path, componentOrder) {
         if (componentOrder === void 0) { componentOrder = 0; }
         return function (target) {
-            if (!feng3d.menuConfig.component)
-                feng3d.menuConfig.component = [];
-            feng3d.menuConfig.component.push({ path: path, order: componentOrder, type: target["name"] });
-            feng3d.menuConfig.component.sort(function (a, b) { if (a.path < b.path)
-                return -1; return 1; });
-            feng3d.menuConfig.component.sort(function (a, b) { return a.order - b.order; });
+            feng3d.menuConfig.addComponent({ path: path, order: componentOrder, type: target["name"] });
         };
     }
     feng3d.AddComponentMenu = AddComponentMenu;
     /**
+     * 添加实体菜单
+     *
+     * 在创建实体函数上新增 @AddEntityMenu("3D对象/平面") 可以添加到实体菜单上。
+     *
+     * @param path 菜单中路径
+     * @param componentOrder 菜单中顺序(从低到高)。
+     */
+    function AddEntityMenu(path, componentOrder) {
+        if (componentOrder === void 0) { componentOrder = 0; }
+        return function (target, propertyKey, descriptor) {
+            feng3d.menuConfig.addEntity({ path: path, order: componentOrder, func: target[propertyKey].bind(target) });
+        };
+    }
+    feng3d.AddEntityMenu = AddEntityMenu;
+    var MenuConfig = /** @class */ (function () {
+        function MenuConfig() {
+            this._componentOrderInvalid = false;
+            this._component = [];
+            this._entity = [];
+            this._entityOrderInvalid = false;
+        }
+        Object.defineProperty(MenuConfig.prototype, "component", {
+            /**
+             * 组件菜单
+             */
+            get: function () {
+                if (this._componentOrderInvalid) {
+                    this._component.sort(function (a, b) { if (a.path < b.path)
+                        return -1; return 1; });
+                    this._component.sort(function (a, b) { return a.order - b.order; });
+                    this._componentOrderInvalid = false;
+                }
+                return this._component;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        /**
+         * 新增组件菜单
+         * @param componentMenu
+         */
+        MenuConfig.prototype.addComponent = function (componentMenu) {
+            this._component.push(componentMenu);
+            this._componentOrderInvalid = true;
+        };
+        Object.defineProperty(MenuConfig.prototype, "entity", {
+            /**
+             * 实体菜单
+             */
+            get: function () {
+                if (this._entityOrderInvalid) {
+                    // this._entity.sort((a, b) => { if (a.path < b.path) return -1; return 1 })
+                    this._entity.sort(function (a, b) { return a.order - b.order; });
+                    this._entityOrderInvalid = false;
+                }
+                return this._entity;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        /**
+         * 新增实体菜单
+         * @param componentMenu
+         */
+        MenuConfig.prototype.addEntity = function (item) {
+            this._entity.push(item);
+            this._entityOrderInvalid = true;
+        };
+        return MenuConfig;
+    }());
+    feng3d.MenuConfig = MenuConfig;
+    /**
      * 菜单配置
      */
-    feng3d.menuConfig = {};
+    feng3d.menuConfig = new MenuConfig();
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
@@ -26325,6 +27162,7 @@ var feng3d;
          */
         function Component() {
             var _this = _super.call(this) || this;
+            _this._entity = null;
             _this._disposed = false;
             _this.onAny(_this._onAnyListener, _this);
             return _this;
@@ -26370,11 +27208,20 @@ var feng3d;
                 return this._entity;
             },
             set: function (v) {
-                if (this._entity === v) {
-                    return;
-                }
                 console.assert(!this._entity, "组件无法再次加入其它Entity中!");
                 this._entity = v;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Component.prototype, "node", {
+            get: function () {
+                var _a;
+                return this._node || ((_a = this._entity) === null || _a === void 0 ? void 0 : _a.getComponent(feng3d.Node));
+            },
+            set: function (v) {
+                console.assert(!this._node, "无法重复赋值!");
+                this._node = v;
             },
             enumerable: false,
             configurable: true
@@ -26386,8 +27233,7 @@ var feng3d;
              * 组件与实体及所有附加组件使用相同的名称。
              */
             get: function () {
-                var _a;
-                return (_a = this._entity) === null || _a === void 0 ? void 0 : _a.name;
+                return this._entity.name;
             },
             set: function (v) {
                 this._entity.name = v;
@@ -26431,7 +27277,7 @@ var feng3d;
          * @return				子组件
          */
         Component.prototype.getComponentAt = function (index) {
-            return this.entity.getComponentAt(index);
+            return this._entity.getComponentAt(index);
         };
         /**
          * 添加指定组件类型到实体
@@ -26440,14 +27286,14 @@ var feng3d;
          */
         Component.prototype.addComponent = function (type, callback) {
             if (callback === void 0) { callback = null; }
-            return this.entity.addComponent(type, callback);
+            return this._entity.addComponent(type, callback);
         };
         /**
          * 添加脚本
          * @param script   脚本路径
          */
         Component.prototype.addScript = function (scriptName) {
-            return this.entity.addScript(scriptName);
+            return this._entity.addScript(scriptName);
         };
         /**
          * 获取实体上第一个指定类型的组件，不存在时返回null
@@ -26456,7 +27302,7 @@ var feng3d;
          * @return                  返回指定类型组件
          */
         Component.prototype.getComponent = function (type) {
-            return this.entity.getComponent(type);
+            return this._entity.getComponent(type);
         };
         /**
          * 获取实体上所有指定类型的组件数组
@@ -26465,7 +27311,7 @@ var feng3d;
          * @return			返回与给出类定义一致的组件
          */
         Component.prototype.getComponents = function (type) {
-            return this.entity.getComponents(type);
+            return this._entity.getComponents(type);
         };
         /**
          * 设置子组件的位置
@@ -26473,7 +27319,7 @@ var feng3d;
          * @param index				位置索引
          */
         Component.prototype.setComponentIndex = function (component, index) {
-            this.entity.setComponentIndex(component, index);
+            this._entity.setComponentIndex(component, index);
         };
         /**
          * 设置组件到指定位置
@@ -26481,14 +27327,14 @@ var feng3d;
          * @param index			索引
          */
         Component.prototype.setComponentAt = function (component, index) {
-            this.entity.setComponentAt(component, index);
+            this._entity.setComponentAt(component, index);
         };
         /**
          * 移除组件
          * @param component 被移除组件
          */
         Component.prototype.removeComponent = function (component) {
-            this.entity.removeComponent(component);
+            this._entity.removeComponent(component);
         };
         /**
          * 获取组件在容器的索引位置
@@ -26496,14 +27342,14 @@ var feng3d;
          * @return				    组件在容器的索引位置
          */
         Component.prototype.getComponentIndex = function (component) {
-            return this.entity.getComponentIndex(component);
+            return this._entity.getComponentIndex(component);
         };
         /**
          * 移除组件
          * @param index		要删除的 Component 的子索引。
          */
         Component.prototype.removeComponentAt = function (index) {
-            return this.entity.removeComponentAt(index);
+            return this._entity.removeComponentAt(index);
         };
         /**
          * 交换子组件位置
@@ -26511,7 +27357,7 @@ var feng3d;
          * @param index2		第二个子组件的索引位置
          */
         Component.prototype.swapComponentsAt = function (index1, index2) {
-            this.swapComponentsAt(index1, index2);
+            this._entity.swapComponentsAt(index1, index2);
         };
         /**
          * 交换子组件位置
@@ -26519,7 +27365,7 @@ var feng3d;
          * @param b		第二个子组件
          */
         Component.prototype.swapComponents = function (a, b) {
-            this.swapComponents(a, b);
+            this._entity.swapComponents(a, b);
         };
         /**
          * 销毁
@@ -26531,20 +27377,30 @@ var feng3d;
         Component.prototype.beforeRender = function (renderAtomic, scene, camera) {
         };
         /**
+         * Returns all components of Type type in the Entity.
+         *
+         * 返回 Entity 或其任何子项中类型为 type 的所有组件。
+         *
+         * @param type		类定义
+         * @return			返回与给出类定义一致的组件
+         */
+        Component.prototype.getComponentsInChildren = function (type, filter, result) {
+            return this.node.getComponentsInChildren(type, filter, result);
+        };
+        /**
+         * 从父类中获取组件
+         * @param type		类定义
+         * @return			返回与给出类定义一致的组件
+         */
+        Component.prototype.getComponentsInParents = function (type, result) {
+            return this.node.getComponentsInParents(type, result);
+        };
+        /**
          * 监听对象的所有事件并且传播到所有组件中
          */
         Component.prototype._onAnyListener = function (e) {
-            if (this._entity)
-                this._entity.emitEvent(e);
-        };
-        /**
-         * 该方法仅在Entity中使用
-         * @private
-         *
-         * @param entity 实体
-         */
-        Component.prototype._setEntity = function (entity) {
-            this._entity = entity;
+            var _a;
+            (_a = this._entity) === null || _a === void 0 ? void 0 : _a.emitEvent(e);
         };
         /**
          * 组件名称与类定义映射，由 @RegisterComponent 装饰器进行填充。
@@ -26560,29 +27416,80 @@ var feng3d;
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
-    /**
-     *
-     */
-    var Container = /** @class */ (function (_super) {
-        __extends(Container, _super);
-        function Container() {
+    var Node = /** @class */ (function (_super) {
+        __extends(Node, _super);
+        function Node() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this._children = [];
+            _this._visible = true;
+            _this._globalVisible = false;
+            _this._globalVisibleInvalid = true;
+            /**
+             * 自身以及子对象是否支持鼠标拾取
+             */
+            _this.mouseEnabled = true;
             return _this;
         }
-        Object.defineProperty(Container.prototype, "parent", {
+        Object.defineProperty(Node.prototype, "parent", {
             get: function () {
                 return this._parent;
             },
             enumerable: false,
             configurable: true
         });
-        Container.prototype._setParent = function (value) {
-            this._parent = value;
-        };
-        Object.defineProperty(Container.prototype, "numChildren", {
+        Object.defineProperty(Node.prototype, "children", {
+            /**
+             * 子对象
+             */
+            get: function () {
+                return this._children;
+            },
+            set: function (value) {
+                if (!value)
+                    return;
+                for (var i = this._children.length - 1; i >= 0; i--) {
+                    this.removeChildAt(i);
+                }
+                for (var i = 0; i < value.length; i++) {
+                    this.addChild(value[i]);
+                }
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node.prototype, "numChildren", {
             get: function () {
                 return this._children.length;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node.prototype, "visible", {
+            /**
+             * 是否显示
+             */
+            get: function () {
+                return this._visible;
+            },
+            set: function (v) {
+                if (this._visible == v)
+                    return;
+                this._visible = v;
+                this._invalidateGlobalVisible();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node.prototype, "globalVisible", {
+            /**
+             * 全局是否可见
+             */
+            get: function () {
+                if (this._globalVisibleInvalid) {
+                    this._updateGlobalVisible();
+                    this._globalVisibleInvalid = false;
+                }
+                return this._globalVisible;
             },
             enumerable: false,
             configurable: true
@@ -26592,7 +27499,7 @@ var feng3d;
          *
          * @param name 对象名称
          */
-        Container.prototype.find = function (name) {
+        Node.prototype.find = function (name) {
             if (this.name == name)
                 return this;
             for (var i = 0; i < this._children.length; i++) {
@@ -26607,7 +27514,7 @@ var feng3d;
          *
          * @param child 可能的子孙对象
          */
-        Container.prototype.contains = function (child) {
+        Node.prototype.contains = function (child) {
             var checkitem = child;
             do {
                 if (checkitem == this)
@@ -26621,36 +27528,89 @@ var feng3d;
          *
          * @param child 子对象
          */
-        Container.prototype.addChild = function (child) {
-            if (child == null)
-                return;
-            if (child.parent == this) {
-                // 把子对象移动到最后
-                var childIndex = this._children.indexOf(child);
-                if (childIndex != -1)
-                    this._children.splice(childIndex, 1);
-                this._children.push(child);
+        Node.prototype.addChild = function () {
+            var children = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                children[_i] = arguments[_i];
+            }
+            if (children.length > 1) {
+                for (var i = 0; i < children.length; i++) {
+                    this.addChild(children[i]);
+                }
             }
             else {
-                if (child.contains(this)) {
-                    console.error("无法添加到自身中!");
-                    return;
-                }
-                if (child._parent)
-                    child._parent.removeChild(child);
-                child._setParent(this);
-                this._children.push(child);
-                child.emit("added", { parent: this });
-                this.emit("addChild", { child: child, parent: this }, true);
+                var child = children[0];
+                this.addChildAt(child, this._children.length);
             }
+            return children[0];
+        };
+        Node.prototype.addChildAt = function (child, index) {
+            if (index < 0 || index > this._children.length) {
+                throw new Error(child + "addChildAt: The index " + index + " supplied is out of bounds " + this._children.length);
+            }
+            if (child._parent) {
+                child._parent.removeChild(child);
+            }
+            child._setParent(this);
+            this._children.splice(index, 0, child);
+            this.onChildrenChange(index);
+            child.emit("added", { parent: this });
+            this.emit("childAdded", { child: child, parent: this, index: index }, true);
             return child;
+        };
+        /**
+         *
+         * @param child
+         * @param child2
+         */
+        Node.prototype.swapChildren = function (child, child2) {
+            if (child === child2) {
+                return;
+            }
+            var index1 = this.getChildIndex(child);
+            var index2 = this.getChildIndex(child2);
+            this._children[index1] = child2;
+            this._children[index2] = child;
+            this.onChildrenChange(index1 < index2 ? index1 : index2);
+            return this;
+        };
+        /***
+         *
+         */
+        Node.prototype.onChildrenChange = function (index) {
+            /* empty */
+        };
+        /**
+         *
+         * @param child
+         */
+        Node.prototype.getChildIndex = function (child) {
+            var index = this._children.indexOf(child);
+            if (index === -1) {
+                throw new Error('The supplied Node must be a child of the caller');
+            }
+            return index;
+        };
+        /**
+         *
+         * @param child
+         * @param index
+         */
+        Node.prototype.setChildIndex = function (child, index) {
+            if (index < 0 || index >= this._children.length) {
+                throw new Error("The index " + index + " supplied is out of bounds " + this._children.length);
+            }
+            var currentIndex = this.getChildIndex(child);
+            this._children.splice(currentIndex, 1);
+            this._children.splice(index, 0, child);
+            this.onChildrenChange(index);
         };
         /**
          * 添加子对象
          *
          * @param children 子对象
          */
-        Container.prototype.addChildren = function () {
+        Node.prototype.addChildren = function () {
             var children = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 children[_i] = arguments[_i];
@@ -26662,64 +27622,168 @@ var feng3d;
         /**
          * 移除自身
          */
-        Container.prototype.remove = function () {
+        Node.prototype.remove = function () {
             if (this.parent)
                 this.parent.removeChild(this);
         };
         /**
          * 移除所有子对象
          */
-        Container.prototype.removeChildren = function () {
-            for (var i = this.numChildren - 1; i >= 0; i--) {
+        Node.prototype.removeChildren = function (beginIndex, endIndex) {
+            if (beginIndex === void 0) { beginIndex = 0; }
+            if (endIndex === void 0) { endIndex = this._children.length; }
+            beginIndex = Math.clamp(beginIndex, 0, this._children.length);
+            endIndex = Math.clamp(endIndex, 0, this._children.length);
+            var removed = this._children.slice(beginIndex, endIndex);
+            for (var i = endIndex - 1; i >= beginIndex; i--) {
                 this.removeChildAt(i);
             }
+            return removed;
         };
         /**
          * 移除子对象
          *
          * @param child 子对象
          */
-        Container.prototype.removeChild = function (child) {
-            if (child == null)
-                return;
-            var childIndex = this._children.indexOf(child);
-            if (childIndex != -1)
-                this.removeChildInternal(childIndex, child);
+        Node.prototype.removeChild = function () {
+            var children = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                children[_i] = arguments[_i];
+            }
+            if (children.length > 1) {
+                for (var i = 0; i < children.length; i++) {
+                    this.removeChild(children[i]);
+                }
+            }
+            else {
+                var child = children[0];
+                var index = this._children.indexOf(child);
+                if (index === -1)
+                    return null;
+                this.removeChildAt(index);
+            }
+            return children[0];
         };
         /**
          * 删除指定位置的子对象
          *
          * @param index 需要删除子对象的所有
          */
-        Container.prototype.removeChildAt = function (index) {
+        Node.prototype.removeChildAt = function (index) {
             var child = this._children[index];
-            return this.removeChildInternal(index, child);
+            this._children.splice(index, 1);
+            child._setParent(null);
+            this.onChildrenChange(index);
+            child.emit("removed", { parent: this });
+            this.emit("childRemoved", { child: child, parent: this, index: index }, true);
+            return child;
         };
         /**
          * 获取指定位置的子对象
          *
          * @param index
          */
-        Container.prototype.getChildAt = function (index) {
-            index = index;
+        Node.prototype.getChildAt = function (index) {
+            if (index < 0 || index >= this._children.length) {
+                throw new Error("getChildAt: Index (" + index + ") does not exist.");
+            }
             return this._children[index];
         };
         /**
          * 获取子对象列表（备份）
          */
-        Container.prototype.getChildren = function () {
-            return this._children.concat();
+        Node.prototype.getChildren = function (start, end) {
+            return this._children.slice(start, end);
         };
-        Container.prototype.removeChildInternal = function (childIndex, child) {
-            childIndex = childIndex;
-            this._children.splice(childIndex, 1);
-            child._setParent(null);
-            child.emit("removed", { parent: this });
-            this.emit("removeChild", { child: child, parent: this }, true);
+        /**
+         * 从自身与子代（孩子，孩子的孩子，...）Entity 中获取所有指定类型的组件
+         *
+         * @param type		要检索的组件的类型。
+         * @return			返回与给出类定义一致的组件
+         *
+         * @todo 与 Node3D.getComponentsInChildren 代码重复，有待优化
+         */
+        Node.prototype.getComponentsInChildren = function (type, filter, result) {
+            result = result || [];
+            var findchildren = true;
+            var cls = type;
+            var components = this.entity.components;
+            for (var i = 0, n = components.length; i < n; i++) {
+                var item = components[i];
+                if (!cls) {
+                    result.push(item);
+                }
+                else if (item instanceof cls) {
+                    if (filter) {
+                        var filterresult = filter(item);
+                        filterresult && filterresult.value && result.push(item);
+                        findchildren = filterresult ? (filterresult && filterresult.findchildren) : false;
+                    }
+                    else {
+                        result.push(item);
+                    }
+                }
+            }
+            if (findchildren) {
+                var children = this.children;
+                for (var i = 0, n = children.length; i < n; i++) {
+                    var child = children[i];
+                    if (child instanceof feng3d.Node2D) {
+                        child.getComponentsInChildren(type, filter, result);
+                    }
+                }
+            }
+            return result;
         };
-        return Container;
-    }(feng3d.EventEmitter));
-    feng3d.Container = Container;
+        /**
+         * 从父代（父亲，父亲的父亲，...）中获取组件
+         *
+         * @param type		类定义
+         * @return			返回与给出类定义一致的组件
+         */
+        Node.prototype.getComponentsInParents = function (type, result) {
+            result = result || [];
+            var parent = this.parent;
+            while (parent) {
+                var compnent = parent.getComponent(type);
+                compnent && result.push(compnent);
+                parent = parent.parent;
+            }
+            return result;
+        };
+        Node.prototype._setParent = function (value) {
+            this._parent = value;
+        };
+        Node.prototype._updateGlobalVisible = function () {
+            var visible = this.visible;
+            if (this.parent) {
+                visible = visible && this.parent.globalVisible;
+            }
+            this._globalVisible = visible;
+        };
+        Node.prototype._invalidateGlobalVisible = function () {
+            if (this._globalVisibleInvalid)
+                return;
+            this._globalVisibleInvalid = true;
+            this._children.forEach(function (c) {
+                c._invalidateGlobalVisible();
+            });
+        };
+        __decorate([
+            feng3d.serialize
+        ], Node.prototype, "children", null);
+        __decorate([
+            feng3d.serialize
+        ], Node.prototype, "visible", null);
+        __decorate([
+            feng3d.serialize
+        ], Node.prototype, "mouseEnabled", void 0);
+        Node = __decorate([
+            feng3d.RegisterComponent({ single: true })
+        ], Node);
+        return Node;
+    }(feng3d.Component));
+    feng3d.Node = Node;
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
@@ -26812,10 +27876,6 @@ var feng3d;
         function Node3D() {
             var _this = _super.call(this) || this;
             _this.assetType = feng3d.AssetType.node3d;
-            /**
-             * 自身以及子对象是否支持鼠标拾取
-             */
-            _this.mouseEnabled = true;
             _this._x = 0;
             _this._y = 0;
             _this._z = 0;
@@ -26825,9 +27885,6 @@ var feng3d;
             _this._sx = 1;
             _this._sy = 1;
             _this._sz = 1;
-            _this._visible = true;
-            _this._globalVisible = false;
-            _this._globalVisibleInvalid = true;
             _this._orientation = new feng3d.Quaternion();
             _this._matrix = new feng3d.Matrix4x4();
             _this._matrixInvalid = false;
@@ -26841,15 +27898,16 @@ var feng3d;
             _this._worldToLocalMatrixInvalid = false;
             _this._localToWorldRotationMatrix = new feng3d.Matrix4x4();
             _this._localToWorldRotationMatrixInvalid = false;
-            _this._children = [];
             _this._renderAtomic = new feng3d.RenderAtomic();
             _this._renderAtomic.uniforms.u_modelMatrix = function () { return _this.localToWorldMatrix; };
             _this._renderAtomic.uniforms.u_ITModelMatrix = function () { return _this.ITlocalToWorldMatrix; };
             return _this;
         }
-        Node3D_1 = Node3D;
-        Node3D.prototype.create = function () {
-            new feng3d.Entity().addComponent(Node3D_1);
+        Node3D.create = function (name) {
+            if (name === void 0) { name = "Node3D"; }
+            var node3d = new feng3d.Entity().addComponent(Node3D);
+            node3d.name = name;
+            return node3d;
         };
         Object.defineProperty(Node3D.prototype, "worldPosition", {
             /**
@@ -27056,36 +28114,6 @@ var feng3d;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(Node3D.prototype, "visible", {
-            /**
-             * 是否显示
-             */
-            get: function () {
-                return this._visible;
-            },
-            set: function (v) {
-                if (this._visible == v)
-                    return;
-                this._visible = v;
-                this._invalidateGlobalVisible();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(Node3D.prototype, "globalVisible", {
-            /**
-             * 全局是否可见
-             */
-            get: function () {
-                if (this._globalVisibleInvalid) {
-                    this._updateGlobalVisible();
-                    this._globalVisibleInvalid = false;
-                }
-                return this._globalVisible;
-            },
-            enumerable: false,
-            configurable: true
-        });
         Object.defineProperty(Node3D.prototype, "matrix", {
             /**
              * 本地变换矩阵
@@ -27142,43 +28170,9 @@ var feng3d;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(Node3D.prototype, "parent", {
-            get: function () {
-                return this._parent;
-            },
-            enumerable: false,
-            configurable: true
-        });
         Object.defineProperty(Node3D.prototype, "scene", {
             get: function () {
                 return this._scene;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(Node3D.prototype, "children", {
-            /**
-             * 子对象
-             */
-            get: function () {
-                return this._children.concat();
-            },
-            set: function (value) {
-                if (!value)
-                    return;
-                for (var i = this._children.length - 1; i >= 0; i--) {
-                    this.removeChildAt(i);
-                }
-                for (var i = 0; i < value.length; i++) {
-                    this.addChild(value[i]);
-                }
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(Node3D.prototype, "numChildren", {
-            get: function () {
-                return this._children.length;
             },
             enumerable: false,
             configurable: true
@@ -27367,129 +28361,6 @@ var feng3d;
             configurable: true
         });
         /**
-         * 根据名称查找对象
-         *
-         * @param name 对象名称
-         */
-        Node3D.prototype.find = function (name) {
-            if (this.name == name)
-                return this;
-            for (var i = 0; i < this._children.length; i++) {
-                var target = this._children[i].find(name);
-                if (target)
-                    return target;
-            }
-            return null;
-        };
-        /**
-         * 是否包含指定对象
-         *
-         * @param child 可能的子孙对象
-         */
-        Node3D.prototype.contains = function (child) {
-            var checkitem = child;
-            do {
-                if (checkitem == this)
-                    return true;
-                checkitem = checkitem.parent;
-            } while (checkitem);
-            return false;
-        };
-        /**
-         * 添加子对象
-         *
-         * @param child 子对象
-         */
-        Node3D.prototype.addChild = function (child) {
-            if (child == null)
-                return;
-            if (child.parent == this) {
-                // 把子对象移动到最后
-                var childIndex = this._children.indexOf(child);
-                if (childIndex != -1)
-                    this._children.splice(childIndex, 1);
-                this._children.push(child);
-            }
-            else {
-                if (child.contains(this)) {
-                    console.error("无法添加到自身中!");
-                    return;
-                }
-                if (child._parent)
-                    child._parent.removeChild(child);
-                child._setParent(this);
-                this._children.push(child);
-                child.emit("added", { parent: this });
-                this.emit("addChild", { child: child, parent: this }, true);
-            }
-            return child;
-        };
-        /**
-         * 添加子对象
-         *
-         * @param children 子对象
-         */
-        Node3D.prototype.addChildren = function () {
-            var children = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                children[_i] = arguments[_i];
-            }
-            for (var i = 0; i < children.length; i++) {
-                this.addChild(children[i]);
-            }
-        };
-        /**
-         * 移除自身
-         */
-        Node3D.prototype.remove = function () {
-            if (this.parent)
-                this.parent.removeChild(this);
-        };
-        /**
-         * 移除所有子对象
-         */
-        Node3D.prototype.removeChildren = function () {
-            for (var i = this.numChildren - 1; i >= 0; i--) {
-                this.removeChildAt(i);
-            }
-        };
-        /**
-         * 移除子对象
-         *
-         * @param child 子对象
-         */
-        Node3D.prototype.removeChild = function (child) {
-            if (child == null)
-                return;
-            var childIndex = this._children.indexOf(child);
-            if (childIndex != -1)
-                this.removeChildInternal(childIndex, child);
-        };
-        /**
-         * 删除指定位置的子对象
-         *
-         * @param index 需要删除子对象的所有
-         */
-        Node3D.prototype.removeChildAt = function (index) {
-            var child = this._children[index];
-            return this.removeChildInternal(index, child);
-        };
-        /**
-         * 获取指定位置的子对象
-         *
-         * @param index
-         */
-        Node3D.prototype.getChildAt = function (index) {
-            index = index;
-            return this._children[index];
-        };
-        /**
-         * 获取子对象列表（备份）
-         */
-        Node3D.prototype.getChildren = function () {
-            return this._children.concat();
-        };
-        /**
          * 将方向从局部空间转换到世界空间。
          *
          * @param direction 局部空间方向
@@ -27620,56 +28491,6 @@ var feng3d;
             this.worldToLocalMatrix.transformRay(worldRay, localRay);
             return localRay;
         };
-        /**
-         * 从自身与子代（孩子，孩子的孩子，...）Entity 中获取所有指定类型的组件
-         *
-         * @param type		要检索的组件的类型。
-         * @return			返回与给出类定义一致的组件
-         */
-        Node3D.prototype.getComponentsInChildren = function (type, filter, result) {
-            result = result || [];
-            var findchildren = true;
-            var cls = type;
-            var components = this.entity.components;
-            for (var i = 0, n = components.length; i < n; i++) {
-                var item = components[i];
-                if (!cls) {
-                    result.push(item);
-                }
-                else if (item instanceof cls) {
-                    if (filter) {
-                        var filterresult = filter(item);
-                        filterresult && filterresult.value && result.push(item);
-                        findchildren = filterresult ? (filterresult && filterresult.findchildren) : false;
-                    }
-                    else {
-                        result.push(item);
-                    }
-                }
-            }
-            if (findchildren) {
-                for (var i = 0, n = this.numChildren; i < n; i++) {
-                    this._children[i].getComponentsInChildren(type, filter, result);
-                }
-            }
-            return result;
-        };
-        /**
-         * 从父代（父亲，父亲的父亲，...）中获取组件
-         *
-         * @param type		类定义
-         * @return			返回与给出类定义一致的组件
-         */
-        Node3D.prototype.getComponentsInParents = function (type, result) {
-            result = result || [];
-            var parent = this.parent;
-            while (parent) {
-                var compnent = parent.getComponent(type);
-                compnent && result.push(compnent);
-                parent = parent.parent;
-            }
-            return result;
-        };
         Node3D.prototype.beforeRender = function (renderAtomic, scene, camera) {
             Object.assign(renderAtomic.uniforms, this._renderAtomic.uniforms);
         };
@@ -27705,7 +28526,7 @@ var feng3d;
         };
         Node3D.prototype.updateScene = function () {
             var _a;
-            var newScene = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._scene;
+            var newScene = (_a = this.parent) === null || _a === void 0 ? void 0 : _a._scene;
             if (this._scene == newScene)
                 return;
             if (this._scene) {
@@ -27721,16 +28542,10 @@ var feng3d;
          * @private
          */
         Node3D.prototype._updateChildrenScene = function () {
+            var children = this.children;
             for (var i = 0, n = this._children.length; i < n; i++) {
-                this._children[i].updateScene();
+                children[i].updateScene();
             }
-        };
-        Node3D.prototype.removeChildInternal = function (childIndex, child) {
-            childIndex = childIndex;
-            this._children.splice(childIndex, 1);
-            child._setParent(null);
-            child.emit("removed", { parent: this });
-            this.emit("removeChild", { child: child, parent: this }, true);
         };
         Node3D.prototype._invalidateTransform = function () {
             if (this._matrixInvalid)
@@ -27839,21 +28654,6 @@ var feng3d;
             if (loadingNum == 0)
                 callback();
         };
-        Node3D.prototype._updateGlobalVisible = function () {
-            var visible = this.visible;
-            if (this.parent) {
-                visible = visible && this.parent.globalVisible;
-            }
-            this._globalVisible = visible;
-        };
-        Node3D.prototype._invalidateGlobalVisible = function () {
-            if (this._globalVisibleInvalid)
-                return;
-            this._globalVisibleInvalid = true;
-            this._children.forEach(function (c) {
-                c._invalidateGlobalVisible();
-            });
-        };
         /**
          * 申明冒泡函数
          * feng3d.__event_bubble_function__
@@ -27869,16 +28669,12 @@ var feng3d;
             this._scene = v;
             this._updateChildrenScene();
         };
-        var Node3D_1;
         __decorate([
             feng3d.serialize
         ], Node3D.prototype, "prefabId", void 0);
         __decorate([
             feng3d.serialize
         ], Node3D.prototype, "assetId", void 0);
-        __decorate([
-            feng3d.serialize
-        ], Node3D.prototype, "mouseEnabled", void 0);
         __decorate([
             feng3d.serialize,
             feng3d.oav()
@@ -27916,16 +28712,10 @@ var feng3d;
             feng3d.oav()
         ], Node3D.prototype, "sz", null);
         __decorate([
-            feng3d.serialize
-        ], Node3D.prototype, "visible", null);
-        __decorate([
-            feng3d.serialize
-        ], Node3D.prototype, "children", null);
-        Node3D = Node3D_1 = __decorate([
-            feng3d.RegisterComponent({ single: true })
-        ], Node3D);
+            feng3d.AddEntityMenu("Node3D/Empty")
+        ], Node3D, "create", null);
         return Node3D;
-    }(feng3d.Component));
+    }(feng3d.Node));
     feng3d.Node3D = Node3D;
     var tempVector3_1 = new feng3d.Vector3();
     var tempVector3_2 = new feng3d.Vector3();
@@ -28370,7 +29160,7 @@ var feng3d;
                 }
             }
             this._components.splice(index, 0, component);
-            component._setEntity(this);
+            component.entity = this;
             component.init();
             //派发添加组件事件
             this.emit("addComponent", { component: component, entity: this }, true);
@@ -28731,7 +29521,6 @@ var feng3d;
     }(feng3d.Feng3dObject));
     feng3d.View = View;
 })(feng3d || (feng3d = {}));
-// var viewRect0 = { x: 0, y: 0, w: 400, h: 300 };
 var feng3d;
 (function (feng3d) {
     /**
@@ -28751,31 +29540,11 @@ var feng3d;
              * 附加到此 Entity 的 Node3D。
              */
             get: function () {
-                var _a;
-                return (_a = this._entity) === null || _a === void 0 ? void 0 : _a.getComponent(feng3d.Node3D);
+                return this.node;
             },
             enumerable: false,
             configurable: true
         });
-        /**
-         * Returns all components of Type type in the Entity.
-         *
-         * 返回 Entity 或其任何子项中类型为 type 的所有组件。
-         *
-         * @param type		类定义
-         * @return			返回与给出类定义一致的组件
-         */
-        Component3D.prototype.getComponentsInChildren = function (type, filter, result) {
-            return this.node3d.getComponentsInChildren(type, filter, result);
-        };
-        /**
-         * 从父类中获取组件
-         * @param type		类定义
-         * @return			返回与给出类定义一致的组件
-         */
-        Component3D.prototype.getComponentsInParents = function (type, result) {
-            return this.node3d.getComponentsInParents(type, result);
-        };
         Component3D = __decorate([
             feng3d.RegisterComponent({ dependencies: [feng3d.Node3D] })
         ], Component3D);
@@ -29131,6 +29900,560 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
+     * Container is a general-purpose display object that holds children. It also adds built-in support for advanced
+     * rendering features like masking and filtering.
+     *
+     * It is the base class of all display objects that act as a container for other objects, including Graphics
+     * and Sprite.
+     *
+     * ```js
+     * import { BlurFilter } from '@pixi/filter-blur';
+     * import { Container } from '@pixi/display';
+     * import { Graphics } from '@pixi/graphics';
+     * import { Sprite } from '@pixi/sprite';
+     *
+     * let container = new Container();
+     * let sprite = Sprite.from("https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png");
+     *
+     * sprite.width = 512;
+     * sprite.height = 512;
+     *
+     * // Adds a sprite as a child to this container. As a result, the sprite will be rendered whenever the container
+     * // is rendered.
+     * container.addChild(sprite);
+     *
+     * // Blurs whatever is rendered by the container
+     * container.filters = [new BlurFilter()];
+     *
+     * // Only the contents within a circle at the center should be rendered onto the screen.
+     * container.mask = new Graphics()
+     *  .beginFill(0xffffff)
+     *  .drawCircle(sprite.width / 2, sprite.height / 2, Math.min(sprite.width, sprite.height) / 2)
+     *  .endFill();
+     * ```
+     *
+     */
+    var Node2D = /** @class */ (function (_super) {
+        __extends(Node2D, _super);
+        function Node2D() {
+            var _this = _super.call(this) || this;
+            _this.tempDisplayObjectParent = null;
+            /**
+             * World transform and local transform of this object.
+             * This will become read-only later, please do not assign anything there unless you know what are you doing.
+             *
+             * @member {PIXI.Transform}
+             */
+            _this.transform = new feng3d.Transform();
+            /**
+             * The opacity of the object.
+             *
+             * @member {number}
+             */
+            _this.alpha = 1;
+            /**
+             * The visibility of the object. If false the object will not be drawn, and
+             * the updateTransform function will not be called.
+             *
+             * Only affects recursive calls from parent. You can ask for bounds or call updateTransform manually.
+             *
+             * @member {boolean}
+             */
+            _this.visible = true;
+            /**
+             * The display object container that contains this display object.
+             *
+             * @member {PIXI.Container}
+             */
+            _this._parent = null;
+            /**
+             * The multiplied alpha of the displayObject.
+             *
+             * @member {number}
+             * @readonly
+             */
+            _this.worldAlpha = 1;
+            /**
+             * If the object has been destroyed via destroy(). If true, it should not be used.
+             *
+             * @member {boolean}
+             * @protected
+             */
+            _this._destroyed = false;
+            /**
+             * The array of children of this container.
+             *
+             * @member {feng3d.Node2D[]}
+             * @readonly
+             */
+            _this.children = [];
+            return _this;
+        }
+        /**
+         * Recursively updates transform of all objects from the root to this one
+         * internal function for toLocal()
+         */
+        Node2D.prototype._recursivePostUpdateTransform = function () {
+            var parent = this.parent;
+            if (parent && parent instanceof Node2D) {
+                parent._recursivePostUpdateTransform();
+                this.transform.updateTransform(parent.transform);
+            }
+            else {
+                this.transform.updateTransform(this._tempDisplayObjectParent.transform);
+            }
+        };
+        /**
+         * Calculates the global position of the display object.
+         *
+         * @param {PIXI.IPointData} position - The world origin to calculate from.
+         * @param {PIXI.Point} [point] - A Point object in which to store the value, optional
+         *  (otherwise will create a new Point).
+         * @param {boolean} [skipUpdate=false] - Should we skip the update transform.
+         * @return {PIXI.Point} A point object representing the position of this object.
+         */
+        Node2D.prototype.toGlobal = function (position, point, skipUpdate) {
+            if (skipUpdate === void 0) { skipUpdate = false; }
+            if (!skipUpdate) {
+                this._recursivePostUpdateTransform();
+                // this parent check is for just in case the item is a root object.
+                // If it is we need to give it a temporary parent so that displayObjectUpdateTransform works correctly
+                // this is mainly to avoid a parent check in the main loop. Every little helps for performance :)
+                if (!this.parent) {
+                    this._setParent(this._tempDisplayObjectParent);
+                    this.displayObjectUpdateTransform();
+                    this._setParent(null);
+                }
+                else {
+                    this.displayObjectUpdateTransform();
+                }
+            }
+            // don't need to update the lot
+            return this.worldTransform.apply(position, point);
+        };
+        /**
+         * Calculates the local position of the display object relative to another point.
+         *
+         * @param {PIXI.IPointData} position - The world origin to calculate from.
+         * @param {feng3d.Node2D} [from] - The Node2D to calculate the global position from.
+         * @param {PIXI.Point} [point] - A Point object in which to store the value, optional
+         *  (otherwise will create a new Point).
+         * @param {boolean} [skipUpdate=false] - Should we skip the update transform
+         * @return {PIXI.Point} A point object representing the position of this object
+         */
+        Node2D.prototype.toLocal = function (position, from, point, skipUpdate) {
+            if (from) {
+                position = from.toGlobal(position, point, skipUpdate);
+            }
+            if (!skipUpdate) {
+                this._recursivePostUpdateTransform();
+                // this parent check is for just in case the item is a root object.
+                // If it is we need to give it a temporary parent so that displayObjectUpdateTransform works correctly
+                // this is mainly to avoid a parent check in the main loop. Every little helps for performance :)
+                if (!this.parent) {
+                    this._setParent(this._tempDisplayObjectParent);
+                    this.displayObjectUpdateTransform();
+                    this._setParent(null);
+                }
+                else {
+                    this.displayObjectUpdateTransform();
+                }
+            }
+            // simply apply the matrix..
+            return this.worldTransform.applyInverse(position, point);
+        };
+        Node2D.prototype._setParent = function (value) {
+            this._parent = value;
+            this.transform._parentID = -1;
+        };
+        /**
+         * Convenience function to set the position, scale, skew and pivot at once.
+         *
+         * @param {number} [x=0] - The X position
+         * @param {number} [y=0] - The Y position
+         * @param {number} [scaleX=1] - The X scale value
+         * @param {number} [scaleY=1] - The Y scale value
+         * @param {number} [rotation=0] - The rotation
+         * @param {number} [skewX=0] - The X skew value
+         * @param {number} [skewY=0] - The Y skew value
+         * @param {number} [pivotX=0] - The X pivot value
+         * @param {number} [pivotY=0] - The Y pivot value
+         * @return {feng3d.Node2D} The Node2D instance
+         */
+        Node2D.prototype.setTransform = function (x, y, scaleX, scaleY, rotation, skewX, skewY, pivotX, pivotY) {
+            if (x === void 0) { x = 0; }
+            if (y === void 0) { y = 0; }
+            if (scaleX === void 0) { scaleX = 1; }
+            if (scaleY === void 0) { scaleY = 1; }
+            if (rotation === void 0) { rotation = 0; }
+            if (skewX === void 0) { skewX = 0; }
+            if (skewY === void 0) { skewY = 0; }
+            if (pivotX === void 0) { pivotX = 0; }
+            if (pivotY === void 0) { pivotY = 0; }
+            this.x = x;
+            this.y = y;
+            this.scaleX = !scaleX ? 1 : scaleX;
+            this.scaleX = !scaleY ? 1 : scaleY;
+            this.rotation = rotation;
+            this.skewX = skewX;
+            this.skewY = skewY;
+            this.pivotX = pivotX;
+            this.pivotY = pivotY;
+            return this;
+        };
+        Object.defineProperty(Node2D.prototype, "_tempDisplayObjectParent", {
+            /**
+             * @protected
+             * @member {PIXI.Container}
+             */
+            get: function () {
+                return this.tempDisplayObjectParent;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "x", {
+            /**
+             * The position of the displayObject on the x axis relative to the local coordinates of the parent.
+             * An alias to position.x
+             *
+             * @member {number}
+             */
+            get: function () {
+                return this.transform.x;
+            },
+            set: function (value) {
+                this.transform.x = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "y", {
+            /**
+             * The position of the displayObject on the y axis relative to the local coordinates of the parent.
+             * An alias to position.y
+             *
+             * @member {number}
+             */
+            get: function () {
+                return this.transform.y;
+            },
+            set: function (value) {
+                this.transform.y = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "worldTransform", {
+            /**
+             * Current transform of the object based on world (parent) factors.
+             *
+             * @member {PIXI.Matrix}
+             * @readonly
+             */
+            get: function () {
+                return this.transform.worldTransform;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "localTransform", {
+            /**
+             * Current transform of the object based on local factors: position, scale, other stuff.
+             *
+             * @member {PIXI.Matrix}
+             * @readonly
+             */
+            get: function () {
+                return this.transform.localTransform;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "scaleX", {
+            /**
+             * The scale factors of this object along the local coordinate axes.
+             *
+             * The default scale is (1, 1).
+             */
+            get: function () {
+                return this.transform.scaleX;
+            },
+            set: function (v) {
+                this.transform.scaleX = v;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "scaleY", {
+            get: function () {
+                return this.transform.scaleY;
+            },
+            set: function (v) {
+                this.transform.scaleY = v;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "pivotX", {
+            /**
+             * The center of rotation, scaling, and skewing for this display object in its local space. The `position`
+             * is the projection of `pivot` in the parent's local space.
+             *
+             * By default, the pivot is the origin (0, 0).
+             */
+            get: function () {
+                return this.transform.pivotX;
+            },
+            set: function (value) {
+                this.transform.pivotX = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "pivotY", {
+            get: function () {
+                return this.transform.pivotY;
+            },
+            set: function (value) {
+                this.transform.pivotY = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "skewX", {
+            /**
+             * The skew factor for the object in radians.
+             */
+            get: function () {
+                return this.transform.skewX;
+            },
+            set: function (value) {
+                this.transform.skewX = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "skewY", {
+            get: function () {
+                return this.transform.skewY;
+            },
+            set: function (value) {
+                this.transform.skewY = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "rotation", {
+            /**
+             * The rotation of the object in radians.
+             * 'rotation' and 'angle' have the same effect on a display object; rotation is in radians, angle is in degrees.
+             */
+            get: function () {
+                return this.transform.rotation;
+            },
+            set: function (value) {
+                this.transform.rotation = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "angle", {
+            /**
+             * The angle of the object in degrees.
+             * 'rotation' and 'angle' have the same effect on a display object; rotation is in radians, angle is in degrees.
+             */
+            get: function () {
+                return this.transform.rotation * Math.RAD2DEG;
+            },
+            set: function (value) {
+                this.transform.rotation = value * Math.DEG2RAD;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Node2D.prototype, "worldVisible", {
+            /**
+             * Indicates if the object is globally visible.
+             */
+            get: function () {
+                var item = this;
+                do {
+                    if (!item.visible) {
+                        return false;
+                    }
+                    item = item.parent;
+                } while (item && item instanceof Node2D);
+                return true;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        /**
+         * Updates the transform on all children of this container for rendering
+         */
+        Node2D.prototype.updateTransform = function () {
+            var parent = this.parent;
+            this.transform.updateTransform(parent.transform);
+            // TODO: check render flags, how to process stuff here
+            this.worldAlpha = this.alpha * parent.worldAlpha;
+            for (var i = 0, j = this.children.length; i < j; ++i) {
+                var child = this.children[i];
+                if (child.visible) {
+                    child.updateTransform();
+                }
+            }
+        };
+        /**
+         * Removes all internal references and listeners as well as removes children from the display list.
+         * Do not use a Container after calling `destroy`.
+         *
+         * @param {object|boolean} [options] - Options parameter. A boolean will act as if all options
+         *  have been set to that value
+         * @param {boolean} [options.children=false] - if set to true, all the children will have their destroy
+         *  method called as well. 'options' will be passed on to those calls.
+         * @param {boolean} [options.texture=false] - Only used for child Sprites if options.children is set to true
+         *  Should it destroy the texture of the child sprite
+         * @param {boolean} [options.baseTexture=false] - Only used for child Sprites if options.children is set to true
+         *  Should it destroy the base texture of the child sprite
+         */
+        Node2D.prototype.destroy = function (options) {
+            if (this.parent) {
+                this.parent.removeChild(this);
+            }
+            this.offAll();
+            this.transform = null;
+            this._parent = null;
+            this._destroyed = true;
+            var destroyChildren = typeof options === 'boolean' ? options : options && options.children;
+            var oldChildren = this.removeChildren(0, this.children.length);
+            if (destroyChildren) {
+                for (var i = 0; i < oldChildren.length; ++i) {
+                    oldChildren[i].destroy(options);
+                }
+            }
+        };
+        __decorate([
+            feng3d.oav()
+        ], Node2D.prototype, "alpha", void 0);
+        __decorate([
+            feng3d.oav()
+        ], Node2D.prototype, "visible", void 0);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Node2D.prototype, "x", null);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Node2D.prototype, "y", null);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Node2D.prototype, "scaleX", null);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Node2D.prototype, "scaleY", null);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Node2D.prototype, "pivotX", null);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Node2D.prototype, "pivotY", null);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Node2D.prototype, "skewX", null);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Node2D.prototype, "skewY", null);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Node2D.prototype, "rotation", null);
+        __decorate([
+            feng3d.oav()
+        ], Node2D.prototype, "angle", null);
+        return Node2D;
+    }(feng3d.Node));
+    feng3d.Node2D = Node2D;
+    /**
+     * Node2D default updateTransform, does not update children of container.
+     * Will crash if there's no parent element.
+     *.Node2D#
+     * @method displayObjectUpdateTransform
+     */
+    Node2D.prototype.displayObjectUpdateTransform = Node2D.prototype.updateTransform;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
+     * 2D组件
+     *
+     * 所有基于3D空间的组件均可继承于该组件。
+     */
+    var Component2D = /** @class */ (function (_super) {
+        __extends(Component2D, _super);
+        function Component2D() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Object.defineProperty(Component2D.prototype, "node2d", {
+            /**
+             * The Node2D attached to this Entity (null if there is none attached).
+             *
+             * 附加到此 Entity 的 Node2D。
+             */
+            get: function () {
+                return this.node;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Component2D = __decorate([
+            feng3d.RegisterComponent({ dependencies: [feng3d.Node2D] })
+        ], Component2D);
+        return Component2D;
+    }(feng3d.Component));
+    feng3d.Component2D = Component2D;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
+     * 2D场景
+     *
+     * Scene2D同时拥有Node2D与Node3D组件。
+     */
+    var Scene2D = /** @class */ (function (_super) {
+        __extends(Scene2D, _super);
+        function Scene2D() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Scene2D_1 = Scene2D;
+        Scene2D.create = function (name) {
+            if (name === void 0) { name = "Scene2D"; }
+            var node2d = new feng3d.Entity().addComponent(Scene2D_1);
+            node2d.name = name;
+            return node2d;
+        };
+        var Scene2D_1;
+        __decorate([
+            feng3d.AddEntityMenu("Node2D/Scene2D")
+        ], Scene2D, "create", null);
+        Scene2D = Scene2D_1 = __decorate([
+            feng3d.RegisterComponent({ single: true, dependencies: [feng3d.Node] }),
+            feng3d.AddComponentMenu("Scene/Scene2D")
+        ], Scene2D);
+        return Scene2D;
+    }(feng3d.Component));
+    feng3d.Scene2D = Scene2D;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
      * 天空盒组件
      */
     var SkyBox = /** @class */ (function (_super) {
@@ -29245,6 +30568,7 @@ var feng3d;
             return _this;
         }
         HoldSizeComponent.prototype.init = function () {
+            _super.prototype.init.call(this);
             this.node3d.on("updateLocalToWorldMatrix", this._onUpdateLocalToWorldMatrix, this);
         };
         HoldSizeComponent.prototype.dispose = function () {
@@ -29260,8 +30584,8 @@ var feng3d;
             this._invalidateSceneTransform();
         };
         HoldSizeComponent.prototype._invalidateSceneTransform = function () {
-            if (this._entity)
-                this.node3d["_invalidateSceneTransform"]();
+            var _a;
+            (_a = this.node3d) === null || _a === void 0 ? void 0 : _a["_invalidateSceneTransform"]();
         };
         HoldSizeComponent.prototype._onUpdateLocalToWorldMatrix = function () {
             var _localToWorldMatrix = this.node3d["_localToWorldMatrix"];
@@ -29320,7 +30644,7 @@ var feng3d;
             this._invalidHoldSizeMatrix();
         };
         BillboardComponent.prototype._invalidHoldSizeMatrix = function () {
-            if (this._entity)
+            if (this.entity)
                 this.node3d["_invalidateSceneTransform"]();
         };
         BillboardComponent.prototype._onUpdateLocalToWorldMatrix = function () {
@@ -29688,10 +31012,10 @@ var feng3d;
             if (oldValue) {
                 oldValue.off("boundsInvalid", this._onBoundsInvalid, this);
             }
+            this.geometry = this.geometry || feng3d.Geometry.getDefault("Cube");
             if (value) {
                 value.on("boundsInvalid", this._onBoundsInvalid, this);
             }
-            this.geometry = this.geometry || feng3d.Geometry.getDefault("Cube");
             this._onBoundsInvalid();
         };
         Renderable.prototype._updateBounds = function () {
@@ -29921,10 +31245,17 @@ var feng3d;
             _this._pickMap = new Map();
             return _this;
         }
+        Scene_1 = Scene;
+        Scene.create = function (name) {
+            if (name === void 0) { name = "Scene"; }
+            var node = new feng3d.Entity().addComponent(Scene_1);
+            node.name = name;
+            return node;
+        };
         Scene.prototype.init = function () {
             _super.prototype.init.call(this);
-            this.entity.hideFlags = this.entity.hideFlags | feng3d.HideFlags.Hide;
-            this.entity.hideFlags = this.entity.hideFlags | feng3d.HideFlags.DontTransform;
+            // this.entity.hideFlags = this.entity.hideFlags | HideFlags.Hide;
+            // this.entity.hideFlags = this.entity.hideFlags | HideFlags.DontTransform;
             //
             this.node3d._setScene(this);
         };
@@ -30135,6 +31466,7 @@ var feng3d;
             });
             return results;
         };
+        var Scene_1;
         __decorate([
             feng3d.serialize,
             feng3d.oav()
@@ -30143,7 +31475,10 @@ var feng3d;
             feng3d.serialize,
             feng3d.oav()
         ], Scene.prototype, "ambientColor", void 0);
-        Scene = __decorate([
+        __decorate([
+            feng3d.AddEntityMenu("Node3D/Scene")
+        ], Scene, "create", null);
+        Scene = Scene_1 = __decorate([
             feng3d.RegisterComponent({ single: true })
         ], Scene);
         return Scene;
@@ -30305,6 +31640,7 @@ var feng3d;
         function Geometry() {
             var _this = _super.call(this) || this;
             _this.preview = "";
+            _this.name = "Geometry";
             _this.assetType = feng3d.AssetType.geometry;
             /**
              * 纹理U缩放，默认为1。
@@ -31285,6 +32621,7 @@ var feng3d;
         __extends(PointGeometry, _super);
         function PointGeometry() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.name = "Point";
             /**
              * 点数据列表
              * 修改数组内数据时需要手动调用 invalidateGeometry();
@@ -31292,6 +32629,14 @@ var feng3d;
             _this.points = [];
             return _this;
         }
+        PointGeometry.create = function (name) {
+            if (name === void 0) { name = "Point"; }
+            var model = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            model.geometry = new PointGeometry();
+            model.name = name;
+            model.material = feng3d.Material.getDefault("Point-Material");
+            return model;
+        };
         /**
          * 构建几何体
          */
@@ -31299,36 +32644,53 @@ var feng3d;
             var numPoints = this.points.length;
             var indices = [];
             var positionData = [];
-            var normalData = [];
-            var uvData = [];
             var colors = [];
             numPoints = Math.max(1, numPoints);
             for (var i = 0; i < numPoints; i++) {
                 var element = this.points[i];
                 var position = (element && element.position) || feng3d.Vector3.ZERO;
                 var color = (element && element.color) || feng3d.Color4.WHITE;
-                var normal = (element && element.normal) || feng3d.Vector3.ZERO;
-                var uv = (element && element.uv) || feng3d.Vector2.ZERO;
                 indices[i] = i;
                 positionData.push(position.x, position.y, position.z);
-                normalData.push(normal.x, normal.y, normal.z);
-                uvData.push(uv.x, uv.y);
                 colors.push(color.r, color.g, color.b, color.a);
             }
             this.positions = positionData;
-            this.uvs = uvData;
-            this.normals = normalData;
             this.indices = indices;
             this.colors = colors;
         };
         __decorate([
             feng3d.serialize,
-            feng3d.oav(),
+            feng3d.oav({ component: "OAVArray", tooltip: "点数据列表", componentParam: { defaultItem: function () { return new PointInfo(); } } }),
             feng3d.watch("invalidateGeometry")
         ], PointGeometry.prototype, "points", void 0);
+        __decorate([
+            feng3d.AddEntityMenu("Node3D/Point")
+        ], PointGeometry, "create", null);
         return PointGeometry;
     }(feng3d.Geometry));
     feng3d.PointGeometry = PointGeometry;
+    /**
+     * 点信息
+     */
+    var PointInfo = /** @class */ (function () {
+        function PointInfo() {
+            this.position = new feng3d.Vector3();
+            /**
+             * 起点颜色
+             */
+            this.color = new feng3d.Color4();
+        }
+        __decorate([
+            feng3d.serialize,
+            feng3d.oav({ tooltip: "坐标" })
+        ], PointInfo.prototype, "position", void 0);
+        __decorate([
+            feng3d.serialize,
+            feng3d.oav({ tooltip: "颜色" })
+        ], PointInfo.prototype, "color", void 0);
+        return PointInfo;
+    }());
+    feng3d.PointInfo = PointInfo;
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
@@ -31347,6 +32709,14 @@ var feng3d;
             _this.segments = [];
             return _this;
         }
+        SegmentGeometry.create = function (name) {
+            if (name === void 0) { name = "Segment"; }
+            var model = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            model.geometry = new SegmentGeometry();
+            model.name = name;
+            model.material = feng3d.Material.getDefault("Segment-Material");
+            return model;
+        };
         /**
          * 添加线段
          *
@@ -31383,9 +32753,12 @@ var feng3d;
         };
         __decorate([
             feng3d.serialize,
-            feng3d.oav({ component: "OAVArray", tooltip: "在指定时间进行额外发射指定数量的粒子", componentParam: { defaultItem: function () { return new Segment(); } } }),
+            feng3d.oav({ component: "OAVArray", tooltip: "线段列表", componentParam: { defaultItem: function () { return new Segment(); } } }),
             feng3d.watch("invalidateGeometry")
         ], SegmentGeometry.prototype, "segments", void 0);
+        __decorate([
+            feng3d.AddEntityMenu("Node3D/Segment")
+        ], SegmentGeometry, "create", null);
         return SegmentGeometry;
     }(feng3d.Geometry));
     feng3d.SegmentGeometry = SegmentGeometry;
@@ -31918,6 +33291,9 @@ var feng3d;
             feng3d.serialize,
             feng3d.oav({ component: "OAVObjectView" })
         ], Camera.prototype, "lens", null);
+        __decorate([
+            feng3d.AddEntityMenu("Node3D/Camera")
+        ], Camera, "create", null);
         Camera = Camera_1 = __decorate([
             feng3d.AddComponentMenu("Rendering/Camera"),
             feng3d.RegisterComponent({ single: true })
@@ -31948,6 +33324,16 @@ var feng3d;
             _this.tangents = feng3d.geometryUtils.createVertexTangents(_this.indices, _this.positions, _this.uvs, true);
             return _this;
         }
+        QuadGeometry.prototype.create = function (name) {
+            if (name === void 0) { name = "Quad"; }
+            var mesh = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            mesh.name = name;
+            mesh.geometry = feng3d.Geometry.getDefault("Quad");
+            return mesh;
+        };
+        __decorate([
+            feng3d.AddEntityMenu("Node3D/Quad")
+        ], QuadGeometry.prototype, "create", null);
         return QuadGeometry;
     }(feng3d.Geometry));
     feng3d.QuadGeometry = QuadGeometry;
@@ -31988,6 +33374,13 @@ var feng3d;
             _this.name = "Plane";
             return _this;
         }
+        PlaneGeometry.prototype.create = function (name) {
+            if (name === void 0) { name = "Plane"; }
+            var mesh = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            mesh.name = name;
+            mesh.geometry = feng3d.Geometry.getDefault("Plane");
+            return mesh;
+        };
         /**
          * 构建几何体数据
          */
@@ -32143,6 +33536,9 @@ var feng3d;
             return data;
         };
         __decorate([
+            feng3d.AddEntityMenu("Node3D/Plane")
+        ], PlaneGeometry.prototype, "create", null);
+        __decorate([
             feng3d.oav(),
             feng3d.serialize,
             feng3d.watch("invalidateGeometry")
@@ -32215,6 +33611,13 @@ var feng3d;
             _this.tile6 = false;
             return _this;
         }
+        CubeGeometry.prototype.create = function (name) {
+            if (name === void 0) { name = "Cube"; }
+            var mesh = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            mesh.name = name;
+            mesh.geometry = feng3d.Geometry.getDefault("Cube");
+            return mesh;
+        };
         CubeGeometry.prototype.buildGeometry = function () {
             var vertexPositionData = this.buildPosition();
             this.positions = vertexPositionData;
@@ -32560,6 +33963,9 @@ var feng3d;
             return data;
         };
         __decorate([
+            feng3d.AddEntityMenu("Node3D/Cube")
+        ], CubeGeometry.prototype, "create", null);
+        __decorate([
             feng3d.serialize,
             feng3d.oav(),
             feng3d.watch("invalidateGeometry")
@@ -32631,6 +34037,13 @@ var feng3d;
             _this.name = "Sphere";
             return _this;
         }
+        SphereGeometry.prototype.create = function (name) {
+            if (name === void 0) { name = "Sphere"; }
+            var mesh = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            mesh.name = name;
+            mesh.geometry = feng3d.Geometry.getDefault("Sphere");
+            return mesh;
+        };
         /**
          * 构建几何体数据
          * @param this.radius 球体半径
@@ -32764,6 +34177,9 @@ var feng3d;
             return data;
         };
         __decorate([
+            feng3d.AddEntityMenu("Node3D/Sphere")
+        ], SphereGeometry.prototype, "create", null);
+        __decorate([
             feng3d.serialize,
             feng3d.oav(),
             feng3d.watch("invalidateGeometry")
@@ -32823,6 +34239,13 @@ var feng3d;
             _this.name = "Capsule";
             return _this;
         }
+        CapsuleGeometry.prototype.create = function (name) {
+            if (name === void 0) { name = "Capsule"; }
+            var mesh = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            mesh.name = name;
+            mesh.geometry = feng3d.Geometry.getDefault("Capsule");
+            return mesh;
+        };
         /**
          * 构建几何体数据
          * @param radius 胶囊体半径
@@ -32957,6 +34380,9 @@ var feng3d;
             return data;
         };
         __decorate([
+            feng3d.AddEntityMenu("Node3D/Capsule")
+        ], CapsuleGeometry.prototype, "create", null);
+        __decorate([
             feng3d.serialize,
             feng3d.oav(),
             feng3d.watch("invalidateGeometry")
@@ -33038,6 +34464,13 @@ var feng3d;
             _this.name = "Cylinder";
             return _this;
         }
+        CylinderGeometry.prototype.create = function (name) {
+            if (name === void 0) { name = "Cylinder"; }
+            var mesh = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            mesh.name = name;
+            mesh.geometry = feng3d.Geometry.getDefault("Cylinder");
+            return mesh;
+        };
         /**
          * 构建几何体数据
          */
@@ -33294,6 +34727,9 @@ var feng3d;
             return data;
         };
         __decorate([
+            feng3d.AddEntityMenu("Node3D/Cylinder")
+        ], CylinderGeometry.prototype, "create", null);
+        __decorate([
             feng3d.serialize,
             feng3d.oav(),
             feng3d.watch("invalidateGeometry")
@@ -33372,6 +34808,16 @@ var feng3d;
             _this.surfaceClosed = true;
             return _this;
         }
+        ConeGeometry.prototype.create = function (name) {
+            if (name === void 0) { name = "Cone"; }
+            var mesh = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            mesh.name = name;
+            mesh.geometry = feng3d.Geometry.getDefault("Cone");
+            return mesh;
+        };
+        __decorate([
+            feng3d.AddEntityMenu("Node3D/Cone")
+        ], ConeGeometry.prototype, "create", null);
         return ConeGeometry;
     }(feng3d.CylinderGeometry));
     feng3d.ConeGeometry = ConeGeometry;
@@ -33416,6 +34862,13 @@ var feng3d;
             _this._vertexTangentStride = 3;
             return _this;
         }
+        TorusGeometry.prototype.create = function (name) {
+            if (name === void 0) { name = "Torus"; }
+            var mesh = new feng3d.Entity().addComponent(feng3d.MeshRenderer);
+            mesh.name = name;
+            mesh.geometry = feng3d.Geometry.getDefault("Torus");
+            return mesh;
+        };
         /**
          * 添加顶点数据
          */
@@ -33545,6 +34998,9 @@ var feng3d;
             // build real data from raw data
             this.uvs = data;
         };
+        __decorate([
+            feng3d.AddEntityMenu("Node3D/Torus")
+        ], TorusGeometry.prototype, "create", null);
         __decorate([
             feng3d.serialize,
             feng3d.oav(),
@@ -34365,6 +35821,8 @@ var feng3d;
     }());
     feng3d.PointUniforms = PointUniforms;
     feng3d.shaderConfig.shaders["point"].cls = PointUniforms;
+    feng3d.shaderConfig.shaders["point"].renderParams = { renderMode: feng3d.RenderMode.POINTS, enableBlend: true };
+    feng3d.Material.setDefault("Point-Material", { shaderName: "point" });
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
@@ -34645,10 +36103,9 @@ var feng3d;
         }
         DirectionalLight_1 = DirectionalLight;
         DirectionalLight.create = function (name) {
-            if (name === void 0) { name = "DirectionalLight"; }
-            var entity = new feng3d.Entity();
-            entity.name = name;
-            var directionalLight = entity.addComponent(DirectionalLight_1);
+            if (name === void 0) { name = "Directional Light"; }
+            var directionalLight = new feng3d.Entity().addComponent(DirectionalLight_1);
+            directionalLight.name = name;
             return directionalLight;
         };
         Object.defineProperty(DirectionalLight.prototype, "position", {
@@ -34674,7 +36131,7 @@ var feng3d;
                 return pre;
             }, null) || new feng3d.Box3(new feng3d.Vector3(), new feng3d.Vector3(1, 1, 1));
             // 
-            var center = worldBounds.getCenter();
+            var center = worldBounds.getCenter() || new feng3d.Vector3();
             var radius = worldBounds.getSize().length / 2;
             // 
             var position = center.addTo(this.direction.scaleNumberTo(radius + this.shadowCameraNear).negate());
@@ -34691,6 +36148,9 @@ var feng3d;
             }
         };
         var DirectionalLight_1;
+        __decorate([
+            feng3d.AddEntityMenu("Light/Directional Light")
+        ], DirectionalLight, "create", null);
         DirectionalLight = DirectionalLight_1 = __decorate([
             feng3d.AddComponentMenu("Rendering/DirectionalLight"),
             feng3d.RegisterComponent()
@@ -34716,6 +36176,13 @@ var feng3d;
             _this.shadowCamera.lens = new feng3d.PerspectiveLens(90, 1, 0.1, _this.range);
             return _this;
         }
+        PointLight_1 = PointLight;
+        PointLight.create = function (name) {
+            if (name === void 0) { name = "Point Light"; }
+            var pointlight = new feng3d.Entity().addComponent(PointLight_1);
+            pointlight.name = name;
+            return pointlight;
+        };
         Object.defineProperty(PointLight.prototype, "range", {
             /**
              * 光照范围
@@ -34746,11 +36213,15 @@ var feng3d;
             if (this.shadowCamera)
                 this.shadowCamera.lens.far = this.range;
         };
+        var PointLight_1;
         __decorate([
             feng3d.oav(),
             feng3d.serialize
         ], PointLight.prototype, "range", null);
-        PointLight = __decorate([
+        __decorate([
+            feng3d.AddEntityMenu("Light/Point Light")
+        ], PointLight, "create", null);
+        PointLight = PointLight_1 = __decorate([
             feng3d.AddComponentMenu("Rendering/PointLight"),
             feng3d.RegisterComponent()
         ], PointLight);
@@ -34786,6 +36257,13 @@ var feng3d;
             _this.perspectiveLens = _this.shadowCamera.lens = new feng3d.PerspectiveLens(_this.angle, 1, 0.1, _this.range);
             return _this;
         }
+        SpotLight_1 = SpotLight;
+        SpotLight.create = function (name) {
+            if (name === void 0) { name = "Spot Light"; }
+            var spotlight = new feng3d.Entity().addComponent(SpotLight_1);
+            spotlight.name = name;
+            return spotlight;
+        };
         Object.defineProperty(SpotLight.prototype, "coneCos", {
             /**
              * 椎体cos值
@@ -34811,6 +36289,7 @@ var feng3d;
             if (this.perspectiveLens)
                 this.perspectiveLens.fov = this.angle;
         };
+        var SpotLight_1;
         __decorate([
             feng3d.oav(),
             feng3d.serialize,
@@ -34825,7 +36304,10 @@ var feng3d;
             feng3d.oav(),
             feng3d.serialize
         ], SpotLight.prototype, "penumbra", void 0);
-        SpotLight = __decorate([
+        __decorate([
+            feng3d.AddEntityMenu("Light/Spot Light")
+        ], SpotLight, "create", null);
+        SpotLight = SpotLight_1 = __decorate([
             feng3d.RegisterComponent()
         ], SpotLight);
         return SpotLight;
@@ -36040,6 +37522,13 @@ var feng3d;
             _this.frameBufferObject = new feng3d.FrameBufferObject();
             return _this;
         }
+        Water_1 = Water;
+        Water.create = function (name) {
+            if (name === void 0) { name = "Water"; }
+            var water = new feng3d.Entity().addComponent(Water_1);
+            water.name = name;
+            return water;
+        };
         Water.prototype.beforeRender = function (renderAtomic, scene, camera) {
             var uniforms = this.material.uniforms;
             var sun = this.node3d.scene.activeDirectionalLights[0];
@@ -36113,7 +37602,11 @@ var feng3d;
             // this.material.uniforms.s_mirrorSampler = frameBufferObject.texture;
             uniforms.u_textureMatrix = textureMatrix;
         };
-        Water = __decorate([
+        var Water_1;
+        __decorate([
+            feng3d.AddEntityMenu("Node3D/Water")
+        ], Water, "create", null);
+        Water = Water_1 = __decorate([
             feng3d.AddComponentMenu("Graphics/Water"),
             feng3d.RegisterComponent()
         ], Water);

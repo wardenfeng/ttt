@@ -381,7 +381,7 @@ namespace feng3d
          * @param component		被添加的组件
          * @param index			插入的位置
          */
-        private addComponentAt(component: Components, index: number): void
+        addComponentAt(component: Components, index: number): void
         {
             if (component == null)
                 return;
@@ -406,7 +406,7 @@ namespace feng3d
             }
 
             this._components.splice(index, 0, component);
-            component._setEntity(this);
+            component.entity = this;
             component.init();
             //派发添加组件事件
             this.emit("addComponent", { component: component, entity: this }, true);

@@ -121,6 +121,9 @@
         "src/math/shape/curves/QuadraticBezierCurve3.ts",
         //
         "src/math/Noise.ts",
+        // pixi
+        "src/math/pixi/Matrix.ts",
+        "src/math/pixi/Transform.ts",
         //
         "src/filesystem/PathUtils.ts",
         //
@@ -227,7 +230,7 @@
         //
         //
         "src/component/Component.ts",
-        "src/core/Container.ts",
+        "src/core/Node.ts",
         "src/core/HideFlags.ts",
         "src/core/RunEnvironment.ts",
         "src/core/Node3D.ts",
@@ -239,6 +242,10 @@
         "src/component/Graphics.ts",
         "src/component/Behaviour.ts",
         "src/core/TransformLayout.ts",
+        // 2D
+        "src/core/Node2D.ts",
+        "src/component/Component2D.ts",
+        "src/core/Scene2D.ts",
         // 天空盒
         "src/skybox/SkyBox.ts",
         "src/skybox/SkyBoxRenderer.ts",

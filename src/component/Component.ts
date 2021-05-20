@@ -82,13 +82,13 @@ namespace feng3d
     {
     }
 
-	/**
+    /**
      * 组件
      * 
      * 所有附加到Entity的基类。
      * 
      * 注意，您的代码不会直接创建 Component，而是您编写脚本代码，然后将该脚本附加到 Entity。
-	 */
+     */
     export class Component<T extends ComponentEventMap = ComponentEventMap> extends Feng3dObject<T> implements IDisposable
     {
         /**
@@ -145,13 +145,22 @@ namespace feng3d
 
         set entity(v)
         {
-            if (this._entity === v)
-            {
-                return;
-            }
             console.assert(!this._entity, "组件无法再次加入其它Entity中!");
             this._entity = v;
         }
+        private _entity: Entity = null;
+
+        get node()
+        {
+            return this._node || this._entity?.getComponent(Node);
+        }
+
+        set node(v)
+        {
+            console.assert(!this._node, "无法重复赋值!");
+            this._node = v;
+        }
+        private _node: Node;
 
         /**
          * 名称。
@@ -160,7 +169,7 @@ namespace feng3d
          */
         get name()
         {
-            return this._entity?.name;
+            return this._entity.name;
         }
 
         set name(v)
@@ -192,9 +201,9 @@ namespace feng3d
         //------------------------------------------
         // Functions
         //------------------------------------------
-		/**
-		 * 创建一个组件
-		 */
+        /**
+         * 创建一个组件
+         */
         constructor()
         {
             super();
@@ -217,7 +226,7 @@ namespace feng3d
          */
         getComponentAt(index: number): Component
         {
-            return this.entity.getComponentAt(index);
+            return this._entity.getComponentAt(index);
         }
 
         /**
@@ -227,7 +236,7 @@ namespace feng3d
          */
         addComponent<T extends Components>(type: Constructor<T>, callback: (component: T) => void = null): T
         {
-            return this.entity.addComponent(type, callback);
+            return this._entity.addComponent(type, callback);
         }
 
         /**
@@ -236,7 +245,7 @@ namespace feng3d
          */
         addScript(scriptName: string)
         {
-            return this.entity.addScript(scriptName);
+            return this._entity.addScript(scriptName);
         }
 
         /**
@@ -247,7 +256,7 @@ namespace feng3d
          */
         getComponent<T extends Components>(type: Constructor<T>): T
         {
-            return this.entity.getComponent(type);
+            return this._entity.getComponent(type);
         }
 
         /**
@@ -258,7 +267,7 @@ namespace feng3d
          */
         getComponents<T extends Components>(type: Constructor<T>): T[]
         {
-            return this.entity.getComponents(type);
+            return this._entity.getComponents(type);
         }
 
         /**
@@ -268,7 +277,7 @@ namespace feng3d
          */
         setComponentIndex(component: Components, index: number): void
         {
-            this.entity.setComponentIndex(component, index);
+            this._entity.setComponentIndex(component, index);
         }
 
         /**
@@ -278,7 +287,7 @@ namespace feng3d
          */
         setComponentAt(component: Components, index: number)
         {
-            this.entity.setComponentAt(component, index);
+            this._entity.setComponentAt(component, index);
         }
 
         /**
@@ -287,7 +296,7 @@ namespace feng3d
          */
         removeComponent(component: Components): void
         {
-            this.entity.removeComponent(component);
+            this._entity.removeComponent(component);
         }
 
         /**
@@ -297,7 +306,7 @@ namespace feng3d
          */
         getComponentIndex(component: Components): number
         {
-            return this.entity.getComponentIndex(component);
+            return this._entity.getComponentIndex(component);
         }
 
         /**
@@ -306,7 +315,7 @@ namespace feng3d
          */
         removeComponentAt(index: number): Component
         {
-            return this.entity.removeComponentAt(index);
+            return this._entity.removeComponentAt(index);
         }
 
         /**
@@ -316,7 +325,7 @@ namespace feng3d
          */
         swapComponentsAt(index1: number, index2: number): void
         {
-            this.swapComponentsAt(index1, index2);
+            this._entity.swapComponentsAt(index1, index2);
         }
 
         /**
@@ -326,7 +335,7 @@ namespace feng3d
          */
         swapComponents(a: Components, b: Components): void
         {
-            this.swapComponents(a, b);
+            this._entity.swapComponents(a, b);
         }
 
         /**
@@ -344,23 +353,34 @@ namespace feng3d
         }
 
         /**
+         * Returns all components of Type type in the Entity.
+         * 
+         * 返回 Entity 或其任何子项中类型为 type 的所有组件。
+         * 
+         * @param type		类定义
+         * @return			返回与给出类定义一致的组件
+         */
+        getComponentsInChildren<T extends Components>(type?: Constructor<T>, filter?: (compnent: T) => { findchildren: boolean, value: boolean }, result?: T[]): T[]
+        {
+            return this.node.getComponentsInChildren(type, filter, result);
+        }
+
+        /**
+         * 从父类中获取组件
+         * @param type		类定义
+         * @return			返回与给出类定义一致的组件
+         */
+        getComponentsInParents<T extends Components>(type?: Constructor<T>, result?: T[]): T[]
+        {
+            return this.node.getComponentsInParents(type, result);
+        }
+
+        /**
          * 监听对象的所有事件并且传播到所有组件中
          */
         private _onAnyListener(e: Event<any>)
         {
-            if (this._entity)
-                this._entity.emitEvent(e);
-        }
-
-        /**
-         * 该方法仅在Entity中使用
-         * @private
-         * 
-         * @param entity 实体
-         */
-        _setEntity(entity: Entity)
-        {
-            this._entity = entity;
+            this._entity?.emitEvent(e);
         }
 
         //------------------------------------------
@@ -370,7 +390,6 @@ namespace feng3d
         //------------------------------------------
         // Protected Properties
         //------------------------------------------
-        protected _entity: Entity;
 
         //------------------------------------------
         // Protected Functions

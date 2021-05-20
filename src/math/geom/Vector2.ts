@@ -66,7 +66,7 @@ namespace feng3d
          * @param x 该对象的x属性值
          * @param y 该对象的y属性值
          */
-        set(x: number, y: number): Vector2
+        set(x = 0, y = x): Vector2
         {
             this.x = x;
             this.y = y;

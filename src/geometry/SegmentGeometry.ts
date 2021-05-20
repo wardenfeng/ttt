@@ -12,12 +12,22 @@ namespace feng3d
 
         name = "Segment";
 
+        @AddEntityMenu("Node3D/Segment")
+        static create(name = "Segment")
+        {
+            var model = new Entity().addComponent(MeshRenderer);
+            model.geometry = new SegmentGeometry();
+            model.name = name;
+            model.material = Material.getDefault("Segment-Material");
+            return model;
+        }
+
 		/**
 		 * 线段列表
          * 修改数组内数据时需要手动调用 invalidateGeometry();
 		 */
         @serialize
-        @oav({ component: "OAVArray", tooltip: "在指定时间进行额外发射指定数量的粒子", componentParam: { defaultItem: () => { return new Segment(); } } })
+        @oav({ component: "OAVArray", tooltip: "线段列表", componentParam: { defaultItem: () => { return new Segment(); } } })
         @watch("invalidateGeometry")
         segments: Segment[] = [];
 
