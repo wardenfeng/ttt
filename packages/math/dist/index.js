@@ -6122,7 +6122,7 @@ var feng3d;
          */
         Box3.prototype.getCenter = function (vout) {
             if (vout === void 0) { vout = new feng3d.Vector3(); }
-            if (this.isEmpty) {
+            if (this.isEmpty()) {
                 return null;
             }
             return vout.copy(this.min).add(this.max).scaleNumber(0.5);

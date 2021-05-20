@@ -48,7 +48,7 @@ namespace feng3d
          */
         getCenter(vout = new Vector3())
         {
-            if (this.isEmpty)
+            if (this.isEmpty())
             {
                 return null;
             }
