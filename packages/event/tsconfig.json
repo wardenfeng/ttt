@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "declarationMap": true,
+        "declaration": true,
+        "composite": true,
+        "experimentalDecorators": true,
+        "lib": [
+            "ES2017",
+            "DOM"
+        ],
+        "outFile": "./dist/index.js",
+    },
+    "files": [
+        "src/FEvent.ts",
+        "src/EventEmitter.ts",
+        "src/ObjectEvent.ts",
+        "src/GlobalEmitter.ts",
+    ]
+}

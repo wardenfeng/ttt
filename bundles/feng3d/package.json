@@ -1,0 +1,34 @@
+{
+  "name": "feng3d",
+  "version": "0.1.3",
+  "description": "webgl 3d engine",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && npm run shaderpack",
+    "build:w": "tsc -w",
+    "shaderpack": "node shaderpack.js",
+    "shaderpack:w": "node shaderpack.js -w"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitee.com/feng3d/feng3d.git"
+  },
+  "keywords": [
+    "feng3d",
+    "webgl",
+    "3d engine"
+  ],
+  "author": "feng",
+  "bugs": {
+    "url": "https://gitee.com/feng3d/feng3d/issues"
+  },
+  "homepage": "https://gitee.com/feng3d/feng3d#readme",
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  }
+}

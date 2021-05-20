@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "declarationMap": true,
+        "declaration": true,
+        "composite": true,
+        "experimentalDecorators": true,
+        "lib": [
+            "ES2017",
+            "DOM"
+        ],
+        "types": [
+            "@feng3d/event"
+        ],
+        "outFile": "./dist/index.js",
+    },
+    "files": [
+        "src/EventProxy.ts",
+        "src/WindowEventProxy.ts",
+        "src/Keyboard.ts",
+        "src/handle/KeyCapture.ts",
+        "src/handle/KeyState.ts",
+        "src/handle/ShortCutCapture.ts",
+        "src/handle/ShortCutEvent.ts",
+        "src/ShortCut.ts",
+    ]
+}
