@@ -1,9 +1,6 @@
 {
     "references": [
         {
-            "path": "bundles/feng3d"
-        },
-        {
             "path": "packages/algorithms"
         },
         {
@@ -41,7 +38,8 @@
         },
         {
             "path": "packages/watcher"
-        },
+        }
     ],
-    "files": []
+    "files": [],
+    "include": []
 }
