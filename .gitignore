@@ -4,7 +4,4 @@ editor/package-lock.json
 /yarn.lock
 /out
 /lerna-debug.log
-**/dist
-
-**/index.d.ts
 /docs

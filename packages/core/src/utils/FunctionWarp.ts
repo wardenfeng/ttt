@@ -57,7 +57,7 @@ export class FunctionWrap
         object[funcName] = <any>(function (...args: Parameters<V>)
         {
             var r = (<any>oldFun).apply(this, args);
-            var args1 = args.concat();
+            var args1 = (<any>args).concat();
             args1.unshift(r);
             r = extendFunc.apply(this, args1);
             return r;
