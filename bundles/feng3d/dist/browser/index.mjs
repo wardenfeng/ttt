@@ -2234,7 +2234,6 @@ Stack.prototype.toArray = function toArray () {
 Stack.prototype.toString = function toString (valueToString) {
     return this.linkedList.toString(valueToString);
 };
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/core - v0.3.3
@@ -6755,7 +6754,6 @@ __decorate([
     watch("invalidate")
 ], RenderBuffer.prototype, "OFFSCREEN_HEIGHT", void 0);
 
-
 shaderlib.shaderConfig = {
     "shaders": {
         "color": {
@@ -6868,7 +6866,6 @@ shaderlib.shaderConfig = {
         "worldposition_vert": "//获取全局坐标\r\nvec4 worldPosition = u_modelMatrix * position;\r\n//输出全局坐标\r\nv_worldPosition = worldPosition.xyz;"
     }
 };
-
 
 /*!
  * @feng3d/event - v0.3.3
@@ -7397,11 +7394,9 @@ var event = new FEvent();
  */
 var globalEmitter = new EventEmitter();
 
-
 globalEmitter.on("asset.shaderChanged", function () {
     shaderlib.clearCache();
 });
-
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -7781,7 +7776,6 @@ function getObjectBlockInfos$1(object, objectAttributeInfos, blockDefinitionVec)
     }
     return objectBlockInfos;
 }
-
 
 /*!
  * @feng3d/serialization - v0.3.3
@@ -9165,7 +9159,6 @@ serialization$1.setValueHandlers = [
         }
     } ];
 
-
 /*!
  * @feng3d/watcher - v0.3.3
  *
@@ -9474,7 +9467,6 @@ function notifyListener(newValue, oldValue, host, property) {
     });
 }
 
-
 /**
  * 运行环境枚举
  */
@@ -9493,7 +9485,6 @@ var RunEnvironment;
      */
     RunEnvironment[RunEnvironment["all"] = 255] = "all";
 })(RunEnvironment || (RunEnvironment = {}));
-
 
 /*!
  * @feng3d/polyfill - v0.3.3
@@ -10442,7 +10433,6 @@ var lazy$1 = {
     }
 };
 
-
 /**
  * 在检查器中控制对象销毁、保存和可见性的位掩码。
  */
@@ -10493,7 +10483,6 @@ var HideFlags;
      */
     HideFlags[HideFlags["HideAndDontSave"] = 61] = "HideAndDontSave";
 })(HideFlags || (HideFlags = {}));
-
 
 /**
  * 所有feng3d对象的基类
@@ -10581,7 +10570,6 @@ serialization$1.serializeHandlers.push(
         return false;
     }
 });
-
 
 /**
  * 组件信息属性常量，保存组件名称与组件依赖ComponentInfo，由 @RegisterComponent 装饰器进行填充。
@@ -10843,7 +10831,6 @@ Component._componentMap = {};
 __decorate$1([
     serialize$1
 ], Component.prototype, "entity", null);
-
 
 /*!
  * @feng3d/math - v0.3.3
@@ -22069,7 +22056,6 @@ Curve.prototype.computeFrenetFrames = function computeFrenetFrames (segments, cl
 //
 var tmp = new Vector3();
 
-
 /**
  * 资源扩展名
  */
@@ -22157,7 +22143,6 @@ var AssetType;
      */
     AssetType["script"] = "script";
 })(AssetType || (AssetType = {}));
-
 
 /**
  * 轴对称包围盒
@@ -22276,7 +22261,6 @@ BoundingBox.prototype._invalidateWorldBounds = function _invalidateWorldBounds (
 };
 
 Object.defineProperties( BoundingBox.prototype, prototypeAccessors$7 );
-
 
 /**
  * 变换
@@ -23287,7 +23271,6 @@ var tempVector3_1 = new Vector3();
 var tempVector3_2 = new Vector3();
 var tempVector3_3 = new Vector3();
 
-
 /**
  * 3D组件
  *
@@ -23335,7 +23318,6 @@ var Component3D = /*@__PURE__*/(function (Component) {
 Component3D = __decorate$1([
     RegisterComponent({ dependencies: [Node3D] })
 ], Component3D);
-
 
 /**
  * 行为
@@ -23391,7 +23373,6 @@ Behaviour = __decorate$1([
     RegisterComponent()
 ], Behaviour);
 
-
 /**
  * 添加组件菜单
  *
@@ -23416,7 +23397,6 @@ function AddComponentMenu(path, componentOrder) {
  * 菜单配置
  */
 var menuConfig = {};
-
 
 var AnimationClip = /*@__PURE__*/(function (Feng3dObject) {
     function AnimationClip() {
@@ -23455,7 +23435,6 @@ __decorate$1([
 __decorate$1([
     serialize$1
 ], AnimationClip.prototype, "propertyClips", void 0);
-
 
 var PropertyClip = function PropertyClip() {
     this._cacheValues = {};
@@ -23526,7 +23505,6 @@ var PropertyClipPathItemType;
     PropertyClipPathItemType[PropertyClipPathItemType["Entity"] = 0] = "Entity";
     PropertyClipPathItemType[PropertyClipPathItemType["Component"] = 1] = "Component";
 })(PropertyClipPathItemType || (PropertyClipPathItemType = {}));
-
 
 var Animation = /*@__PURE__*/(function (Behaviour) {
     function Animation() {
@@ -23657,7 +23635,6 @@ Animation = __decorate$1([
 ], Animation);
 var autoobjectCacheID = 1;
 
-
 /**
  * 骨骼关节数据
  */
@@ -23684,7 +23661,6 @@ __decorate$1([
 __decorate$1([
     serialize$1
 ], SkeletonJoint.prototype, "matrix", void 0);
-
 
 /**
  * 3d对象脚本
@@ -23780,7 +23756,6 @@ ScriptComponent = __decorate$1([
     AddComponentMenu("Script/Script"),
     RegisterComponent()
 ], ScriptComponent);
-
 
 /**
  * 实体，场景唯一存在的对象类型
@@ -24161,7 +24136,6 @@ __decorate$1([
     oav$1({ component: "OAVComponentList" })
 ], Entity.prototype, "components", null);
 
-
 var SkeletonComponent = /*@__PURE__*/(function (Component3D) {
     function SkeletonComponent() {
         Component3D.apply(this, arguments);
@@ -24307,7 +24281,6 @@ __decorate$1([
 SkeletonComponent = __decorate$1([
     RegisterComponent()
 ], SkeletonComponent);
-
 
 /**
  * 资源数据
@@ -24563,7 +24536,6 @@ serialization$1.differentHandlers.push(
         return false;
     }
 });
-
 
 var GeometryUtils = function GeometryUtils () {};
 
@@ -25082,7 +25054,6 @@ GeometryUtils.prototype.getAABB = function getAABB (positions) {
 };
 var geometryUtils = new GeometryUtils();
 
-
 /**
  * 几何体
  */
@@ -25468,7 +25439,6 @@ __decorate$1([
     oav$1()
 ], Geometry.prototype, "scaleV", void 0);
 
-
 /**
  * 阴影类型
  */
@@ -25491,7 +25461,6 @@ var ShadowType;
      */
     ShadowType[ShadowType["PCF_Soft_Shadows"] = 3] = "PCF_Soft_Shadows";
 })(ShadowType || (ShadowType = {}));
-
 
 var LightPicker = function LightPicker(model) {
     this._model = model;
@@ -25579,7 +25548,6 @@ LightPicker.prototype.beforeRender = function beforeRender (renderAtomic) {
     renderAtomic.uniforms.u_directionalShadowMatrixs = directionalShadowMatrix;
     renderAtomic.uniforms.u_directionalShadowMaps = directionalShadowMaps;
 };
-
 
 /*!
  * @feng3d/filesystem - v0.3.3
@@ -27888,7 +27856,6 @@ Object.defineProperties( ReadFS.prototype, prototypeAccessors$1$2 );
  */
 var fs = new ReadFS();
 
-
 /**
  * 图片相关工具
  */
@@ -28246,7 +28213,6 @@ ImageUtil.prototype.clearBackColor = function clearBackColor (backColor) {
     }
 };
 
-
 var ImageDatas;
 (function (ImageDatas) {
     ImageDatas["black"] = "black";
@@ -28497,7 +28463,6 @@ __decorate$1([
     watch$1("invalidate")
 ], TextureInfo.prototype, "OFFSCREEN_HEIGHT", void 0);
 
-
 /**
  * 2D纹理
  */
@@ -28598,7 +28563,6 @@ AssetData.addAssetData("white-Texture", Texture2D.white);
 AssetData.addAssetData("Default-Texture", Texture2D.default);
 AssetData.addAssetData("Default-NormalTexture", Texture2D.defaultNormal);
 AssetData.addAssetData("Default-ParticleTexture", Texture2D.defaultParticle);
-
 
 /**
  * 立方体纹理
@@ -28756,7 +28720,6 @@ __decorate$1([
 TextureCube.default = serialization$1.setValue(new TextureCube(), { name: "Default-TextureCube", hideFlags: HideFlags.NotEditable });
 AssetData.addAssetData("Default-TextureCube", TextureCube.default);
 
-
 /**
  * 材质
  */
@@ -28909,7 +28872,6 @@ __decorate$1([
     watch$1("_onRenderParamsChanged")
 ], Material.prototype, "renderParams", void 0);
 
-
 /**
  * 可射线捕获
  */
@@ -28975,7 +28937,6 @@ var RayCastable = /*@__PURE__*/(function (Behaviour) {
 RayCastable = __decorate$1([
     RegisterComponent()
 ], RayCastable);
-
 
 /**
  * 可渲染组件
@@ -29161,7 +29122,6 @@ Node3D.prototype.onSelfLoadCompleted = function onSelfLoadCompleted(callback) {
         { callback(); }
 };
 
-
 var SkinnedMeshRenderer = /*@__PURE__*/(function (Renderable) {
     function SkinnedMeshRenderer() {
         Renderable.apply(this, arguments);
@@ -29278,7 +29238,6 @@ __decorate$1([
 __decorate$1([
     serialize$1
 ], SkinSkeleton.prototype, "numJoint", void 0);
-
 
 /**
  * 心跳计时器
@@ -29524,7 +29483,6 @@ else {
     localrequestAnimationFrame = requestAnimationFrame;
 }
 runTickerFuncs();
-
 
 /**
  * feng3d资源
@@ -29775,7 +29733,6 @@ __decorate$1([
     serialize$1
 ], FileAsset.prototype, "assetId", void 0);
 
-
 /**
  * 文件夹资源
  */
@@ -29830,7 +29787,6 @@ FolderAsset.extenson = "";
 FolderAsset = __decorate$1([
     ov({ component: "OVFolderAsset" })
 ], FolderAsset);
-
 
 /*!
  * @feng3d/task - v0.3.3
@@ -29959,7 +29915,6 @@ Task$1.prototype.seriesResults = function seriesResults (ps, fn, done) {
  * 任务，用于处理任务之间依赖
  */
 var task$1 = new Task$1();
-
 
 /**
  * .
@@ -31476,7 +31431,6 @@ posix.posix = win32.posix = posix;
  */
 var path = process.platform === 'win32' ? win32 : posix;
 
-
 /**
  * 可读资源系统
  */
@@ -31815,7 +31769,6 @@ Object.defineProperties( ReadRS.prototype, prototypeAccessors$b );
  */
 var rs = new ReadRS();
 
-
 /**
  * 可读写资源系统
  */
@@ -32010,7 +31963,6 @@ var ReadWriteRS = /*@__PURE__*/(function (ReadRS) {
     return ReadWriteRS;
 }(ReadRS));
 
-
 /**
  * 声音监听器
  */
@@ -32119,7 +32071,6 @@ if (listener.forwardX) {
 else {
     listener.setOrientation(0, 0, -1, 0, 1, 0);
 }
-
 
 /**
  * 音量与距离算法
@@ -32453,7 +32404,6 @@ function createPanner() {
     return panner;
 }
 
-
 /**
  * 摄像机投影类型
  */
@@ -32468,7 +32418,6 @@ var Projection;
      */
     Projection[Projection["Orthographic"] = 1] = "Orthographic";
 })(Projection || (Projection = {}));
-
 
 /**
  * 摄像机镜头
@@ -32623,7 +32572,6 @@ __decorate$1([
     watch$1("invalidate")
 ], LensBase.prototype, "aspect", void 0);
 
-
 /**
  * 正射投影镜头
  */
@@ -32656,7 +32604,6 @@ __decorate$1([
     oav$1(),
     watch$1("invalidate")
 ], OrthographicLens.prototype, "size", void 0);
-
 
 /**
  * 透视摄像机镜头
@@ -32747,7 +32694,6 @@ __decorate$1([
     serialize$1,
     oav$1()
 ], PerspectiveLens.prototype, "fov", void 0);
-
 
 var Camera_1;
 /**
@@ -32931,7 +32877,6 @@ Entity.registerPrimitive("Camera", function (g) {
     g.addComponent(Camera);
 });
 
-
 var BillboardComponent = /*@__PURE__*/(function (Component3D) {
     function BillboardComponent () {
         Component3D.apply(this, arguments);
@@ -32982,7 +32927,6 @@ BillboardComponent = __decorate$1([
     AddComponentMenu("Layout/BillboardComponent"),
     RegisterComponent()
 ], BillboardComponent);
-
 
 /**
  * 参考
@@ -33063,7 +33007,6 @@ CartoonComponent = __decorate$1([
     RegisterComponent()
 ], CartoonComponent);
 
-
 /**
  * Graphics 类包含一组可用来创建矢量形状的方法。
  */
@@ -33124,7 +33067,6 @@ function watchContext2D(context2D, watchFuncs) {
 //     var ctxt = canvas.getContext('2d');
 //     ctxts.push(ctxt);
 // }
-
 
 var HoldSizeComponent = /*@__PURE__*/(function (Component3D) {
     function HoldSizeComponent() {
@@ -33194,7 +33136,6 @@ HoldSizeComponent = __decorate$1([
     RegisterComponent()
 ], HoldSizeComponent);
 
-
 var OutLineComponent = /*@__PURE__*/(function (Component) {
     function OutLineComponent() {
         Component.apply(this, arguments);
@@ -33231,7 +33172,6 @@ OutLineComponent = __decorate$1([
     RegisterComponent()
 ], OutLineComponent);
 
-
 /**
  * 线框组件，将会对拥有该组件的对象绘制线框
  */
@@ -33254,7 +33194,6 @@ WireframeComponent = __decorate$1([
     RegisterComponent()
 ], WireframeComponent);
 
-
 var ControllerBase = function ControllerBase(node3d) {
     this.targetNode = node3d;
 };
@@ -33275,7 +33214,6 @@ prototypeAccessors$c.targetNode.set = function (val) {
 };
 
 Object.defineProperties( ControllerBase.prototype, prototypeAccessors$c );
-
 
 /*!
  * @feng3d/shortcut - v0.3.3
@@ -34320,7 +34258,6 @@ var ShortCut = /*@__PURE__*/(function (EventEmitter) {
  */
 var shortcut = new ShortCut();
 
-
 /**
  * FPS模式控制器
  */
@@ -34504,7 +34441,6 @@ FPSController = __decorate$1([
     RegisterComponent()
 ], FPSController);
 
-
 var LookAtController = /*@__PURE__*/(function (ControllerBase) {
     function LookAtController(node3d, Node3D) {
         ControllerBase.call(this, node3d);
@@ -34559,7 +34495,6 @@ var LookAtController = /*@__PURE__*/(function (ControllerBase) {
 
     return LookAtController;
 }(ControllerBase));
-
 
 var HoverController = /*@__PURE__*/(function (LookAtController) {
     function HoverController(node3d, lookAtObject, panAngle, tiltAngle, distance, minTiltAngle, maxTiltAngle, minPanAngle, maxPanAngle, steps, yFactor, wrapPanAngle) {
@@ -34774,7 +34709,6 @@ var HoverController = /*@__PURE__*/(function (LookAtController) {
     return HoverController;
 }(LookAtController));
 
-
 var MeshRenderer_1;
 /**
  * 网格渲染器
@@ -34802,7 +34736,6 @@ var MeshRenderer = MeshRenderer_1 = /*@__PURE__*/(function (Renderable) {
 MeshRenderer = MeshRenderer_1 = __decorate$1([
     RegisterComponent()
 ], MeshRenderer);
-
 
 /**
  * 射线投射拾取器
@@ -34879,7 +34812,6 @@ Raycaster.prototype.pickAll = function pickAll (ray3D, node3ds) {
  * 射线投射拾取器
  */
 var raycaster = new Raycaster();
-
 
 /**
  * 鼠标事件管理
@@ -35092,7 +35024,6 @@ var WindowMouseInput = /*@__PURE__*/(function (MouseInput) {
     return WindowMouseInput;
 }(MouseInput));
 
-
 /**
  * 3d对象脚本
  */
@@ -35130,7 +35061,6 @@ Script.prototype.dispose = function dispose () {
 };
 
 Object.defineProperties( Script.prototype, prototypeAccessors$e );
-
 
 var TransformLayout_1;
 /**
@@ -35347,7 +35277,6 @@ TransformLayout = TransformLayout_1 = __decorate$1([
     AddComponentMenu("Layout/TransformLayout"),
     RegisterComponent({ single: true })
 ], TransformLayout);
-
 
 /**
  * 平面几何体
@@ -35568,7 +35497,6 @@ Entity.registerPrimitive("Plane", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Plane");
 });
 
-
 /**
  * 渲染目标纹理
  */
@@ -35595,7 +35523,6 @@ __decorate$1([
 __decorate$1([
     watch$1("invalidate")
 ], RenderTargetTexture2D.prototype, "OFFSCREEN_HEIGHT", void 0);
-
 
 /**
  * 帧缓冲对象
@@ -35694,7 +35621,6 @@ __decorate$1([
     watch$1("invalidate")
 ], FrameBufferObject.prototype, "depthBuffer", void 0);
 
-
 /**
  * 灯光类型
 
@@ -35714,7 +35640,6 @@ var LightType;
      */
     LightType[LightType["Spot"] = 2] = "Spot";
 })(LightType || (LightType = {}));
-
 
 /**
  * 灯光
@@ -35846,7 +35771,6 @@ __decorate$1([
     oav$1({ tooltip: "是否调试阴影图" })
 ], Light.prototype, "debugShadowMap", void 0);
 
-
 var DirectionalLight_1;
 /**
  * 方向光源
@@ -35918,7 +35842,6 @@ Entity.registerPrimitive("Directional light", function (g) {
     g.addComponent(DirectionalLight);
 });
 
-
 /**
  * 前向渲染器
  */
@@ -35962,7 +35885,6 @@ ForwardRenderer.prototype.draw = function draw (gl, scene, camera) {
  */
 var forwardRenderer = new ForwardRenderer();
 
-
 /**
  * 轮廓渲染器
  */
@@ -35994,7 +35916,6 @@ OutlineRenderer.prototype.draw = function draw (gl, scene, camera) {
  * 轮廓渲染器
  */
 var outlineRenderer = new OutlineRenderer();
-
 
 var ShadowRenderer = function ShadowRenderer() {
     this.renderAtomic = new RenderAtomic();
@@ -36185,7 +36106,6 @@ var cubeDirections = [
     new Vector3(0, 0, -1), new Vector3(0, 1, 0), new Vector3(0, -1, 0)
 ];
 
-
 var WireframeRenderer = function WireframeRenderer () {};
 
 WireframeRenderer.prototype.init = function init () {
@@ -36264,7 +36184,6 @@ WireframeRenderer.prototype.drawGameObject = function drawGameObject (gl, render
  */
 var wireframeRenderer = new WireframeRenderer();
 
-
 /**
  * 点光源
  */
@@ -36319,7 +36238,6 @@ PointLight = __decorate$1([
 Entity.registerPrimitive("Point light", function (g) {
     g.addComponent(PointLight);
 });
-
 
 /**
  * 聚光灯光源
@@ -36391,7 +36309,6 @@ Entity.registerPrimitive("Spot light", function (g) {
     g.addComponent(SpotLight);
 });
 
-
 /**
  * 天空盒组件
  */
@@ -36420,7 +36337,6 @@ SkyBox = __decorate$1([
     AddComponentMenu("SkyBox/SkyBox"),
     RegisterComponent()
 ], SkyBox);
-
 
 /**
  * 场景拾取缓存
@@ -36496,7 +36412,6 @@ ScenePickCache.prototype.clear = function clear () {
 };
 
 Object.defineProperties( ScenePickCache.prototype, prototypeAccessors$f );
-
 
 /**
  * 3D场景
@@ -36700,7 +36615,6 @@ Scene = __decorate$1([
     RegisterComponent({ single: true })
 ], Scene);
 
-
 /**
  * 天空盒渲染器
  */
@@ -36773,7 +36687,6 @@ SkyBoxRenderer.prototype.drawSkyBox = function drawSkyBox (gl, skybox, scene, ca
  * 天空盒渲染器
  */
 var skyboxRenderer = new SkyBoxRenderer();
-
 
 /**
  * 视图
@@ -37038,7 +36951,6 @@ var View = /*@__PURE__*/(function (Feng3dObject) {
 }(Feng3dObject));
 // var viewRect0 = { x: 0, y: 0, w: 400, h: 300 ;}
 
-
 var CustomGeometry = /*@__PURE__*/(function (Geometry) {
     function CustomGeometry () {
         Geometry.apply(this, arguments);
@@ -37074,7 +36986,6 @@ __decorate$1([
 __decorate$1([
     serialize$1
 ], CustomGeometry.prototype, "attributes", null);
-
 
 /**
  * 点几何体
@@ -37129,7 +37040,6 @@ __decorate$1([
     oav$1(),
     watch$1("invalidateGeometry")
 ], PointGeometry.prototype, "points", void 0);
-
 
 /**
  * 线段组件
@@ -37232,7 +37142,6 @@ Entity.registerPrimitive("Segment", function (g) {
     model.material = Material.getDefault("Segment-Material");
 });
 
-
 var ColorUniforms = function ColorUniforms() {
     /**
      * 颜色
@@ -37244,7 +37153,6 @@ __decorate$1([
     oav$1()
 ], ColorUniforms.prototype, "u_diffuseInput", void 0);
 shaderlib.shaderConfig.shaders["color"].cls = ColorUniforms;
-
 
 var PointUniforms = function PointUniforms() {
     /**
@@ -37266,7 +37174,6 @@ __decorate$1([
 ], PointUniforms.prototype, "u_PointSize", void 0);
 shaderlib.shaderConfig.shaders["point"].cls = PointUniforms;
 
-
 /**
  * 线段材质
  * 目前webgl不支持修改线条宽度，参考：https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/lineWidth
@@ -37284,7 +37191,6 @@ __decorate$1([
 shaderlib.shaderConfig.shaders["segment"].cls = SegmentUniforms;
 shaderlib.shaderConfig.shaders["segment"].renderParams = { renderMode: RenderMode.LINES, enableBlend: true };
 Material.setDefault("Segment-Material", { shaderName: "segment" });
-
 
 /**
  * 雾模式
@@ -37437,7 +37343,6 @@ __decorate$1([
 shaderlib.shaderConfig.shaders["standard"].cls = StandardUniforms;
 Material.setDefault("Default-Material", { shaderName: "standard" });
 
-
 var TextureUniforms = function TextureUniforms() {
     /**
      * 颜色
@@ -37457,7 +37362,6 @@ __decorate$1([
     serialize$1
 ], TextureUniforms.prototype, "s_texture", void 0);
 shaderlib.shaderConfig.shaders["texture"].cls = TextureUniforms;
-
 
 /**
  * 胶囊体几何体
@@ -37656,7 +37560,6 @@ Geometry.setDefault("Capsule", new CapsuleGeometry());
 Entity.registerPrimitive("Capsule", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Capsule");
 });
-
 
 /**
  * 圆柱体几何体
@@ -38014,7 +37917,6 @@ Entity.registerPrimitive("Cylinder", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Cylinder");
 });
 
-
 /**
  * 圆锥体
 
@@ -38048,7 +37950,6 @@ Geometry.setDefault("Cone", new ConeGeometry());
 Entity.registerPrimitive("Cone", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Cone");
 });
-
 
 /**
  * 立（长）方体几何体
@@ -38477,7 +38378,6 @@ Entity.registerPrimitive("Cube", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Cube");
 });
 
-
 var ParametricGeometry = /*@__PURE__*/(function (Geometry) {
     function ParametricGeometry(func, slices, stacks, doubleside) {
         if ( slices === void 0 ) { slices = 8; }
@@ -38543,7 +38443,6 @@ var ParametricGeometry = /*@__PURE__*/(function (Geometry) {
     return ParametricGeometry;
 }(Geometry));
 
-
 /**
  * 四边形面皮几何体
  */
@@ -38568,7 +38467,6 @@ Geometry.setDefault("Quad", new QuadGeometry());
 Entity.registerPrimitive("Quad", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Quad");
 });
-
 
 /**
  * 球体几何体
@@ -38758,7 +38656,6 @@ Geometry.setDefault("Sphere", new SphereGeometry());
 Entity.registerPrimitive("Sphere", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Sphere");
 });
-
 
 /**
  * 圆环几何体
@@ -38956,7 +38853,6 @@ Entity.registerPrimitive("Torus", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Torus");
 });
 
-
 /**
  * 鼠标拾取渲染器
  */
@@ -39019,7 +38915,6 @@ var MouseRenderer = /*@__PURE__*/(function (EventEmitter) {
 }(EventEmitter));
 var mouseRenderer = new MouseRenderer();
 
-
 /**
  * 用于处理从场景中获取特定数据
  */
@@ -39061,7 +38956,6 @@ SceneUtil.prototype.getActiveRenderers = function getActiveRenderers (scene, cam
 };
 var sceneUtil = new SceneUtil();
 
-
 var Setting = function Setting() {
     /**
      * 版本号
@@ -39085,7 +38979,6 @@ var Setting = function Setting() {
     this.defaultRotationOrder = RotationOrder.YXZ;
 };
 var setting = new Setting();
-
 
 /**
  * 天空盒渲染器
@@ -39156,7 +39049,6 @@ SkyBoxRenderer$1.prototype.drawSkyBox = function drawSkyBox (gl, skybox, scene, 
     gl.render(this.renderAtomic);
 };
 
-
 var CanvasTexture2D = /*@__PURE__*/(function (Texture2D) {
     function CanvasTexture2D () {
         Texture2D.apply(this, arguments);
@@ -39177,7 +39069,6 @@ __decorate$1([
     watch$1("_canvasChanged")
 ], CanvasTexture2D.prototype, "canvas", void 0);
 
-
 var ImageDataTexture2D = /*@__PURE__*/(function (Texture2D) {
     function ImageDataTexture2D () {
         Texture2D.apply(this, arguments);
@@ -39197,7 +39088,6 @@ var ImageDataTexture2D = /*@__PURE__*/(function (Texture2D) {
 __decorate$1([
     watch$1("_imageDataChanged")
 ], ImageDataTexture2D.prototype, "imageData", void 0);
-
 
 /**
  * 2D纹理
@@ -39229,7 +39119,6 @@ __decorate$1([
     watch$1("_imageChanged")
 ], ImageTexture2D.prototype, "image", null);
 
-
 var VideoTexture2D = /*@__PURE__*/(function (Texture2D) {
     function VideoTexture2D () {
         Texture2D.apply(this, arguments);
@@ -39249,7 +39138,6 @@ var VideoTexture2D = /*@__PURE__*/(function (Texture2D) {
 __decorate$1([
     watch$1("_videoChanged")
 ], VideoTexture2D.prototype, "video", void 0);
-
 
 /**
  * 通用唯一标识符（Universally Unique Identifier）
@@ -39291,7 +39179,6 @@ Uuid.prototype.getObjectUuid = function getObjectUuid (object) {
 };
 var __uuid__ = "__uuid__";
 var uuid = new Uuid();
-
 
 /**
  * 函数经
@@ -39507,7 +39394,6 @@ Debug.prototype.time = function time (fn, labal) {
  */
 var debug = new Debug();
 
-
 /**
  * 对象池
  *
@@ -39577,7 +39463,6 @@ Pool.prototype.releaseArray = function releaseArray (objects) {
     });
 };
 
-
 /**
  * 常用正则表示式
  */
@@ -39603,7 +39488,6 @@ var RegExps = function RegExps() {
      */
     this.classReg = /(export\s+)?(abstract\s+)?class\s+([\w$_\d]+)(\s+extends\s+([\w$_\d\.]+))?/;
 };
-
 
 var Stats = function Stats() {
     var this$1 = this;
@@ -39714,7 +39598,6 @@ var StatsPanel = function StatsPanel(name, fg, bg) {
     };
 };
 
-
 /**
  * The Water component renders the terrain.
  */
@@ -39754,7 +39637,6 @@ Water = __decorate$1([
 Entity.registerPrimitive("Water", function (g) {
     g.addComponent(Water);
 });
-
 
 var WaterUniforms = function WaterUniforms() {
     this.u_alpha = 1.0;
@@ -40335,7 +40217,6 @@ var globalEmitter$3 = new EventEmitter$3();
  * 只针对Object的事件
  */
 var objectevent = event$1;
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/filesystem - v0.3.3
@@ -43045,7 +42926,6 @@ var ReadWriteFS = /*@__PURE__*/(function (ReadFS) {
 
     return ReadWriteFS;
 }(ReadFS$1));
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/math - v0.3.3
@@ -56865,7 +56745,6 @@ var QuadraticBezierCurve3 = /*@__PURE__*/(function (Curve) {
 
     return QuadraticBezierCurve3;
 }(Curve$1));
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/objectview - v0.3.3
@@ -57250,7 +57129,6 @@ function getObjectBlockInfos$4(object, objectAttributeInfos, blockDefinitionVec)
     }
     return objectBlockInfos;
 }
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/polyfill - v0.3.3
@@ -58198,7 +58076,6 @@ var lazy$2 = {
         return lazyItem;
     }
 };
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/renderer - v0.3.3
@@ -62712,7 +62589,6 @@ __decorate$4([
 __decorate$4([
     watch$2("invalidate")
 ], RenderBuffer$1.prototype, "OFFSCREEN_HEIGHT", void 0);
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/serialization - v0.3.3
@@ -64095,7 +63971,6 @@ serialization$5.setValueHandlers = [
             return true;
         }
     } ];
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/shortcut - v0.3.3
@@ -65139,7 +65014,6 @@ var ShortCut$1 = /*@__PURE__*/(function (EventEmitter) {
  * 快捷键
  */
 var shortcut$1 = new ShortCut$1();
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/task - v0.3.3
@@ -65268,7 +65142,6 @@ Task$3.prototype.seriesResults = function seriesResults (ps, fn, done) {
  * 任务，用于处理任务之间依赖
  */
 var task$3 = new Task$3();
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/watcher - v0.3.3
@@ -65577,9 +65450,6 @@ function notifyListener$1(newValue, oldValue, host, property) {
         element.handler.call(element.thisObject, newValue, oldValue, host, property);
     });
 }
-//# sourceMappingURL=index.js.map
-
-//# sourceMappingURL=index.js.map
 
 export { Animation, AnimationClip, AnimationCurve$1 as AnimationCurve, AnimationCurveVector3$1 as AnimationCurveVector3, ArcCurve2, AssetData, AssetType, Attribute$1 as Attribute, AttributeUsage$1 as AttributeUsage, AudioListener, AudioSource, AvlTree, Behaviour, BezierCurve$1 as BezierCurve, BillboardComponent, BinarySearchTree, BinarySearchTreeNode, BinaryTreeNode, BlendEquation$1 as BlendEquation, BlendFactor$1 as BlendFactor, BloomFilter, BoundingBox, Box3$1 as Box3, Camera, CanvasTexture2D, CapsuleGeometry, CartoonComponent, CatmullRomCurve3, ClassUtils$5 as ClassUtils, Color3$1 as Color3, Color4$1 as Color4, ColorKeywords$1 as ColorKeywords, ColorMask$1 as ColorMask, ColorUniforms, Comparator, Component, ConeGeometry, ControllerBase, CoordinateSystem$1 as CoordinateSystem, CubeGeometry, CubicBezierCurve2, CubicBezierCurve3, CullFace$1 as CullFace, Curve$1 as Curve, CurvePath, CustomGeometry, CylinderGeometry, DataTransform$3 as DataTransform, Debug, DepthFunc$1 as DepthFunc, DirectionalLight, DisjointSet, DistanceModelType, DoublyLinkedList, Earcut, EllipseCurve2, Entity, EquationSolving$1 as EquationSolving, EventEmitter$3 as EventEmitter, EventProxy$1 as EventProxy, FEvent$1 as FEvent, FPSController, FSType$1 as FSType, Feng3dObject, FileAsset, FogMode, FolderAsset, Font, ForwardRenderer, FrameBuffer$1 as FrameBuffer, FrameBufferObject, FrontFace$1 as FrontFace, Frustum$1 as Frustum, FunctionWrap, GL$1 as GL, GLArrayType$1 as GLArrayType, GLCache$1 as GLCache, GLCapabilities$1 as GLCapabilities, GLExtension$1 as GLExtension, Geometry, GeometryUtils, Gradient$1 as Gradient, GradientMode$1 as GradientMode, Graph, Graphics, HashTable, Heap, HideFlags, HighFunction, HoldSizeComponent, HoverController, HttpFS$1 as HttpFS, ImageDataTexture2D, ImageTexture2D, ImageUtil, Index$1 as Index, Interpolations, KeyBoard$1 as KeyBoard, KeyState$1 as KeyState, LensBase, Light, LightPicker, LightType, LineCurve2, LineCurve3, LinkedList, Loader$1 as Loader, LoaderDataFormat$1 as LoaderDataFormat, LookAtController, Material, Matrix3x3$1 as Matrix3x3, Matrix4x4$1 as Matrix4x4, MaxHeap, MeshRenderer, MinHeap, MinMaxCurve$1 as MinMaxCurve, MinMaxCurveMode$1 as MinMaxCurveMode, MinMaxCurveVector3$1 as MinMaxCurveVector3, MinMaxGradient$1 as MinMaxGradient, MinMaxGradientMode$1 as MinMaxGradientMode, Mouse3DManager, MouseRenderer, Node3D, Noise$1 as Noise, OAVComponent, OBVComponent, OVComponent, ObjectView$4 as ObjectView, OrthographicLens, OutLineComponent, OutlineRenderer, ParametricGeometry, Path2, PathUtils$1 as PathUtils, PerspectiveLens, Plane$1 as Plane, PlaneClassification$1 as PlaneClassification, PlaneGeometry, PointGeometry, PointLight, PointUniforms, Pool, PriorityQueue, PriorityQueue1, Projection, PropertyClip, QuadGeometry, QuadraticBezierCurve2, QuadraticBezierCurve3, Quaternion$1 as Quaternion, Queue, Ray3$1 as Ray3, RayCastable, Raycaster, ReadFS$1 as ReadFS, ReadRS, ReadWriteFS, ReadWriteRS, Rectangle$1 as Rectangle, RegExps, RenderAtomic$1 as RenderAtomic, RenderBuffer$1 as RenderBuffer, RenderMode$1 as RenderMode, RenderParams$1 as RenderParams, RenderTargetTexture2D, Renderable, RotationOrder$1 as RotationOrder, RunEnvironment, Scene, ScenePickCache, SceneUtil, Script, ScriptComponent, Segment3$1 as Segment3, SegmentGeometry, SegmentUniforms, Serialization$5 as Serialization, Setting, Shader$1 as Shader, ShaderLib$1 as ShaderLib, ShaderMacroUtils$1 as ShaderMacroUtils, ShadowRenderer, ShadowType, Shape2, ShapePath2, ShapeUtils, ShortCut$1 as ShortCut, ShortCutCapture$1 as ShortCutCapture, SkeletonComponent, SkeletonJoint, SkinnedMeshRenderer, SkyBox, SkyBoxRenderer$1 as SkyBoxRenderer, Sphere, SphereGeometry, SplineCurve2, SpotLight, Stack, StandardUniforms, Stats, Texture$1 as Texture, Texture2D, TextureCube, TextureDataType$1 as TextureDataType, TextureFormat$1 as TextureFormat, TextureInfo, TextureMagFilter$1 as TextureMagFilter, TextureMinFilter$1 as TextureMinFilter, TextureType$1 as TextureType, TextureUniforms, TextureWrap$1 as TextureWrap, Ticker, TorusGeometry, TransformLayout, TriangleGeometry, Uuid, Vector2$1 as Vector2, Vector3$1 as Vector3, Vector4$1 as Vector4, VideoTexture2D, View, Watcher$1 as Watcher, Water, WaterUniforms, WebGLRenderer$1 as WebGLRenderer, WireframeComponent, WireframeRenderer, WrapMode$1 as WrapMode, _IndexedDB$1 as _IndexedDB, _indexedDB$1 as _indexedDB, classUtils$5 as classUtils, dataTransform$3 as dataTransform, debug, defaultRotationOrder$1 as defaultRotationOrder, event$1 as event, fs$1 as fs, globalEmitter$3 as globalEmitter, indexedDBFS$1 as indexedDBFS, lazy$2 as lazy, loader$1 as loader, menuConfig, oav$4 as oav, objectevent, objectview$4 as objectview, ov$1 as ov, path, pathUtils$1 as pathUtils, sceneUtil, serialization$5 as serialization, serialize$5 as serialize, setting, shaderlib$1 as shaderlib, task$3 as task, ticker, watch$3 as watch, watcher$1 as watcher, windowEventProxy$1 as windowEventProxy };
 //# sourceMappingURL=index.mjs.map

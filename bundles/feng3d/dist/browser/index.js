@@ -2237,7 +2237,6 @@ var feng3d = (function (exports) {
     Stack.prototype.toString = function toString (valueToString) {
         return this.linkedList.toString(valueToString);
     };
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/core - v0.3.3
@@ -6758,7 +6757,6 @@ var feng3d = (function (exports) {
         watch("invalidate")
     ], RenderBuffer.prototype, "OFFSCREEN_HEIGHT", void 0);
 
-
     shaderlib.shaderConfig = {
         "shaders": {
             "color": {
@@ -6871,7 +6869,6 @@ var feng3d = (function (exports) {
             "worldposition_vert": "//获取全局坐标\r\nvec4 worldPosition = u_modelMatrix * position;\r\n//输出全局坐标\r\nv_worldPosition = worldPosition.xyz;"
         }
     };
-
 
     /*!
      * @feng3d/event - v0.3.3
@@ -7400,11 +7397,9 @@ var feng3d = (function (exports) {
      */
     var globalEmitter = new EventEmitter();
 
-
     globalEmitter.on("asset.shaderChanged", function () {
         shaderlib.clearCache();
     });
-
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -7784,7 +7779,6 @@ var feng3d = (function (exports) {
         }
         return objectBlockInfos;
     }
-
 
     /*!
      * @feng3d/serialization - v0.3.3
@@ -9168,7 +9162,6 @@ var feng3d = (function (exports) {
             }
         } ];
 
-
     /*!
      * @feng3d/watcher - v0.3.3
      *
@@ -9477,7 +9470,6 @@ var feng3d = (function (exports) {
         });
     }
 
-
     /**
      * 运行环境枚举
      */
@@ -9496,7 +9488,6 @@ var feng3d = (function (exports) {
          */
         RunEnvironment[RunEnvironment["all"] = 255] = "all";
     })(exports.RunEnvironment || (exports.RunEnvironment = {}));
-
 
     /*!
      * @feng3d/polyfill - v0.3.3
@@ -10445,7 +10436,6 @@ var feng3d = (function (exports) {
         }
     };
 
-
     /**
      * 在检查器中控制对象销毁、保存和可见性的位掩码。
      */
@@ -10496,7 +10486,6 @@ var feng3d = (function (exports) {
          */
         HideFlags[HideFlags["HideAndDontSave"] = 61] = "HideAndDontSave";
     })(exports.HideFlags || (exports.HideFlags = {}));
-
 
     /**
      * 所有feng3d对象的基类
@@ -10584,7 +10573,6 @@ var feng3d = (function (exports) {
             return false;
         }
     });
-
 
     /**
      * 组件信息属性常量，保存组件名称与组件依赖ComponentInfo，由 @RegisterComponent 装饰器进行填充。
@@ -10846,7 +10834,6 @@ var feng3d = (function (exports) {
     __decorate$1([
         serialize$1
     ], Component.prototype, "entity", null);
-
 
     /*!
      * @feng3d/math - v0.3.3
@@ -22072,7 +22059,6 @@ var feng3d = (function (exports) {
     //
     var tmp = new Vector3();
 
-
     /**
      * 资源扩展名
      */
@@ -22160,7 +22146,6 @@ var feng3d = (function (exports) {
          */
         AssetType["script"] = "script";
     })(exports.AssetType || (exports.AssetType = {}));
-
 
     /**
      * 轴对称包围盒
@@ -22279,7 +22264,6 @@ var feng3d = (function (exports) {
     };
 
     Object.defineProperties( BoundingBox.prototype, prototypeAccessors$7 );
-
 
     /**
      * 变换
@@ -23290,7 +23274,6 @@ var feng3d = (function (exports) {
     var tempVector3_2 = new Vector3();
     var tempVector3_3 = new Vector3();
 
-
     /**
      * 3D组件
      *
@@ -23338,7 +23321,6 @@ var feng3d = (function (exports) {
     Component3D = __decorate$1([
         RegisterComponent({ dependencies: [exports.Node3D] })
     ], Component3D);
-
 
     /**
      * 行为
@@ -23394,7 +23376,6 @@ var feng3d = (function (exports) {
         RegisterComponent()
     ], exports.Behaviour);
 
-
     /**
      * 添加组件菜单
      *
@@ -23419,7 +23400,6 @@ var feng3d = (function (exports) {
      * 菜单配置
      */
     var menuConfig = {};
-
 
     var AnimationClip = /*@__PURE__*/(function (Feng3dObject) {
         function AnimationClip() {
@@ -23458,7 +23438,6 @@ var feng3d = (function (exports) {
     __decorate$1([
         serialize$1
     ], AnimationClip.prototype, "propertyClips", void 0);
-
 
     var PropertyClip = function PropertyClip() {
         this._cacheValues = {};
@@ -23529,7 +23508,6 @@ var feng3d = (function (exports) {
         PropertyClipPathItemType[PropertyClipPathItemType["Entity"] = 0] = "Entity";
         PropertyClipPathItemType[PropertyClipPathItemType["Component"] = 1] = "Component";
     })(PropertyClipPathItemType || (PropertyClipPathItemType = {}));
-
 
     exports.Animation = /*@__PURE__*/(function (Behaviour) {
         function Animation() {
@@ -23660,7 +23638,6 @@ var feng3d = (function (exports) {
     ], exports.Animation);
     var autoobjectCacheID = 1;
 
-
     /**
      * 骨骼关节数据
      */
@@ -23687,7 +23664,6 @@ var feng3d = (function (exports) {
     __decorate$1([
         serialize$1
     ], SkeletonJoint.prototype, "matrix", void 0);
-
 
     /**
      * 3d对象脚本
@@ -23783,7 +23759,6 @@ var feng3d = (function (exports) {
         AddComponentMenu("Script/Script"),
         RegisterComponent()
     ], exports.ScriptComponent);
-
 
     /**
      * 实体，场景唯一存在的对象类型
@@ -24164,7 +24139,6 @@ var feng3d = (function (exports) {
         oav$1({ component: "OAVComponentList" })
     ], Entity.prototype, "components", null);
 
-
     exports.SkeletonComponent = /*@__PURE__*/(function (Component3D) {
         function SkeletonComponent() {
             Component3D.apply(this, arguments);
@@ -24310,7 +24284,6 @@ var feng3d = (function (exports) {
     exports.SkeletonComponent = __decorate$1([
         RegisterComponent()
     ], exports.SkeletonComponent);
-
 
     /**
      * 资源数据
@@ -24566,7 +24539,6 @@ var feng3d = (function (exports) {
             return false;
         }
     });
-
 
     var GeometryUtils = function GeometryUtils () {};
 
@@ -25085,7 +25057,6 @@ var feng3d = (function (exports) {
     };
     var geometryUtils = new GeometryUtils();
 
-
     /**
      * 几何体
      */
@@ -25471,7 +25442,6 @@ var feng3d = (function (exports) {
         oav$1()
     ], Geometry.prototype, "scaleV", void 0);
 
-
     /**
      * 阴影类型
      */
@@ -25494,7 +25464,6 @@ var feng3d = (function (exports) {
          */
         ShadowType[ShadowType["PCF_Soft_Shadows"] = 3] = "PCF_Soft_Shadows";
     })(exports.ShadowType || (exports.ShadowType = {}));
-
 
     var LightPicker = function LightPicker(model) {
         this._model = model;
@@ -25582,7 +25551,6 @@ var feng3d = (function (exports) {
         renderAtomic.uniforms.u_directionalShadowMatrixs = directionalShadowMatrix;
         renderAtomic.uniforms.u_directionalShadowMaps = directionalShadowMaps;
     };
-
 
     /*!
      * @feng3d/filesystem - v0.3.3
@@ -27891,7 +27859,6 @@ var feng3d = (function (exports) {
      */
     var fs = new ReadFS();
 
-
     /**
      * 图片相关工具
      */
@@ -28249,7 +28216,6 @@ var feng3d = (function (exports) {
         }
     };
 
-
     var ImageDatas;
     (function (ImageDatas) {
         ImageDatas["black"] = "black";
@@ -28500,7 +28466,6 @@ var feng3d = (function (exports) {
         watch$1("invalidate")
     ], TextureInfo.prototype, "OFFSCREEN_HEIGHT", void 0);
 
-
     /**
      * 2D纹理
      */
@@ -28601,7 +28566,6 @@ var feng3d = (function (exports) {
     AssetData.addAssetData("Default-Texture", Texture2D.default);
     AssetData.addAssetData("Default-NormalTexture", Texture2D.defaultNormal);
     AssetData.addAssetData("Default-ParticleTexture", Texture2D.defaultParticle);
-
 
     /**
      * 立方体纹理
@@ -28759,7 +28723,6 @@ var feng3d = (function (exports) {
     TextureCube.default = serialization$1.setValue(new TextureCube(), { name: "Default-TextureCube", hideFlags: exports.HideFlags.NotEditable });
     AssetData.addAssetData("Default-TextureCube", TextureCube.default);
 
-
     /**
      * 材质
      */
@@ -28912,7 +28875,6 @@ var feng3d = (function (exports) {
         watch$1("_onRenderParamsChanged")
     ], Material.prototype, "renderParams", void 0);
 
-
     /**
      * 可射线捕获
      */
@@ -28978,7 +28940,6 @@ var feng3d = (function (exports) {
     exports.RayCastable = __decorate$1([
         RegisterComponent()
     ], exports.RayCastable);
-
 
     /**
      * 可渲染组件
@@ -29164,7 +29125,6 @@ var feng3d = (function (exports) {
             { callback(); }
     };
 
-
     exports.SkinnedMeshRenderer = /*@__PURE__*/(function (Renderable) {
         function SkinnedMeshRenderer() {
             Renderable.apply(this, arguments);
@@ -29281,7 +29241,6 @@ var feng3d = (function (exports) {
     __decorate$1([
         serialize$1
     ], SkinSkeleton.prototype, "numJoint", void 0);
-
 
     /**
      * 心跳计时器
@@ -29527,7 +29486,6 @@ var feng3d = (function (exports) {
         localrequestAnimationFrame = requestAnimationFrame;
     }
     runTickerFuncs();
-
 
     /**
      * feng3d资源
@@ -29778,7 +29736,6 @@ var feng3d = (function (exports) {
         serialize$1
     ], FileAsset.prototype, "assetId", void 0);
 
-
     /**
      * 文件夹资源
      */
@@ -29833,7 +29790,6 @@ var feng3d = (function (exports) {
     exports.FolderAsset = __decorate$1([
         ov({ component: "OVFolderAsset" })
     ], exports.FolderAsset);
-
 
     /*!
      * @feng3d/task - v0.3.3
@@ -29962,7 +29918,6 @@ var feng3d = (function (exports) {
      * 任务，用于处理任务之间依赖
      */
     var task$1 = new Task$1();
-
 
     /**
      * .
@@ -31479,7 +31434,6 @@ var feng3d = (function (exports) {
      */
     var path = process.platform === 'win32' ? win32 : posix;
 
-
     /**
      * 可读资源系统
      */
@@ -31818,7 +31772,6 @@ var feng3d = (function (exports) {
      */
     var rs = new ReadRS();
 
-
     /**
      * 可读写资源系统
      */
@@ -32013,7 +31966,6 @@ var feng3d = (function (exports) {
         return ReadWriteRS;
     }(ReadRS));
 
-
     /**
      * 声音监听器
      */
@@ -32122,7 +32074,6 @@ var feng3d = (function (exports) {
     else {
         listener.setOrientation(0, 0, -1, 0, 1, 0);
     }
-
 
     /**
      * 音量与距离算法
@@ -32456,7 +32407,6 @@ var feng3d = (function (exports) {
         return panner;
     }
 
-
     /**
      * 摄像机投影类型
      */
@@ -32471,7 +32421,6 @@ var feng3d = (function (exports) {
          */
         Projection[Projection["Orthographic"] = 1] = "Orthographic";
     })(exports.Projection || (exports.Projection = {}));
-
 
     /**
      * 摄像机镜头
@@ -32626,7 +32575,6 @@ var feng3d = (function (exports) {
         watch$1("invalidate")
     ], LensBase.prototype, "aspect", void 0);
 
-
     /**
      * 正射投影镜头
      */
@@ -32659,7 +32607,6 @@ var feng3d = (function (exports) {
         oav$1(),
         watch$1("invalidate")
     ], OrthographicLens.prototype, "size", void 0);
-
 
     /**
      * 透视摄像机镜头
@@ -32750,7 +32697,6 @@ var feng3d = (function (exports) {
         serialize$1,
         oav$1()
     ], PerspectiveLens.prototype, "fov", void 0);
-
 
     var Camera_1;
     /**
@@ -32934,7 +32880,6 @@ var feng3d = (function (exports) {
         g.addComponent(exports.Camera);
     });
 
-
     exports.BillboardComponent = /*@__PURE__*/(function (Component3D) {
         function BillboardComponent () {
             Component3D.apply(this, arguments);
@@ -32985,7 +32930,6 @@ var feng3d = (function (exports) {
         AddComponentMenu("Layout/BillboardComponent"),
         RegisterComponent()
     ], exports.BillboardComponent);
-
 
     /**
      * 参考
@@ -33066,7 +33010,6 @@ var feng3d = (function (exports) {
         RegisterComponent()
     ], exports.CartoonComponent);
 
-
     /**
      * Graphics 类包含一组可用来创建矢量形状的方法。
      */
@@ -33127,7 +33070,6 @@ var feng3d = (function (exports) {
     //     var ctxt = canvas.getContext('2d');
     //     ctxts.push(ctxt);
     // }
-
 
     exports.HoldSizeComponent = /*@__PURE__*/(function (Component3D) {
         function HoldSizeComponent() {
@@ -33197,7 +33139,6 @@ var feng3d = (function (exports) {
         RegisterComponent()
     ], exports.HoldSizeComponent);
 
-
     exports.OutLineComponent = /*@__PURE__*/(function (Component) {
         function OutLineComponent() {
             Component.apply(this, arguments);
@@ -33234,7 +33175,6 @@ var feng3d = (function (exports) {
         RegisterComponent()
     ], exports.OutLineComponent);
 
-
     /**
      * 线框组件，将会对拥有该组件的对象绘制线框
      */
@@ -33257,7 +33197,6 @@ var feng3d = (function (exports) {
         RegisterComponent()
     ], exports.WireframeComponent);
 
-
     var ControllerBase = function ControllerBase(node3d) {
         this.targetNode = node3d;
     };
@@ -33278,7 +33217,6 @@ var feng3d = (function (exports) {
     };
 
     Object.defineProperties( ControllerBase.prototype, prototypeAccessors$c );
-
 
     /*!
      * @feng3d/shortcut - v0.3.3
@@ -34323,7 +34261,6 @@ var feng3d = (function (exports) {
      */
     var shortcut = new ShortCut();
 
-
     /**
      * FPS模式控制器
      */
@@ -34507,7 +34444,6 @@ var feng3d = (function (exports) {
         RegisterComponent()
     ], exports.FPSController);
 
-
     var LookAtController = /*@__PURE__*/(function (ControllerBase) {
         function LookAtController(node3d, Node3D) {
             ControllerBase.call(this, node3d);
@@ -34562,7 +34498,6 @@ var feng3d = (function (exports) {
 
         return LookAtController;
     }(ControllerBase));
-
 
     var HoverController = /*@__PURE__*/(function (LookAtController) {
         function HoverController(node3d, lookAtObject, panAngle, tiltAngle, distance, minTiltAngle, maxTiltAngle, minPanAngle, maxPanAngle, steps, yFactor, wrapPanAngle) {
@@ -34777,7 +34712,6 @@ var feng3d = (function (exports) {
         return HoverController;
     }(LookAtController));
 
-
     var MeshRenderer_1;
     /**
      * 网格渲染器
@@ -34805,7 +34739,6 @@ var feng3d = (function (exports) {
     exports.MeshRenderer = MeshRenderer_1 = __decorate$1([
         RegisterComponent()
     ], exports.MeshRenderer);
-
 
     /**
      * 射线投射拾取器
@@ -34882,7 +34815,6 @@ var feng3d = (function (exports) {
      * 射线投射拾取器
      */
     var raycaster = new Raycaster();
-
 
     /**
      * 鼠标事件管理
@@ -35095,7 +35027,6 @@ var feng3d = (function (exports) {
         return WindowMouseInput;
     }(MouseInput));
 
-
     /**
      * 3d对象脚本
      */
@@ -35133,7 +35064,6 @@ var feng3d = (function (exports) {
     };
 
     Object.defineProperties( Script.prototype, prototypeAccessors$e );
-
 
     var TransformLayout_1;
     /**
@@ -35350,7 +35280,6 @@ var feng3d = (function (exports) {
         AddComponentMenu("Layout/TransformLayout"),
         RegisterComponent({ single: true })
     ], exports.TransformLayout);
-
 
     /**
      * 平面几何体
@@ -35571,7 +35500,6 @@ var feng3d = (function (exports) {
         g.addComponent(exports.MeshRenderer).geometry = Geometry.getDefault("Plane");
     });
 
-
     /**
      * 渲染目标纹理
      */
@@ -35598,7 +35526,6 @@ var feng3d = (function (exports) {
     __decorate$1([
         watch$1("invalidate")
     ], RenderTargetTexture2D.prototype, "OFFSCREEN_HEIGHT", void 0);
-
 
     /**
      * 帧缓冲对象
@@ -35697,7 +35624,6 @@ var feng3d = (function (exports) {
         watch$1("invalidate")
     ], FrameBufferObject.prototype, "depthBuffer", void 0);
 
-
     /**
      * 灯光类型
 
@@ -35717,7 +35643,6 @@ var feng3d = (function (exports) {
          */
         LightType[LightType["Spot"] = 2] = "Spot";
     })(exports.LightType || (exports.LightType = {}));
-
 
     /**
      * 灯光
@@ -35849,7 +35774,6 @@ var feng3d = (function (exports) {
         oav$1({ tooltip: "是否调试阴影图" })
     ], Light.prototype, "debugShadowMap", void 0);
 
-
     var DirectionalLight_1;
     /**
      * 方向光源
@@ -35921,7 +35845,6 @@ var feng3d = (function (exports) {
         g.addComponent(exports.DirectionalLight);
     });
 
-
     /**
      * 前向渲染器
      */
@@ -35965,7 +35888,6 @@ var feng3d = (function (exports) {
      */
     var forwardRenderer = new ForwardRenderer();
 
-
     /**
      * 轮廓渲染器
      */
@@ -35997,7 +35919,6 @@ var feng3d = (function (exports) {
      * 轮廓渲染器
      */
     var outlineRenderer = new OutlineRenderer();
-
 
     var ShadowRenderer = function ShadowRenderer() {
         this.renderAtomic = new RenderAtomic();
@@ -36188,7 +36109,6 @@ var feng3d = (function (exports) {
         new Vector3(0, 0, -1), new Vector3(0, 1, 0), new Vector3(0, -1, 0)
     ];
 
-
     var WireframeRenderer = function WireframeRenderer () {};
 
     WireframeRenderer.prototype.init = function init () {
@@ -36267,7 +36187,6 @@ var feng3d = (function (exports) {
      */
     var wireframeRenderer = new WireframeRenderer();
 
-
     /**
      * 点光源
      */
@@ -36322,7 +36241,6 @@ var feng3d = (function (exports) {
     Entity.registerPrimitive("Point light", function (g) {
         g.addComponent(exports.PointLight);
     });
-
 
     /**
      * 聚光灯光源
@@ -36394,7 +36312,6 @@ var feng3d = (function (exports) {
         g.addComponent(exports.SpotLight);
     });
 
-
     /**
      * 天空盒组件
      */
@@ -36423,7 +36340,6 @@ var feng3d = (function (exports) {
         AddComponentMenu("SkyBox/SkyBox"),
         RegisterComponent()
     ], exports.SkyBox);
-
 
     /**
      * 场景拾取缓存
@@ -36499,7 +36415,6 @@ var feng3d = (function (exports) {
     };
 
     Object.defineProperties( ScenePickCache.prototype, prototypeAccessors$f );
-
 
     /**
      * 3D场景
@@ -36703,7 +36618,6 @@ var feng3d = (function (exports) {
         RegisterComponent({ single: true })
     ], exports.Scene);
 
-
     /**
      * 天空盒渲染器
      */
@@ -36776,7 +36690,6 @@ var feng3d = (function (exports) {
      * 天空盒渲染器
      */
     var skyboxRenderer = new SkyBoxRenderer();
-
 
     /**
      * 视图
@@ -37041,7 +36954,6 @@ var feng3d = (function (exports) {
     }(Feng3dObject));
     // var viewRect0 = { x: 0, y: 0, w: 400, h: 300 ;}
 
-
     var CustomGeometry = /*@__PURE__*/(function (Geometry) {
         function CustomGeometry () {
             Geometry.apply(this, arguments);
@@ -37077,7 +36989,6 @@ var feng3d = (function (exports) {
     __decorate$1([
         serialize$1
     ], CustomGeometry.prototype, "attributes", null);
-
 
     /**
      * 点几何体
@@ -37132,7 +37043,6 @@ var feng3d = (function (exports) {
         oav$1(),
         watch$1("invalidateGeometry")
     ], PointGeometry.prototype, "points", void 0);
-
 
     /**
      * 线段组件
@@ -37235,7 +37145,6 @@ var feng3d = (function (exports) {
         model.material = Material.getDefault("Segment-Material");
     });
 
-
     var ColorUniforms = function ColorUniforms() {
         /**
          * 颜色
@@ -37247,7 +37156,6 @@ var feng3d = (function (exports) {
         oav$1()
     ], ColorUniforms.prototype, "u_diffuseInput", void 0);
     shaderlib.shaderConfig.shaders["color"].cls = ColorUniforms;
-
 
     var PointUniforms = function PointUniforms() {
         /**
@@ -37269,7 +37177,6 @@ var feng3d = (function (exports) {
     ], PointUniforms.prototype, "u_PointSize", void 0);
     shaderlib.shaderConfig.shaders["point"].cls = PointUniforms;
 
-
     /**
      * 线段材质
      * 目前webgl不支持修改线条宽度，参考：https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/lineWidth
@@ -37287,7 +37194,6 @@ var feng3d = (function (exports) {
     shaderlib.shaderConfig.shaders["segment"].cls = SegmentUniforms;
     shaderlib.shaderConfig.shaders["segment"].renderParams = { renderMode: RenderMode.LINES, enableBlend: true };
     Material.setDefault("Segment-Material", { shaderName: "segment" });
-
 
     /**
      * 雾模式
@@ -37440,7 +37346,6 @@ var feng3d = (function (exports) {
     shaderlib.shaderConfig.shaders["standard"].cls = StandardUniforms;
     Material.setDefault("Default-Material", { shaderName: "standard" });
 
-
     var TextureUniforms = function TextureUniforms() {
         /**
          * 颜色
@@ -37460,7 +37365,6 @@ var feng3d = (function (exports) {
         serialize$1
     ], TextureUniforms.prototype, "s_texture", void 0);
     shaderlib.shaderConfig.shaders["texture"].cls = TextureUniforms;
-
 
     /**
      * 胶囊体几何体
@@ -37659,7 +37563,6 @@ var feng3d = (function (exports) {
     Entity.registerPrimitive("Capsule", function (g) {
         g.addComponent(exports.MeshRenderer).geometry = Geometry.getDefault("Capsule");
     });
-
 
     /**
      * 圆柱体几何体
@@ -38017,7 +37920,6 @@ var feng3d = (function (exports) {
         g.addComponent(exports.MeshRenderer).geometry = Geometry.getDefault("Cylinder");
     });
 
-
     /**
      * 圆锥体
 
@@ -38051,7 +37953,6 @@ var feng3d = (function (exports) {
     Entity.registerPrimitive("Cone", function (g) {
         g.addComponent(exports.MeshRenderer).geometry = Geometry.getDefault("Cone");
     });
-
 
     /**
      * 立（长）方体几何体
@@ -38480,7 +38381,6 @@ var feng3d = (function (exports) {
         g.addComponent(exports.MeshRenderer).geometry = Geometry.getDefault("Cube");
     });
 
-
     var ParametricGeometry = /*@__PURE__*/(function (Geometry) {
         function ParametricGeometry(func, slices, stacks, doubleside) {
             if ( slices === void 0 ) { slices = 8; }
@@ -38546,7 +38446,6 @@ var feng3d = (function (exports) {
         return ParametricGeometry;
     }(Geometry));
 
-
     /**
      * 四边形面皮几何体
      */
@@ -38571,7 +38470,6 @@ var feng3d = (function (exports) {
     Entity.registerPrimitive("Quad", function (g) {
         g.addComponent(exports.MeshRenderer).geometry = Geometry.getDefault("Quad");
     });
-
 
     /**
      * 球体几何体
@@ -38761,7 +38659,6 @@ var feng3d = (function (exports) {
     Entity.registerPrimitive("Sphere", function (g) {
         g.addComponent(exports.MeshRenderer).geometry = Geometry.getDefault("Sphere");
     });
-
 
     /**
      * 圆环几何体
@@ -38959,7 +38856,6 @@ var feng3d = (function (exports) {
         g.addComponent(exports.MeshRenderer).geometry = Geometry.getDefault("Torus");
     });
 
-
     /**
      * 鼠标拾取渲染器
      */
@@ -39022,7 +38918,6 @@ var feng3d = (function (exports) {
     }(EventEmitter));
     var mouseRenderer = new MouseRenderer();
 
-
     /**
      * 用于处理从场景中获取特定数据
      */
@@ -39064,7 +38959,6 @@ var feng3d = (function (exports) {
     };
     var sceneUtil = new SceneUtil();
 
-
     var Setting = function Setting() {
         /**
          * 版本号
@@ -39088,7 +38982,6 @@ var feng3d = (function (exports) {
         this.defaultRotationOrder = RotationOrder.YXZ;
     };
     var setting = new Setting();
-
 
     /**
      * 天空盒渲染器
@@ -39159,7 +39052,6 @@ var feng3d = (function (exports) {
         gl.render(this.renderAtomic);
     };
 
-
     var CanvasTexture2D = /*@__PURE__*/(function (Texture2D) {
         function CanvasTexture2D () {
             Texture2D.apply(this, arguments);
@@ -39180,7 +39072,6 @@ var feng3d = (function (exports) {
         watch$1("_canvasChanged")
     ], CanvasTexture2D.prototype, "canvas", void 0);
 
-
     var ImageDataTexture2D = /*@__PURE__*/(function (Texture2D) {
         function ImageDataTexture2D () {
             Texture2D.apply(this, arguments);
@@ -39200,7 +39091,6 @@ var feng3d = (function (exports) {
     __decorate$1([
         watch$1("_imageDataChanged")
     ], ImageDataTexture2D.prototype, "imageData", void 0);
-
 
     /**
      * 2D纹理
@@ -39232,7 +39122,6 @@ var feng3d = (function (exports) {
         watch$1("_imageChanged")
     ], ImageTexture2D.prototype, "image", null);
 
-
     var VideoTexture2D = /*@__PURE__*/(function (Texture2D) {
         function VideoTexture2D () {
             Texture2D.apply(this, arguments);
@@ -39252,7 +39141,6 @@ var feng3d = (function (exports) {
     __decorate$1([
         watch$1("_videoChanged")
     ], VideoTexture2D.prototype, "video", void 0);
-
 
     /**
      * 通用唯一标识符（Universally Unique Identifier）
@@ -39294,7 +39182,6 @@ var feng3d = (function (exports) {
     };
     var __uuid__ = "__uuid__";
     var uuid = new Uuid();
-
 
     /**
      * 函数经
@@ -39510,7 +39397,6 @@ var feng3d = (function (exports) {
      */
     var debug = new Debug();
 
-
     /**
      * 对象池
      *
@@ -39580,7 +39466,6 @@ var feng3d = (function (exports) {
         });
     };
 
-
     /**
      * 常用正则表示式
      */
@@ -39606,7 +39491,6 @@ var feng3d = (function (exports) {
          */
         this.classReg = /(export\s+)?(abstract\s+)?class\s+([\w$_\d]+)(\s+extends\s+([\w$_\d\.]+))?/;
     };
-
 
     var Stats = function Stats() {
         var this$1 = this;
@@ -39717,7 +39601,6 @@ var feng3d = (function (exports) {
         };
     };
 
-
     /**
      * The Water component renders the terrain.
      */
@@ -39757,7 +39640,6 @@ var feng3d = (function (exports) {
     Entity.registerPrimitive("Water", function (g) {
         g.addComponent(exports.Water);
     });
-
 
     var WaterUniforms = function WaterUniforms() {
         this.u_alpha = 1.0;
@@ -40338,7 +40220,6 @@ var feng3d = (function (exports) {
      * 只针对Object的事件
      */
     var objectevent = event$1;
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/filesystem - v0.3.3
@@ -43048,7 +42929,6 @@ var feng3d = (function (exports) {
 
         return ReadWriteFS;
     }(ReadFS$1));
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/math - v0.3.3
@@ -56868,7 +56748,6 @@ var feng3d = (function (exports) {
 
         return QuadraticBezierCurve3;
     }(Curve$1));
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/objectview - v0.3.3
@@ -57253,7 +57132,6 @@ var feng3d = (function (exports) {
         }
         return objectBlockInfos;
     }
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/polyfill - v0.3.3
@@ -58201,7 +58079,6 @@ var feng3d = (function (exports) {
             return lazyItem;
         }
     };
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/renderer - v0.3.3
@@ -62715,7 +62592,6 @@ var feng3d = (function (exports) {
     __decorate$4([
         watch$2("invalidate")
     ], RenderBuffer$1.prototype, "OFFSCREEN_HEIGHT", void 0);
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/serialization - v0.3.3
@@ -64098,7 +63974,6 @@ var feng3d = (function (exports) {
                 return true;
             }
         } ];
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/shortcut - v0.3.3
@@ -65142,7 +65017,6 @@ var feng3d = (function (exports) {
      * 快捷键
      */
     var shortcut$1 = new ShortCut$1();
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/task - v0.3.3
@@ -65271,7 +65145,6 @@ var feng3d = (function (exports) {
      * 任务，用于处理任务之间依赖
      */
     var task$3 = new Task$3();
-    //# sourceMappingURL=index.js.map
 
     /*!
      * @feng3d/watcher - v0.3.3
@@ -65580,9 +65453,6 @@ var feng3d = (function (exports) {
             element.handler.call(element.thisObject, newValue, oldValue, host, property);
         });
     }
-    //# sourceMappingURL=index.js.map
-
-    //# sourceMappingURL=index.js.map
 
     exports.AnimationClip = AnimationClip;
     exports.AnimationCurve = AnimationCurve$1;

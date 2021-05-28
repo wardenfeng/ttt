@@ -4516,7 +4516,6 @@ __decorate([
 __decorate([
     watch("invalidate")
 ], RenderBuffer.prototype, "OFFSCREEN_HEIGHT", void 0);
-//# sourceMappingURL=index.js.map
 
 shaderlib.shaderConfig = {
     "shaders": {
@@ -4630,7 +4629,6 @@ shaderlib.shaderConfig = {
         "worldposition_vert": "//获取全局坐标\r\nvec4 worldPosition = u_modelMatrix * position;\r\n//输出全局坐标\r\nv_worldPosition = worldPosition.xyz;"
     }
 };
-//# sourceMappingURL=ShaderConfig.js.map
 
 /*!
  * @feng3d/event - v0.3.3
@@ -5158,12 +5156,10 @@ var event = new FEvent();
  * 全局事件
  */
 var globalEmitter = new EventEmitter();
-//# sourceMappingURL=index.js.map
 
 globalEmitter.on("asset.shaderChanged", function () {
     shaderlib.clearCache();
 });
-//# sourceMappingURL=ShaderLib.js.map
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -5543,7 +5539,6 @@ function getObjectBlockInfos$1(object, objectAttributeInfos, blockDefinitionVec)
     }
     return objectBlockInfos;
 }
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/serialization - v0.3.3
@@ -6926,7 +6921,6 @@ serialization$1.setValueHandlers = [
             return true;
         }
     } ];
-//# sourceMappingURL=index.js.map
 
 /*!
  * @feng3d/watcher - v0.3.3
@@ -7235,7 +7229,6 @@ function notifyListener(newValue, oldValue, host, property) {
         element.handler.call(element.thisObject, newValue, oldValue, host, property);
     });
 }
-//# sourceMappingURL=index.js.map
 
 /**
  * 运行环境枚举
@@ -7255,7 +7248,6 @@ var RunEnvironment;
      */
     RunEnvironment[RunEnvironment["all"] = 255] = "all";
 })(RunEnvironment || (RunEnvironment = {}));
-//# sourceMappingURL=RunEnvironment.js.map
 
 /*!
  * @feng3d/polyfill - v0.3.3
@@ -8203,7 +8195,6 @@ var lazy$1 = {
         return lazyItem;
     }
 };
-//# sourceMappingURL=index.js.map
 
 /**
  * 在检查器中控制对象销毁、保存和可见性的位掩码。
@@ -8255,7 +8246,6 @@ var HideFlags;
      */
     HideFlags[HideFlags["HideAndDontSave"] = 61] = "HideAndDontSave";
 })(HideFlags || (HideFlags = {}));
-//# sourceMappingURL=HideFlags.js.map
 
 /**
  * 所有feng3d对象的基类
@@ -8343,7 +8333,6 @@ serialization$1.serializeHandlers.push(
         return false;
     }
 });
-//# sourceMappingURL=Feng3dObject.js.map
 
 /**
  * 组件信息属性常量，保存组件名称与组件依赖ComponentInfo，由 @RegisterComponent 装饰器进行填充。
@@ -8605,7 +8594,6 @@ Component._componentMap = {};
 __decorate$1([
     serialize$1
 ], Component.prototype, "entity", null);
-//# sourceMappingURL=Component.js.map
 
 /*!
  * @feng3d/math - v0.3.3
@@ -19830,7 +19818,6 @@ Curve.prototype.computeFrenetFrames = function computeFrenetFrames (segments, cl
 };
 //
 var tmp = new Vector3();
-//# sourceMappingURL=index.js.map
 
 /**
  * 资源扩展名
@@ -19919,7 +19906,6 @@ var AssetType;
      */
     AssetType["script"] = "script";
 })(AssetType || (AssetType = {}));
-//# sourceMappingURL=AssetType.js.map
 
 /**
  * 轴对称包围盒
@@ -20038,7 +20024,6 @@ BoundingBox.prototype._invalidateWorldBounds = function _invalidateWorldBounds (
 };
 
 Object.defineProperties( BoundingBox.prototype, prototypeAccessors$7 );
-//# sourceMappingURL=BoundingBox.js.map
 
 /**
  * 变换
@@ -21046,7 +21031,6 @@ Node3D = __decorate$1([
 var tempVector3_1 = new Vector3();
 var tempVector3_2 = new Vector3();
 var tempVector3_3 = new Vector3();
-//# sourceMappingURL=Node3D.js.map
 
 /**
  * 3D组件
@@ -21095,7 +21079,6 @@ var Component3D = /*@__PURE__*/(function (Component) {
 Component3D = __decorate$1([
     RegisterComponent({ dependencies: [Node3D] })
 ], Component3D);
-//# sourceMappingURL=Component3D.js.map
 
 /**
  * 行为
@@ -21150,7 +21133,6 @@ __decorate$1([
 Behaviour = __decorate$1([
     RegisterComponent()
 ], Behaviour);
-//# sourceMappingURL=Behaviour.js.map
 
 /**
  * 添加组件菜单
@@ -21176,7 +21158,6 @@ function AddComponentMenu(path, componentOrder) {
  * 菜单配置
  */
 var menuConfig = {};
-//# sourceMappingURL=Menu.js.map
 
 var AnimationClip = /*@__PURE__*/(function (Feng3dObject) {
     function AnimationClip() {
@@ -21215,7 +21196,6 @@ __decorate$1([
 __decorate$1([
     serialize$1
 ], AnimationClip.prototype, "propertyClips", void 0);
-//# sourceMappingURL=AnimationClip.js.map
 
 var PropertyClip = function PropertyClip() {
     this._cacheValues = {};
@@ -21286,7 +21266,6 @@ var PropertyClipPathItemType;
     PropertyClipPathItemType[PropertyClipPathItemType["Entity"] = 0] = "Entity";
     PropertyClipPathItemType[PropertyClipPathItemType["Component"] = 1] = "Component";
 })(PropertyClipPathItemType || (PropertyClipPathItemType = {}));
-//# sourceMappingURL=PropertyClip.js.map
 
 var Animation = /*@__PURE__*/(function (Behaviour) {
     function Animation() {
@@ -21416,7 +21395,6 @@ Animation = __decorate$1([
     RegisterComponent()
 ], Animation);
 var autoobjectCacheID = 1;
-//# sourceMappingURL=Animation.js.map
 
 /**
  * 骨骼关节数据
@@ -21444,7 +21422,6 @@ __decorate$1([
 __decorate$1([
     serialize$1
 ], SkeletonJoint.prototype, "matrix", void 0);
-//# sourceMappingURL=Skeleton.js.map
 
 /**
  * 3d对象脚本
@@ -21540,7 +21517,6 @@ ScriptComponent = __decorate$1([
     AddComponentMenu("Script/Script"),
     RegisterComponent()
 ], ScriptComponent);
-//# sourceMappingURL=ScriptComponent.js.map
 
 /**
  * 实体，场景唯一存在的对象类型
@@ -21920,7 +21896,6 @@ __decorate$1([
     serialize$1,
     oav$1({ component: "OAVComponentList" })
 ], Entity.prototype, "components", null);
-//# sourceMappingURL=Entity.js.map
 
 var SkeletonComponent = /*@__PURE__*/(function (Component3D) {
     function SkeletonComponent() {
@@ -22067,7 +22042,6 @@ __decorate$1([
 SkeletonComponent = __decorate$1([
     RegisterComponent()
 ], SkeletonComponent);
-//# sourceMappingURL=SkeletonComponent.js.map
 
 /**
  * 资源数据
@@ -22323,7 +22297,6 @@ serialization$1.differentHandlers.push(
         return false;
     }
 });
-//# sourceMappingURL=AssetData.js.map
 
 var GeometryUtils = function GeometryUtils () {};
 
@@ -22841,7 +22814,6 @@ GeometryUtils.prototype.getAABB = function getAABB (positions) {
     return Box3.formPositions(positions);
 };
 var geometryUtils = new GeometryUtils();
-//# sourceMappingURL=GeometryUtils.js.map
 
 /**
  * 几何体
@@ -23227,7 +23199,6 @@ __decorate$1([
     serialize$1,
     oav$1()
 ], Geometry.prototype, "scaleV", void 0);
-//# sourceMappingURL=Geometry.js.map
 
 /**
  * 阴影类型
@@ -23251,7 +23222,6 @@ var ShadowType;
      */
     ShadowType[ShadowType["PCF_Soft_Shadows"] = 3] = "PCF_Soft_Shadows";
 })(ShadowType || (ShadowType = {}));
-//# sourceMappingURL=ShadowType.js.map
 
 var LightPicker = function LightPicker(model) {
     this._model = model;
@@ -23339,7 +23309,6 @@ LightPicker.prototype.beforeRender = function beforeRender (renderAtomic) {
     renderAtomic.uniforms.u_directionalShadowMatrixs = directionalShadowMatrix;
     renderAtomic.uniforms.u_directionalShadowMaps = directionalShadowMaps;
 };
-//# sourceMappingURL=LightPicker.js.map
 
 /*!
  * @feng3d/filesystem - v0.3.3
@@ -25647,7 +25616,6 @@ Object.defineProperties( ReadFS.prototype, prototypeAccessors$1$2 );
  * 默认文件系统
  */
 var fs = new ReadFS();
-//# sourceMappingURL=index.js.map
 
 /**
  * 图片相关工具
@@ -26005,7 +25973,6 @@ ImageUtil.prototype.clearBackColor = function clearBackColor (backColor) {
         }
     }
 };
-//# sourceMappingURL=ImageUtil.js.map
 
 var ImageDatas;
 (function (ImageDatas) {
@@ -26256,7 +26223,6 @@ __decorate$1([
 __decorate$1([
     watch$1("invalidate")
 ], TextureInfo.prototype, "OFFSCREEN_HEIGHT", void 0);
-//# sourceMappingURL=TextureInfo.js.map
 
 /**
  * 2D纹理
@@ -26358,7 +26324,6 @@ AssetData.addAssetData("white-Texture", Texture2D.white);
 AssetData.addAssetData("Default-Texture", Texture2D.default);
 AssetData.addAssetData("Default-NormalTexture", Texture2D.defaultNormal);
 AssetData.addAssetData("Default-ParticleTexture", Texture2D.defaultParticle);
-//# sourceMappingURL=Texture2D.js.map
 
 /**
  * 立方体纹理
@@ -26515,7 +26480,6 @@ __decorate$1([
 ], TextureCube.prototype, "rawData", void 0);
 TextureCube.default = serialization$1.setValue(new TextureCube(), { name: "Default-TextureCube", hideFlags: HideFlags.NotEditable });
 AssetData.addAssetData("Default-TextureCube", TextureCube.default);
-//# sourceMappingURL=TextureCube.js.map
 
 /**
  * 材质
@@ -26668,7 +26632,6 @@ __decorate$1([
     oav$1({ block: "渲染参数", component: "OAVObjectView" }),
     watch$1("_onRenderParamsChanged")
 ], Material.prototype, "renderParams", void 0);
-//# sourceMappingURL=Material.js.map
 
 /**
  * 可射线捕获
@@ -26735,7 +26698,6 @@ var RayCastable = /*@__PURE__*/(function (Behaviour) {
 RayCastable = __decorate$1([
     RegisterComponent()
 ], RayCastable);
-//# sourceMappingURL=RayCastable.js.map
 
 /**
  * 可渲染组件
@@ -26920,7 +26882,6 @@ Node3D.prototype.onSelfLoadCompleted = function onSelfLoadCompleted(callback) {
     else
         { callback(); }
 };
-//# sourceMappingURL=Renderable.js.map
 
 var SkinnedMeshRenderer = /*@__PURE__*/(function (Renderable) {
     function SkinnedMeshRenderer() {
@@ -27038,7 +26999,6 @@ __decorate$1([
 __decorate$1([
     serialize$1
 ], SkinSkeleton.prototype, "numJoint", void 0);
-//# sourceMappingURL=SkinnedMeshRenderer.js.map
 
 /**
  * 心跳计时器
@@ -27284,7 +27244,6 @@ else {
     localrequestAnimationFrame = requestAnimationFrame;
 }
 runTickerFuncs();
-//# sourceMappingURL=Ticker.js.map
 
 /**
  * feng3d资源
@@ -27534,7 +27493,6 @@ __decorate$1([
 __decorate$1([
     serialize$1
 ], FileAsset.prototype, "assetId", void 0);
-//# sourceMappingURL=FileAsset.js.map
 
 /**
  * 文件夹资源
@@ -27590,7 +27548,6 @@ FolderAsset.extenson = "";
 FolderAsset = __decorate$1([
     ov({ component: "OVFolderAsset" })
 ], FolderAsset);
-//# sourceMappingURL=FolderAsset.js.map
 
 /*!
  * @feng3d/task - v0.3.3
@@ -27719,7 +27676,6 @@ Task$1.prototype.seriesResults = function seriesResults (ps, fn, done) {
  * 任务，用于处理任务之间依赖
  */
 var task$1 = new Task$1();
-//# sourceMappingURL=index.js.map
 
 /**
  * .
@@ -29231,7 +29187,6 @@ posix.posix = win32.posix = posix;
  * @see https://github.com/nodejs/node/blob/master/lib/path.js
  */
 var path = process.platform === 'win32' ? win32 : posix;
-//# sourceMappingURL=Path.js.map
 
 /**
  * 可读资源系统
@@ -29570,7 +29525,6 @@ Object.defineProperties( ReadRS.prototype, prototypeAccessors$b );
  * 默认资源系统
  */
 var rs = new ReadRS();
-//# sourceMappingURL=ReadRS.js.map
 
 /**
  * 可读写资源系统
@@ -29765,7 +29719,6 @@ var ReadWriteRS = /*@__PURE__*/(function (ReadRS) {
 
     return ReadWriteRS;
 }(ReadRS));
-//# sourceMappingURL=ReadWriteRS.js.map
 
 /**
  * 声音监听器
@@ -29875,7 +29828,6 @@ if (listener.forwardX) {
 else {
     listener.setOrientation(0, 0, -1, 0, 1, 0);
 }
-//# sourceMappingURL=AudioListener.js.map
 
 /**
  * 音量与距离算法
@@ -30208,7 +30160,6 @@ function createPanner() {
     }
     return panner;
 }
-//# sourceMappingURL=AudioSource.js.map
 
 /**
  * 摄像机投影类型
@@ -30224,7 +30175,6 @@ var Projection;
      */
     Projection[Projection["Orthographic"] = 1] = "Orthographic";
 })(Projection || (Projection = {}));
-//# sourceMappingURL=Projection.js.map
 
 /**
  * 摄像机镜头
@@ -30378,7 +30328,6 @@ __decorate$1([
 __decorate$1([
     watch$1("invalidate")
 ], LensBase.prototype, "aspect", void 0);
-//# sourceMappingURL=LensBase.js.map
 
 /**
  * 正射投影镜头
@@ -30412,7 +30361,6 @@ __decorate$1([
     oav$1(),
     watch$1("invalidate")
 ], OrthographicLens.prototype, "size", void 0);
-//# sourceMappingURL=OrthographicLens.js.map
 
 /**
  * 透视摄像机镜头
@@ -30503,7 +30451,6 @@ __decorate$1([
     serialize$1,
     oav$1()
 ], PerspectiveLens.prototype, "fov", void 0);
-//# sourceMappingURL=PerspectiveLens.js.map
 
 var Camera_1;
 /**
@@ -30686,7 +30633,6 @@ var visibleBox = new Box3(new Vector3(-1, -1, -1), new Vector3(1, 1, 1));
 Entity.registerPrimitive("Camera", function (g) {
     g.addComponent(Camera);
 });
-//# sourceMappingURL=Camera.js.map
 
 var BillboardComponent = /*@__PURE__*/(function (Component3D) {
     function BillboardComponent () {
@@ -30738,7 +30684,6 @@ BillboardComponent = __decorate$1([
     AddComponentMenu("Layout/BillboardComponent"),
     RegisterComponent()
 ], BillboardComponent);
-//# sourceMappingURL=BillboardComponent.js.map
 
 /**
  * 参考
@@ -30818,7 +30763,6 @@ CartoonComponent = __decorate$1([
     AddComponentMenu("Rendering/CartoonComponent"),
     RegisterComponent()
 ], CartoonComponent);
-//# sourceMappingURL=CartoonComponent.js.map
 
 /**
  * Graphics 类包含一组可用来创建矢量形状的方法。
@@ -30878,7 +30822,6 @@ function watchContext2D(context2D, watchFuncs) {
 //     var ctxt = canvas.getContext('2d');
 //     ctxts.push(ctxt);
 // }
-//# sourceMappingURL=Graphics.js.map
 
 var HoldSizeComponent = /*@__PURE__*/(function (Component3D) {
     function HoldSizeComponent() {
@@ -30947,7 +30890,6 @@ HoldSizeComponent = __decorate$1([
     AddComponentMenu("Layout/HoldSizeComponent"),
     RegisterComponent()
 ], HoldSizeComponent);
-//# sourceMappingURL=HoldSizeComponent.js.map
 
 var OutLineComponent = /*@__PURE__*/(function (Component) {
     function OutLineComponent() {
@@ -30984,7 +30926,6 @@ OutLineComponent = __decorate$1([
     AddComponentMenu("Rendering/OutLineComponent"),
     RegisterComponent()
 ], OutLineComponent);
-//# sourceMappingURL=OutLineComponent.js.map
 
 /**
  * 线框组件，将会对拥有该组件的对象绘制线框
@@ -31007,7 +30948,6 @@ __decorate$1([
 WireframeComponent = __decorate$1([
     RegisterComponent()
 ], WireframeComponent);
-//# sourceMappingURL=WireframeComponent.js.map
 
 var ControllerBase = function ControllerBase(node3d) {
     this.targetNode = node3d;
@@ -31029,7 +30969,6 @@ prototypeAccessors$c.targetNode.set = function (val) {
 };
 
 Object.defineProperties( ControllerBase.prototype, prototypeAccessors$c );
-//# sourceMappingURL=ControllerBase.js.map
 
 /*!
  * @feng3d/shortcut - v0.3.3
@@ -32073,7 +32012,6 @@ var ShortCut = /*@__PURE__*/(function (EventEmitter) {
  * 快捷键
  */
 var shortcut = new ShortCut();
-//# sourceMappingURL=index.js.map
 
 /**
  * FPS模式控制器
@@ -32257,7 +32195,6 @@ FPSController = __decorate$1([
     AddComponentMenu("Controller/FPSController"),
     RegisterComponent()
 ], FPSController);
-//# sourceMappingURL=FPSController.js.map
 
 var LookAtController = /*@__PURE__*/(function (ControllerBase) {
     function LookAtController(node3d, Node3D) {
@@ -32313,7 +32250,6 @@ var LookAtController = /*@__PURE__*/(function (ControllerBase) {
 
     return LookAtController;
 }(ControllerBase));
-//# sourceMappingURL=LookAtController.js.map
 
 var HoverController = /*@__PURE__*/(function (LookAtController) {
     function HoverController(node3d, lookAtObject, panAngle, tiltAngle, distance, minTiltAngle, maxTiltAngle, minPanAngle, maxPanAngle, steps, yFactor, wrapPanAngle) {
@@ -32527,7 +32463,6 @@ var HoverController = /*@__PURE__*/(function (LookAtController) {
 
     return HoverController;
 }(LookAtController));
-//# sourceMappingURL=HoverController.js.map
 
 var MeshRenderer_1;
 /**
@@ -32556,7 +32491,6 @@ var MeshRenderer = MeshRenderer_1 = /*@__PURE__*/(function (Renderable) {
 MeshRenderer = MeshRenderer_1 = __decorate$1([
     RegisterComponent()
 ], MeshRenderer);
-//# sourceMappingURL=MeshRenderer.js.map
 
 /**
  * 射线投射拾取器
@@ -32633,7 +32567,6 @@ Raycaster.prototype.pickAll = function pickAll (ray3D, node3ds) {
  * 射线投射拾取器
  */
 var raycaster = new Raycaster();
-//# sourceMappingURL=Raycaster.js.map
 
 /**
  * 鼠标事件管理
@@ -32845,7 +32778,6 @@ var WindowMouseInput = /*@__PURE__*/(function (MouseInput) {
 
     return WindowMouseInput;
 }(MouseInput));
-//# sourceMappingURL=Mouse3DManager.js.map
 
 /**
  * 3d对象脚本
@@ -32884,7 +32816,6 @@ Script.prototype.dispose = function dispose () {
 };
 
 Object.defineProperties( Script.prototype, prototypeAccessors$e );
-//# sourceMappingURL=Script.js.map
 
 var TransformLayout_1;
 /**
@@ -33101,7 +33032,6 @@ TransformLayout = TransformLayout_1 = __decorate$1([
     AddComponentMenu("Layout/TransformLayout"),
     RegisterComponent({ single: true })
 ], TransformLayout);
-//# sourceMappingURL=TransformLayout.js.map
 
 /**
  * 平面几何体
@@ -33321,7 +33251,6 @@ Geometry.setDefault("Plane", new PlaneGeometry(), { width: 10, height: 10 });
 Entity.registerPrimitive("Plane", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Plane");
 });
-//# sourceMappingURL=PlaneGeometry.js.map
 
 /**
  * 渲染目标纹理
@@ -33349,7 +33278,6 @@ __decorate$1([
 __decorate$1([
     watch$1("invalidate")
 ], RenderTargetTexture2D.prototype, "OFFSCREEN_HEIGHT", void 0);
-//# sourceMappingURL=RenderTargetTexture2D.js.map
 
 /**
  * 帧缓冲对象
@@ -33447,7 +33375,6 @@ __decorate$1([
 __decorate$1([
     watch$1("invalidate")
 ], FrameBufferObject.prototype, "depthBuffer", void 0);
-//# sourceMappingURL=FrameBufferObject.js.map
 
 /**
  * 灯光类型
@@ -33468,7 +33395,6 @@ var LightType;
      */
     LightType[LightType["Spot"] = 2] = "Spot";
 })(LightType || (LightType = {}));
-//# sourceMappingURL=LightType.js.map
 
 /**
  * 灯光
@@ -33599,7 +33525,6 @@ __decorate$1([
 __decorate$1([
     oav$1({ tooltip: "是否调试阴影图" })
 ], Light.prototype, "debugShadowMap", void 0);
-//# sourceMappingURL=Light.js.map
 
 var DirectionalLight_1;
 /**
@@ -33671,7 +33596,6 @@ DirectionalLight = DirectionalLight_1 = __decorate$1([
 Entity.registerPrimitive("Directional light", function (g) {
     g.addComponent(DirectionalLight);
 });
-//# sourceMappingURL=DirectionalLight.js.map
 
 /**
  * 前向渲染器
@@ -33715,7 +33639,6 @@ ForwardRenderer.prototype.draw = function draw (gl, scene, camera) {
  * 前向渲染器
  */
 var forwardRenderer = new ForwardRenderer();
-//# sourceMappingURL=ForwardRenderer.js.map
 
 /**
  * 轮廓渲染器
@@ -33748,7 +33671,6 @@ OutlineRenderer.prototype.draw = function draw (gl, scene, camera) {
  * 轮廓渲染器
  */
 var outlineRenderer = new OutlineRenderer();
-//# sourceMappingURL=OutlineRenderer.js.map
 
 var ShadowRenderer = function ShadowRenderer() {
     this.renderAtomic = new RenderAtomic();
@@ -33938,7 +33860,6 @@ var cubeDirections = [
     new Vector3(1, 0, 0), new Vector3(-1, 0, 0), new Vector3(0, 0, 1),
     new Vector3(0, 0, -1), new Vector3(0, 1, 0), new Vector3(0, -1, 0)
 ];
-//# sourceMappingURL=ShadowRenderer.js.map
 
 var WireframeRenderer = function WireframeRenderer () {};
 
@@ -34017,7 +33938,6 @@ WireframeRenderer.prototype.drawGameObject = function drawGameObject (gl, render
  * 线框渲染器
  */
 var wireframeRenderer = new WireframeRenderer();
-//# sourceMappingURL=WireframeRenderer.js.map
 
 /**
  * 点光源
@@ -34073,7 +33993,6 @@ PointLight = __decorate$1([
 Entity.registerPrimitive("Point light", function (g) {
     g.addComponent(PointLight);
 });
-//# sourceMappingURL=PointLight.js.map
 
 /**
  * 聚光灯光源
@@ -34144,7 +34063,6 @@ SpotLight = __decorate$1([
 Entity.registerPrimitive("Spot light", function (g) {
     g.addComponent(SpotLight);
 });
-//# sourceMappingURL=SpotLight.js.map
 
 /**
  * 天空盒组件
@@ -34174,7 +34092,6 @@ SkyBox = __decorate$1([
     AddComponentMenu("SkyBox/SkyBox"),
     RegisterComponent()
 ], SkyBox);
-//# sourceMappingURL=SkyBox.js.map
 
 /**
  * 场景拾取缓存
@@ -34250,7 +34167,6 @@ ScenePickCache.prototype.clear = function clear () {
 };
 
 Object.defineProperties( ScenePickCache.prototype, prototypeAccessors$f );
-//# sourceMappingURL=ScenePickCache.js.map
 
 /**
  * 3D场景
@@ -34453,7 +34369,6 @@ __decorate$1([
 Scene = __decorate$1([
     RegisterComponent({ single: true })
 ], Scene);
-//# sourceMappingURL=Scene.js.map
 
 /**
  * 天空盒渲染器
@@ -34527,7 +34442,6 @@ SkyBoxRenderer.prototype.drawSkyBox = function drawSkyBox (gl, skybox, scene, ca
  * 天空盒渲染器
  */
 var skyboxRenderer = new SkyBoxRenderer();
-//# sourceMappingURL=SkyboxRenderer.js.map
 
 /**
  * 视图
@@ -34791,7 +34705,6 @@ var View = /*@__PURE__*/(function (Feng3dObject) {
     return View;
 }(Feng3dObject));
 // var viewRect0 = { x: 0, y: 0, w: 400, h: 300 ;}
-//# sourceMappingURL=View.js.map
 
 var CustomGeometry = /*@__PURE__*/(function (Geometry) {
     function CustomGeometry () {
@@ -34828,7 +34741,6 @@ __decorate$1([
 __decorate$1([
     serialize$1
 ], CustomGeometry.prototype, "attributes", null);
-//# sourceMappingURL=CustomGeometry.js.map
 
 /**
  * 点几何体
@@ -34883,7 +34795,6 @@ __decorate$1([
     oav$1(),
     watch$1("invalidateGeometry")
 ], PointGeometry.prototype, "points", void 0);
-//# sourceMappingURL=PointGeometry.js.map
 
 /**
  * 线段组件
@@ -34985,7 +34896,6 @@ Entity.registerPrimitive("Segment", function (g) {
     model.geometry = new SegmentGeometry();
     model.material = Material.getDefault("Segment-Material");
 });
-//# sourceMappingURL=SegmentGeometry.js.map
 
 var ColorUniforms = function ColorUniforms() {
     /**
@@ -34998,7 +34908,6 @@ __decorate$1([
     oav$1()
 ], ColorUniforms.prototype, "u_diffuseInput", void 0);
 shaderlib.shaderConfig.shaders["color"].cls = ColorUniforms;
-//# sourceMappingURL=ColorMaterial.js.map
 
 var PointUniforms = function PointUniforms() {
     /**
@@ -35019,7 +34928,6 @@ __decorate$1([
     oav$1()
 ], PointUniforms.prototype, "u_PointSize", void 0);
 shaderlib.shaderConfig.shaders["point"].cls = PointUniforms;
-//# sourceMappingURL=PointMaterial.js.map
 
 /**
  * 线段材质
@@ -35038,7 +34946,6 @@ __decorate$1([
 shaderlib.shaderConfig.shaders["segment"].cls = SegmentUniforms;
 shaderlib.shaderConfig.shaders["segment"].renderParams = { renderMode: RenderMode.LINES, enableBlend: true };
 Material.setDefault("Segment-Material", { shaderName: "segment" });
-//# sourceMappingURL=SegmentMaterial.js.map
 
 /**
  * 雾模式
@@ -35190,7 +35097,6 @@ __decorate$1([
 ], StandardUniforms.prototype, "u_fogMode", void 0);
 shaderlib.shaderConfig.shaders["standard"].cls = StandardUniforms;
 Material.setDefault("Default-Material", { shaderName: "standard" });
-//# sourceMappingURL=StandardMaterial.js.map
 
 var TextureUniforms = function TextureUniforms() {
     /**
@@ -35211,7 +35117,6 @@ __decorate$1([
     serialize$1
 ], TextureUniforms.prototype, "s_texture", void 0);
 shaderlib.shaderConfig.shaders["texture"].cls = TextureUniforms;
-//# sourceMappingURL=TextureMaterial.js.map
 
 /**
  * 胶囊体几何体
@@ -35410,7 +35315,6 @@ Geometry.setDefault("Capsule", new CapsuleGeometry());
 Entity.registerPrimitive("Capsule", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Capsule");
 });
-//# sourceMappingURL=CapsuleGeometry.js.map
 
 /**
  * 圆柱体几何体
@@ -35767,7 +35671,6 @@ Geometry.setDefault("Cylinder", new CylinderGeometry());
 Entity.registerPrimitive("Cylinder", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Cylinder");
 });
-//# sourceMappingURL=CylinderGeometry.js.map
 
 /**
  * 圆锥体
@@ -35802,7 +35705,6 @@ Geometry.setDefault("Cone", new ConeGeometry());
 Entity.registerPrimitive("Cone", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Cone");
 });
-//# sourceMappingURL=ConeGeometry.js.map
 
 /**
  * 立（长）方体几何体
@@ -36230,7 +36132,6 @@ Geometry.setDefault("Cube", new CubeGeometry());
 Entity.registerPrimitive("Cube", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Cube");
 });
-//# sourceMappingURL=CubeGeometry.js.map
 
 var ParametricGeometry = /*@__PURE__*/(function (Geometry) {
     function ParametricGeometry(func, slices, stacks, doubleside) {
@@ -36296,7 +36197,6 @@ var ParametricGeometry = /*@__PURE__*/(function (Geometry) {
 
     return ParametricGeometry;
 }(Geometry));
-//# sourceMappingURL=ParametricGeometry.js.map
 
 /**
  * 四边形面皮几何体
@@ -36322,7 +36222,6 @@ Geometry.setDefault("Quad", new QuadGeometry());
 Entity.registerPrimitive("Quad", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Quad");
 });
-//# sourceMappingURL=QuadGeometry.js.map
 
 /**
  * 球体几何体
@@ -36512,7 +36411,6 @@ Geometry.setDefault("Sphere", new SphereGeometry());
 Entity.registerPrimitive("Sphere", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Sphere");
 });
-//# sourceMappingURL=SphereGeometry.js.map
 
 /**
  * 圆环几何体
@@ -36709,7 +36607,6 @@ Geometry.setDefault("Torus", new TorusGeometry());
 Entity.registerPrimitive("Torus", function (g) {
     g.addComponent(MeshRenderer).geometry = Geometry.getDefault("Torus");
 });
-//# sourceMappingURL=TorusGeometry.js.map
 
 /**
  * 鼠标拾取渲染器
@@ -36772,7 +36669,6 @@ var MouseRenderer = /*@__PURE__*/(function (EventEmitter) {
     return MouseRenderer;
 }(EventEmitter));
 var mouseRenderer = new MouseRenderer();
-//# sourceMappingURL=MouseRenderer.js.map
 
 /**
  * 用于处理从场景中获取特定数据
@@ -36814,7 +36710,6 @@ SceneUtil.prototype.getActiveRenderers = function getActiveRenderers (scene, cam
     return renderers;
 };
 var sceneUtil = new SceneUtil();
-//# sourceMappingURL=SceneUtil.js.map
 
 var Setting = function Setting() {
     /**
@@ -36839,7 +36734,6 @@ var Setting = function Setting() {
     this.defaultRotationOrder = RotationOrder.YXZ;
 };
 var setting = new Setting();
-//# sourceMappingURL=setting.js.map
 
 /**
  * 天空盒渲染器
@@ -36909,7 +36803,6 @@ SkyBoxRenderer$1.prototype.drawSkyBox = function drawSkyBox (gl, skybox, scene, 
     this.renderAtomic.uniforms.u_skyBoxSize = camera.lens.far / Math.sqrt(3);
     gl.render(this.renderAtomic);
 };
-//# sourceMappingURL=SkyBoxRenderer.js.map
 
 var CanvasTexture2D = /*@__PURE__*/(function (Texture2D) {
     function CanvasTexture2D () {
@@ -36930,7 +36823,6 @@ var CanvasTexture2D = /*@__PURE__*/(function (Texture2D) {
 __decorate$1([
     watch$1("_canvasChanged")
 ], CanvasTexture2D.prototype, "canvas", void 0);
-//# sourceMappingURL=CanvasTexture2D.js.map
 
 var ImageDataTexture2D = /*@__PURE__*/(function (Texture2D) {
     function ImageDataTexture2D () {
@@ -36951,7 +36843,6 @@ var ImageDataTexture2D = /*@__PURE__*/(function (Texture2D) {
 __decorate$1([
     watch$1("_imageDataChanged")
 ], ImageDataTexture2D.prototype, "imageData", void 0);
-//# sourceMappingURL=ImageDataTexture2D.js.map
 
 /**
  * 2D纹理
@@ -36982,7 +36873,6 @@ var ImageTexture2D = /*@__PURE__*/(function (Texture2D) {
 __decorate$1([
     watch$1("_imageChanged")
 ], ImageTexture2D.prototype, "image", null);
-//# sourceMappingURL=ImageTexture2D.js.map
 
 var VideoTexture2D = /*@__PURE__*/(function (Texture2D) {
     function VideoTexture2D () {
@@ -37003,7 +36893,6 @@ var VideoTexture2D = /*@__PURE__*/(function (Texture2D) {
 __decorate$1([
     watch$1("_videoChanged")
 ], VideoTexture2D.prototype, "video", void 0);
-//# sourceMappingURL=VideoTexture2D.js.map
 
 /**
  * 通用唯一标识符（Universally Unique Identifier）
@@ -37045,7 +36934,6 @@ Uuid.prototype.getObjectUuid = function getObjectUuid (object) {
 };
 var __uuid__ = "__uuid__";
 var uuid = new Uuid();
-//# sourceMappingURL=Uuid.js.map
 
 /**
  * 函数经
@@ -37256,7 +37144,6 @@ Debug.prototype.time = function time (fn, labal) {
  * 调试工具
  */
 var debug = new Debug();
-//# sourceMappingURL=debug.js.map
 
 /**
  * 对象池
@@ -37324,7 +37211,6 @@ Pool.prototype.releaseArray = function releaseArray (objects) {
         this$1._objects.push(element);
     });
 };
-//# sourceMappingURL=Pool.js.map
 
 /**
  * 常用正则表示式
@@ -37351,7 +37237,6 @@ var RegExps = function RegExps() {
      */
     this.classReg = /(export\s+)?(abstract\s+)?class\s+([\w$_\d]+)(\s+extends\s+([\w$_\d\.]+))?/;
 };
-//# sourceMappingURL=RegExps.js.map
 
 var Stats = function Stats() {
     var this$1 = this;
@@ -37461,7 +37346,6 @@ var StatsPanel = function StatsPanel(name, fg, bg) {
         context.fillRect(GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, round((1 - (value / maxValue)) * GRAPH_HEIGHT));
     };
 };
-//# sourceMappingURL=Stats.js.map
 
 /**
  * The Water component renders the terrain.
@@ -37502,7 +37386,6 @@ Water = __decorate$1([
 Entity.registerPrimitive("Water", function (g) {
     g.addComponent(Water);
 });
-//# sourceMappingURL=Water.js.map
 
 var WaterUniforms = function WaterUniforms() {
     this.u_alpha = 1.0;
@@ -37551,7 +37434,6 @@ __decorate$1([
 ], WaterUniforms.prototype, "s_mirrorSampler", void 0);
 shaderlib.shaderConfig.shaders["water"].cls = WaterUniforms;
 Material.setDefault("Water-Material", { shaderName: "water" });
-//# sourceMappingURL=WaterMaterial.js.map
 
 export { Animation, AnimationClip, AssetData, AssetType, AudioListener, AudioSource, Behaviour, BillboardComponent, BoundingBox, Camera, CanvasTexture2D, CapsuleGeometry, CartoonComponent, ColorUniforms, Component, ConeGeometry, ControllerBase, CubeGeometry, CustomGeometry, CylinderGeometry, Debug, DirectionalLight, DistanceModelType, Entity, FPSController, Feng3dObject, FileAsset, FogMode, FolderAsset, ForwardRenderer, FrameBufferObject, FunctionWrap, Geometry, GeometryUtils, Graphics, HideFlags, HoldSizeComponent, HoverController, ImageDataTexture2D, ImageTexture2D, ImageUtil, LensBase, Light, LightPicker, LightType, LookAtController, Material, MeshRenderer, Mouse3DManager, MouseRenderer, Node3D, OrthographicLens, OutLineComponent, OutlineRenderer, ParametricGeometry, PerspectiveLens, PlaneGeometry, PointGeometry, PointLight, PointUniforms, Pool, Projection, PropertyClip, QuadGeometry, RayCastable, Raycaster, ReadRS, ReadWriteRS, RegExps, RenderTargetTexture2D, Renderable, RunEnvironment, Scene, ScenePickCache, SceneUtil, Script, ScriptComponent, SegmentGeometry, SegmentUniforms, Setting, ShadowRenderer, ShadowType, SkeletonComponent, SkeletonJoint, SkinnedMeshRenderer, SkyBox, SkyBoxRenderer$1 as SkyBoxRenderer, SphereGeometry, SpotLight, StandardUniforms, Stats, Texture2D, TextureCube, TextureInfo, TextureUniforms, Ticker, TorusGeometry, TransformLayout, Uuid, VideoTexture2D, View, Water, WaterUniforms, WireframeComponent, WireframeRenderer, debug, menuConfig, path, sceneUtil, setting, ticker };
 //# sourceMappingURL=index.js.map

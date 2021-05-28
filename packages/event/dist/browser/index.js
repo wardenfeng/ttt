@@ -4,6 +4,7 @@
  * @feng3d/event is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
  */
+this.feng3d = this.feng3d || {};
 var feng3d = (function (exports) {
     'use strict';
 
@@ -542,4 +543,5 @@ var feng3d = (function (exports) {
     return exports;
 
 }({}));
+Object.assign(this.feng3d, _feng_d_event);
 //# sourceMappingURL=index.js.map
