@@ -6,8 +6,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc && npm run shaderpack",
-    "build:w": "tsc -w",
+    "build": "tsc -b && npm run shaderpack",
+    "build:w": "tsc -b -w",
     "shaderpack": "node shaderpack.js",
     "shaderpack:w": "node shaderpack.js -w"
   },
