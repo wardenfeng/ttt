@@ -11,9 +11,6 @@
             "ES2017",
             "DOM"
         ],
-        "types": [
-            "@feng3d/event"
-        ],
         "outFile": "./dist/index.js",
     },
     "files": [
@@ -25,5 +22,10 @@
         "src/handle/ShortCutCapture.ts",
         "src/handle/ShortCutEvent.ts",
         "src/ShortCut.ts",
+    ],
+    "references": [
+        {
+            "path": "../event"
+        }
     ]
 }

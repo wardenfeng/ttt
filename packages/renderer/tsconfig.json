@@ -11,12 +11,6 @@
             "ES2017",
             "DOM"
         ],
-        "types": [
-            "@feng3d/objectview",
-            "@feng3d/polyfill",
-            "@feng3d/serialization",
-            "@feng3d/watcher"
-        ],
         "outFile": "./dist/index.js",
     },
     "files": [
@@ -59,5 +53,19 @@
         "src/shader/ShaderLib.ts",
         //
         "src/WebGLRenderer.ts",
+    ],
+    "references": [
+        {
+            "path": "../objectview"
+        },
+        {
+            "path": "../polyfill"
+        },
+        {
+            "path": "../serialization"
+        },
+        {
+            "path": "../watcher"
+        },
     ]
 }

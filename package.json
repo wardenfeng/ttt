@@ -1,6 +1,6 @@
 {
   "name": "feng3d",
-  "version": "0.1.3",
+  "version": "0.3.3",
   "author": "feng",
   "description": "webgl 3d engine",
   "main": "dist/index.js",
@@ -11,9 +11,6 @@
     "shaderpack": "node shaderpack.js",
     "shaderpack:w": "node shaderpack.js -w"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "files": [
     "dist",
     "src"

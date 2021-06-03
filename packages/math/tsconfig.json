@@ -11,11 +11,6 @@
             "ES2017",
             "DOM"
         ],
-        "types": [
-            "@feng3d/objectview",
-            "@feng3d/polyfill",
-            "@feng3d/serialization"
-        ],
         "outFile": "./dist/index.js",
     },
     "files": [
@@ -89,5 +84,16 @@
         // pixi
         "src/pixi/Matrix.ts",
         "src/pixi/Transform.ts",
+    ],
+    "references": [
+        {
+            "path": "../objectview"
+        },
+        {
+            "path": "../polyfill"
+        },
+        {
+            "path": "../serialization"
+        }
     ]
 }

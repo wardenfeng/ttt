@@ -11,12 +11,14 @@
             "ES2017",
             "DOM"
         ],
-        "types": [
-            "@feng3d/polyfill"
-        ],
         "outFile": "./dist/index.js",
     },
     "files": [
         "src/ObjectView.ts"
+    ],
+    "references": [
+        {
+            "path": "../polyfill"
+        }
     ]
 }
