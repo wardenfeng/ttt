@@ -205,7 +205,5 @@
             "path": "packages/watcher",
             "prepend": true
         }
-    ],
-    "files": [],
-    "include": []
+    ]
 }
