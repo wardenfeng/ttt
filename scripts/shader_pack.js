@@ -1,6 +1,6 @@
 var fs = require("fs");
 
-var rootdir = __dirname;
+var rootdir = __dirname + "/..";
 
 var process = require("process");
 if (process.argv.includes("-w"))
@@ -52,7 +52,8 @@ function pack()
             }
         }
         var contentStr = JSON.stringify(shaderObj, null, '\t').replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1')
-        writeFile(savePath, `namespace feng3d\n{\nfeng3d.shaderConfig = ${contentStr}\n}`);
+        contentStr = contentStr.split('\n').join('\n\t');
+        writeFile(savePath, `namespace feng3d\n{\n\tshaderConfig = ${contentStr}\n}`);
         console.log("自动生成" + savePath)
     } catch (error)
     {

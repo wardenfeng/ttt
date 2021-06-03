@@ -166,23 +166,11 @@
             "prepend": true
         },
         {
-            "path": "packages/filesystem",
-            "prepend": true
-        },
-        {
-            "path": "packages/math",
-            "prepend": true
-        },
-        {
-            "path": "packages/objectview",
+            "path": "packages/task",
             "prepend": true
         },
         {
             "path": "packages/polyfill",
-            "prepend": true
-        },
-        {
-            "path": "packages/renderer",
             "prepend": true
         },
         {
@@ -194,16 +182,28 @@
             "prepend": true
         },
         {
-            "path": "packages/shortcut",
-            "prepend": true
-        },
-        {
-            "path": "packages/task",
+            "path": "packages/objectview",
             "prepend": true
         },
         {
             "path": "packages/watcher",
             "prepend": true
-        }
+        },
+        {
+            "path": "packages/math",
+            "prepend": true
+        },
+        {
+            "path": "packages/renderer",
+            "prepend": true
+        },
+        {
+            "path": "packages/shortcut",
+            "prepend": true
+        },
+        {
+            "path": "packages/filesystem",
+            "prepend": true
+        },
     ]
 }

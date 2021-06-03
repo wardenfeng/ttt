@@ -8,8 +8,10 @@
   "scripts": {
     "build": "tsc -b && npm run shaderpack",
     "build:w": "tsc -b -w",
-    "shaderpack": "node shaderpack.js",
-    "shaderpack:w": "node shaderpack.js -w"
+    "prebuild": "shaderpack",
+    "shaderpack": "node scripts/shader_pack.js",
+    "shaderpack:w": "node scripts/shader_pack.js -w",
+    "node_export": "node scripts/node_export.js"
   },
   "files": [
     "dist",
