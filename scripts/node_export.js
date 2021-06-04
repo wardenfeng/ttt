@@ -1,11 +1,9 @@
-// export = feng3d;
-
-const fs = require("fs");
+const fs = require('fs');
 
 const dtsAddStr = `
 export = feng3d;`;
 const dtsPath = 'dist/index.d.ts';
-let dtsContent = fs.readFileSync(dtsPath, { encoding: 'utf8' })
+let dtsContent = fs.readFileSync(dtsPath, { encoding: 'utf8' });
 if (dtsContent.indexOf(dtsAddStr) === -1)
 {
     dtsContent += dtsAddStr;
@@ -21,7 +19,7 @@ if (typeof module !== 'undefined')
     module.exports = feng3d;
 }`;
 const jsPath = 'dist/index.js';
-let jsContent = fs.readFileSync(jsPath, { encoding: 'utf8' })
+let jsContent = fs.readFileSync(jsPath, { encoding: 'utf8' });
 if (jsContent.indexOf(jsAddStr) === -1)
 {
     jsContent += jsAddStr;
